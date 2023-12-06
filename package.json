@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx serve",
-    "build": "nx build",
-    "test": "nx test"
+    "start": "npx nx serve smart-savings-api",
+    "build": "npx nx build smart-savings-api",
+    "test": "npx nx test smart-savings-api",
+    "lint": "npx nx lint smart-savings-api"
   },
   "private": true,
   "dependencies": {
