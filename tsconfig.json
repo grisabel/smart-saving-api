@@ -13,8 +13,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {},
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@application/*": ["src/application/*"],
+      "@domain/*": ["src/domain/*"]
+    }
   },
   "files": [],
   "include": [],
