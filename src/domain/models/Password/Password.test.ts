@@ -113,4 +113,16 @@ describe('La clase Password', () => {
     //assert
     expect(result).toEqual(true);
   });
+  it('debe identificar si dos contraseñas no coinciden', () => {
+    //arrange
+    const text1 = 'Aabb@1';
+    const text2 = 'Aabb@2';
+
+    //act
+    const password1 = Password.createFromText(text1);
+    const password2 = Password.createFromText(text2);
+    const result = password1.isEqual(password2);
+    //assert
+    expect(result).toEqual(false);
+  });
 });
