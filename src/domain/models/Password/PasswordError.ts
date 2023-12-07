@@ -16,11 +16,11 @@ interface PasswordErrorParams {
 }
 
 export class PasswordError extends Error {
-  static id: string = 'PasswordError';
+  static msg: string = 'PasswordError';
   public data: PasswordErrorParams;
 
   constructor(data: PasswordErrorParams) {
-    super(PasswordError.id);
+    super(PasswordError.msg);
     this.data = data;
   }
 }
