@@ -6,5 +6,13 @@ export class Id {
     return new Id(idGenerate);
   }
 
+  static createFrom(id: string): Id {
+    return new Id(id);
+  }
+
   private constructor(private value: string) {}
+
+  isEqual(id: Id) {
+    return this.value === id.value;
+  }
 }
