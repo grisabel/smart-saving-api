@@ -1,39 +1,11 @@
-import { Email } from '@domain/models/Email';
-import { Password } from '@domain/models/Password';
-import { User } from '@domain/models/User';
 import { UserLocalRepository } from './UserLocalRepository';
 import { UserInterfaceRepository } from './UserInterfaceRepository';
+import { UserExample } from '@domain/models/User/test/User.example';
 
 describe('La clase UserLocalRepository', () => {
-  const textEmail1 = 'test@test.com';
-  const textEmail2 = 'test2@test.com';
-  const textPassword = 'Aabb@1';
-  const firstName = 'TestName';
-  const lastname = 'TestLastName';
-  const dateBirth = '01/01/2000';
-  const objective = 'Jubilación';
-  const lastSession = '1701959641000';
-  const email1 = Email.createFromText(textEmail1);
-  const email2 = Email.createFromText(textEmail2);
-  const password = Password.createFromHash(textPassword);
-  const user1 = new User(
-    email1,
-    firstName,
-    lastname,
-    dateBirth,
-    objective,
-    lastSession,
-    password
-  );
-  const user2 = new User(
-    email2,
-    firstName,
-    lastname,
-    dateBirth,
-    objective,
-    lastSession,
-    password
-  );
+  const user1 = UserExample.user1();
+  const user2 = UserExample.user2();
+
   it('guarda un usuario y comprueba si existe', () => {
     //arrange
     const userRepository: UserInterfaceRepository = new UserLocalRepository();

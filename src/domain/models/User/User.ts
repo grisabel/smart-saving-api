@@ -21,7 +21,7 @@ export class User {
   }
 
   isEqual(user: User): boolean {
-    return this.email === user.email;
+    return this.email.isEqual(user.email);
   }
 
   getValue() {
