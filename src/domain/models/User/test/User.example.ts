@@ -4,23 +4,23 @@ import { User } from '../User';
 
 export class UserExample {
   static user1(): User {
-    const textEmail = 'test@test.com';
-    const textPassword = 'Aabb@1';
-    const firstName = 'TestName';
-    const lastname = 'TestLastName';
-    const dateBirth = '01/01/2000';
-    const objective = 'Jubilación';
-    const lastSession = '1701959641000';
+    const _textEmail = 'test@test.com';
+    const _textPassword = 'Aabb@1';
+    const _firstName = 'TestName';
+    const _lastname = 'TestLastName';
+    const _dateBirth = '01/01/2000';
+    const _objective = 'Jubilación';
+    const _lastSession = '1701959641000';
 
-    const email = Email.createFromText(textEmail);
-    const password = Password.createFromHash(textPassword);
+    const email = Email.createFromText(_textEmail);
+    const password = Password.createFromHash(_textPassword);
     const user1 = new User(
       email,
-      firstName,
-      lastname,
-      dateBirth,
-      objective,
-      lastSession,
+      _firstName,
+      _lastname,
+      _dateBirth,
+      _objective,
+      _lastSession,
       password
     );
 

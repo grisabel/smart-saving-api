@@ -1,6 +1,7 @@
 import { UserLocalRepository } from './UserLocalRepository';
 import { UserInterfaceRepository } from './UserInterfaceRepository';
 import { UserExample } from '@domain/models/User/test/User.example';
+import { Password } from '@domain/models/Password';
 
 describe('La clase UserLocalRepository', () => {
   let userRepository: UserInterfaceRepository;
@@ -29,5 +30,50 @@ describe('La clase UserLocalRepository', () => {
     //assert
     expect.assertions(1);
     expect(promise).resolves.toEqual(null);
+  });
+
+  it('guarda varios usuarios y obtiene todos', () => {
+    //arrange
+    const user1 = UserExample.user1();
+    const user2 = UserExample.user2();
+
+    //act
+    userRepository.save(user1);
+    userRepository.save(user2);
+    const promise = userRepository.findAll();
+    //assert
+    expect.assertions(1);
+    expect(promise).resolves.toEqual([user1, user2]);
+  });
+
+  it('elimina un usuario', () => {
+    //arrange
+    const user1 = UserExample.user1();
+    const user2 = UserExample.user2();
+
+    //act
+    userRepository.save(user1);
+    userRepository.save(user2);
+    userRepository.delete(user1.getEmail());
+    const promise = userRepository.findAll();
+    //assert
+    expect.assertions(1);
+    expect(promise).resolves.toEqual([user1]);
+  });
+
+  it('actualiza un usuario existente', () => {
+    //arrange
+    const user1 = UserExample.user1();
+    //act
+    userRepository.save(user1);
+
+    const pwd = Password.createFromText('Aabb@1UpdateRepository');
+    user1.changePassword(pwd);
+    userRepository.update(user1);
+
+    const promise = userRepository.findByEmail(user1.getEmail());
+    //assert
+    expect.assertions(1);
+    expect(promise).resolves.toEqual(user1);
   });
 });

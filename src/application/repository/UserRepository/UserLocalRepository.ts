@@ -17,15 +17,22 @@ export class UserLocalRepository implements UserInterfaceRepository {
     return filterArray.length === 0 ? null : filterArray[0];
   }
 
-  findAll(): Promise<User[]> {
-    throw new Error('Method not implemented.');
+  async findAll(): Promise<User[]> {
+    return this.localUsers;
   }
 
-  delete(email: Email): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(email: Email): Promise<void> {
+    this.localUsers = this.localUsers.filter((user) => {
+      return email.isEqual(user.getEmail());
+    });
   }
 
-  update(user: User): Promise<void> {
-    throw new Error('Method not implemented.');
+  async update(user: User): Promise<void> {
+    this.localUsers = this.localUsers.map((userLocal) => {
+      if (userLocal.isEqual(user)) {
+        return user;
+      }
+      return userLocal;
+    });
   }
 }
