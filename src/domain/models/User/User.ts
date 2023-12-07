@@ -11,4 +11,8 @@ export class User {
     private lastSession: string, //timestamp
     private password: Password
   ) {}
+
+  isEqual(user: User) {
+    return this.email === user.email;
+  }
 }
