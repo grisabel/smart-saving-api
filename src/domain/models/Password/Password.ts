@@ -7,7 +7,11 @@ export class Password {
   static createFromText(value: string): Password {
     this.ensureRules(value);
 
-    return new Password(value);
+    return new Password(value, false);
+  }
+
+  static createFromHash(value: string): Password {
+    return new Password(value, true);
   }
 
   static ensureRules(value: string): void {
@@ -50,7 +54,7 @@ export class Password {
     return /[_@#!]/.test(value);
   }
 
-  private constructor(private value: string) {}
+  private constructor(private value: string, public isHashed: boolean) {}
 
   isEqual(password: Password): boolean {
     return this.value === password.value;

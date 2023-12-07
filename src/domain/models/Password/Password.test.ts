@@ -8,6 +8,7 @@ describe('La clase Password', () => {
     const newPassword = Password.createFromText(password);
     //assert
     expect(newPassword).toBeInstanceOf(Password);
+    expect(newPassword.isHashed).toBe(false);
   });
   it('debe lanzar un error si es menor a 6 caracteres', () => {
     //arrange
@@ -136,5 +137,15 @@ describe('La clase Password', () => {
     expect(result).not.toBe(text1);
     expect(result.length).toBe(64);
     expect(/^[a-fA-F0-9]{64}$/.test(result)).toBe(true);
+  });
+  it('debe poder instanciarse mediante un hash', () => {
+    //arrange
+    const hash =
+      '82597e3c864f7fb8abe635d8033ef021339e4005ba82a13b83d1ab6fdde37f9a';
+    //act
+    const passwordHashed = Password.createFromHash(hash);
+    //assert
+    expect(passwordHashed).toBeInstanceOf(Password);
+    expect(passwordHashed.isHashed).toBe(true);
   });
 });
