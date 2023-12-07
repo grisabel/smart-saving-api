@@ -1,6 +1,10 @@
 import { Email } from '@domain/models/Email';
 import { User } from '@domain/models/User';
-import { UserInterfaceRepository } from './UserInterfaceRepository';
+import {
+  USER_REPOSITORY_ERROR,
+  UserInterfaceRepository,
+  UserRepositoryError,
+} from './UserInterfaceRepository';
 
 export class UserLocalRepository implements UserInterfaceRepository {
   private localUsers: User[] = [];
@@ -27,7 +31,9 @@ export class UserLocalRepository implements UserInterfaceRepository {
     });
 
     if (filterArray.length === 0) {
-      throw new Error('User not exist');
+      throw new UserRepositoryError({
+        userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+      });
     }
 
     this.localUsers = filterArray;
@@ -42,7 +48,9 @@ export class UserLocalRepository implements UserInterfaceRepository {
     });
 
     if (filterArray.length === 0) {
-      throw new Error('User not exist');
+      throw new UserRepositoryError({
+        userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+      });
     }
 
     this.localUsers = filterArray;

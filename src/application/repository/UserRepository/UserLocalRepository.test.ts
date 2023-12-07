@@ -1,5 +1,8 @@
 import { UserLocalRepository } from './UserLocalRepository';
-import { UserInterfaceRepository } from './UserInterfaceRepository';
+import {
+  USER_REPOSITORY_ERROR,
+  UserInterfaceRepository,
+} from './UserInterfaceRepository';
 import { UserExample } from '@domain/models/User/test/User.example';
 import { Password } from '@domain/models/Password';
 
@@ -81,7 +84,9 @@ describe('La clase UserLocalRepository', () => {
     }
     //assert
     expect.assertions(1);
-    expect(throwError.message).toEqual('User not exist');
+    expect(throwError.data).toEqual({
+      userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+    });
   });
 
   it('actualiza un usuario existente', () => {
@@ -116,6 +121,8 @@ describe('La clase UserLocalRepository', () => {
 
     //assert
     expect.assertions(1);
-    expect(throwError.message).toEqual('User not exist');
+    expect(throwError.data).toEqual({
+      userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+    });
   });
 });
