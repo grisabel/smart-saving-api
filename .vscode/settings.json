@@ -1,0 +1,4 @@
+{  
+    "jestrunner.runOptions": ["--watch"],
+    "editor.formatOnSave": true
+}
