@@ -1,4 +1,4 @@
-export const ERRORS = {
+export const PASSWORD_ERRORS = {
   length: 'La contraseña debe tener al menos 6 caracteres.',
   number: 'La contraseña debe contener al menos un número.',
   upperCase: 'La contraseña debe contener al menos una letra mayúscula.',
@@ -7,6 +7,24 @@ export const ERRORS = {
     'La contraseña debe contener al menos alguno de los siguientes caracteres: _ @ # !',
 };
 const MINLENGTH = 6;
+
+interface PasswordErrorParams {
+  length?: string;
+  number?: string;
+  upperCase?: string;
+  lowerCase?: string;
+  specialChar?: string;
+}
+
+export class PasswordError extends Error {
+  static id: string = 'PasswordError';
+  public data: PasswordErrorParams;
+
+  constructor(data: PasswordErrorParams) {
+    super(PasswordError.id);
+    this.data = data;
+  }
+}
 
 export class Password {
   private constructor(private password: string) {}
@@ -18,20 +36,26 @@ export class Password {
   }
 
   static ensureRules(password: string): void {
+    const errorsPasswordMap = new Map<string, string>();
+
     if (!this.hasMinLength(password)) {
-      throw new Error(ERRORS.length);
+      errorsPasswordMap.set('length', PASSWORD_ERRORS.length);
     }
     if (!this.hasNumber(password)) {
-      throw new Error(ERRORS.number);
+      errorsPasswordMap.set('number', PASSWORD_ERRORS.number);
     }
     if (!this.hasUpperCase(password)) {
-      throw new Error(ERRORS.upperCase);
+      errorsPasswordMap.set('upperCase', PASSWORD_ERRORS.upperCase);
     }
     if (!this.hasLowerCase(password)) {
-      throw new Error(ERRORS.lowerCase);
+      errorsPasswordMap.set('lowerCase', PASSWORD_ERRORS.lowerCase);
     }
     if (!this.hasSpecialChar(password)) {
-      throw new Error(ERRORS.specialChar);
+      errorsPasswordMap.set('specialChar', PASSWORD_ERRORS.specialChar);
+    }
+
+    if (errorsPasswordMap.size > 0) {
+      throw new PasswordError(Object.fromEntries(errorsPasswordMap));
     }
   }
 
