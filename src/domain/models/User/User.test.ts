@@ -133,7 +133,7 @@ describe('La clase usuario', () => {
     );
 
     user.changePassword(newPassword);
-    const result = user.getJSON();
+    const result = user.getValue();
 
     //assert
     expect(result.password).toEqual(newPassword);

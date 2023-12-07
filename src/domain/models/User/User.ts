@@ -24,15 +24,15 @@ export class User {
     return this.email === user.email;
   }
 
-  getJSON() {
+  getValue() {
     return {
-      email: this.email,
+      email: this.email.getValue(),
       firtname: this.firstname,
       lastname: this.lastname,
       dateBirth: this.dateBirth,
       objective: this.objective,
       lastSession: this.lastSession,
-      password: this.password,
+      password: this.password.getValue(),
     };
   }
 
