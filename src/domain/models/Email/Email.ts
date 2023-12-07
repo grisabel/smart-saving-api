@@ -19,7 +19,7 @@ export class Email {
 
   private constructor(private value: string) {}
 
-  isEquals(email: Email): boolean {
+  isEqual(email: Email): boolean {
     return this.value === email.value;
   }
 

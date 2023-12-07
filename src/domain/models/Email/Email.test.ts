@@ -89,7 +89,7 @@ describe('La clase Email', () => {
     //act
     const email1 = Email.createFromText(text1);
     const email2 = Email.createFromText(text2);
-    const result = email1.isEquals(email2);
+    const result = email1.isEqual(email2);
 
     //assert
     expect(result).toEqual(true);
@@ -103,7 +103,7 @@ describe('La clase Email', () => {
     //act
     const email1 = Email.createFromText(text1);
     const email2 = Email.createFromText(text2);
-    const result = email1.isEquals(email2);
+    const result = email1.isEqual(email2);
 
     //assert
     expect(result).toEqual(false);
