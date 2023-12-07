@@ -1,5 +1,6 @@
 import { Email } from '../Email';
 import { Password } from '../Password';
+import { UserError } from './UserError';
 
 export class User {
   constructor(
@@ -12,7 +13,10 @@ export class User {
     private password: Password
   ) {}
 
-  changePassword(newPassword: Password) {
+  changePassword(newPassword: Password): void {
+    if (this.password.isEqual(newPassword)) {
+      throw new UserError();
+    }
     this.password = newPassword;
   }
 

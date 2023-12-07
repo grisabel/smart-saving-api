@@ -1,6 +1,7 @@
 import { Email } from '../Email';
 import { Password } from '../Password';
 import { User } from './User';
+import { USER_ERRORS } from './UserError';
 
 describe('La clase usuario', () => {
   it('puede generar una instacia a través de su constructor', () => {
@@ -136,5 +137,40 @@ describe('La clase usuario', () => {
 
     //assert
     expect(result.password).toEqual(newPassword);
+  });
+  it('puede detectar si dos contraseñas son iguales y por tanto no puede ser cambiada', () => {
+    //arange
+    const textEmail = 'test@test.com';
+    const textPassword = 'Aabb@1';
+    const textNewPassword = 'Aabb@1';
+    const firstName = 'TestName';
+    const lastname = 'TestLastName';
+    const dateBirth = '01/01/2000';
+    const objective = 'Jubilación';
+    const lastSession = '1701959641000';
+
+    //act
+    const email = Email.createFromText(textEmail);
+    const password = Password.createFromHash(textPassword);
+    const newPassword = Password.createFromHash(textNewPassword);
+    const user = new User(
+      email,
+      firstName,
+      lastname,
+      dateBirth,
+      objective,
+      lastSession,
+      password
+    );
+    let throwError;
+
+    try {
+      user.changePassword(newPassword);
+    } catch (error) {
+      throwError = error;
+    }
+
+    //assert
+    expect(throwError.data).toEqual({ samePassword: USER_ERRORS.samePassword });
   });
 });
