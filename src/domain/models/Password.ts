@@ -9,41 +9,45 @@ export const ERRORS = {
 const MINLENGTH = 6;
 
 export class Password {
-  private password: string;
+  private constructor(private password: string) {}
 
-  constructor(password: string) {
-    this.ensureMinLength(password);
-    this.ensureNumber(password);
-    this.ensureUpperCase(password);
-    this.ensureLowerCase(password);
-    this.ensureSpecialChar(password);
+  static createFromText(password: string): Password {
+    this.ensureRules(password);
 
-    this.password = password;
+    return new Password(password);
   }
 
-  ensureMinLength(password: string): void {
-    if (password.length < MINLENGTH) {
+  static ensureRules(password: string): void {
+    if (!this.hasMinLength(password)) {
       throw new Error(ERRORS.length);
     }
-  }
-  ensureNumber(password: string): void {
-    if (!/\d/.test(password)) {
+    if (!this.hasNumber(password)) {
       throw new Error(ERRORS.number);
     }
-  }
-  ensureUpperCase(password: string): void {
-    if (!/[A-Z]/.test(password)) {
+    if (!this.hasUpperCase(password)) {
       throw new Error(ERRORS.upperCase);
     }
-  }
-  ensureLowerCase(password: string): void {
-    if (!/[a-z]/.test(password)) {
+    if (!this.hasLowerCase(password)) {
       throw new Error(ERRORS.lowerCase);
     }
-  }
-  ensureSpecialChar(password: string): void {
-    if (!/[_@#!]/.test(password)) {
+    if (!this.hasSpecialChar(password)) {
       throw new Error(ERRORS.specialChar);
     }
+  }
+
+  static hasMinLength(password: string): boolean {
+    return password.length >= MINLENGTH;
+  }
+  static hasNumber(password: string): boolean {
+    return /\d/.test(password);
+  }
+  static hasUpperCase(password: string): boolean {
+    return /[A-Z]/.test(password);
+  }
+  static hasLowerCase(password: string): boolean {
+    return /[a-z]/.test(password);
+  }
+  static hasSpecialChar(password: string): boolean {
+    return /[_@#!]/.test(password);
   }
 }

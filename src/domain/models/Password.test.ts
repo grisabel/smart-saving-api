@@ -4,7 +4,7 @@ describe('La clase Password', () => {
     //arrange
     const password = 'Aabb@1';
     //act
-    const newPassword = new Password(password);
+    const newPassword = Password.createFromText(password);
     //assert
     expect(newPassword).toBeInstanceOf(Password);
   });
@@ -14,7 +14,7 @@ describe('La clase Password', () => {
 
     //assert
     expect(() => {
-      new Password(password);
+      Password.createFromText(password);
     }).toThrow(ERRORS.length);
   });
   it('debe lanzar un error si no tiene al menos un caracter numérico', () => {
@@ -23,7 +23,7 @@ describe('La clase Password', () => {
 
     //assert
     expect(() => {
-      new Password(password);
+      Password.createFromText(password);
     }).toThrow(ERRORS.number);
   });
   it('debe lanzar un error si no tiene al menos una letra mayúscula', () => {
@@ -32,7 +32,7 @@ describe('La clase Password', () => {
 
     //assert
     expect(() => {
-      new Password(password);
+      Password.createFromText(password);
     }).toThrow(ERRORS.upperCase);
   });
 
@@ -42,7 +42,7 @@ describe('La clase Password', () => {
 
     //assert
     expect(() => {
-      new Password(password);
+      Password.createFromText(password);
     }).toThrow(ERRORS.lowerCase);
   });
 
@@ -52,7 +52,7 @@ describe('La clase Password', () => {
 
     //assert
     expect(() => {
-      new Password(password);
+      Password.createFromText(password);
     }).toThrow(ERRORS.specialChar);
   });
 });
