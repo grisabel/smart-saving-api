@@ -1,4 +1,5 @@
-import { Password, PASSWORD_ERRORS } from './Password';
+import { Password } from './Password';
+import { PASSWORD_ERRORS } from './PasswordError';
 describe('La clase Password', () => {
   it('debe poder instanciarse mediante un string', () => {
     //arrange
