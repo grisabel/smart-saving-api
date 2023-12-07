@@ -125,4 +125,16 @@ describe('La clase Password', () => {
     //assert
     expect(result).toEqual(false);
   });
+  it('debe generar el hash correctamente', () => {
+    //arrange
+    const text1 = 'Aabb@1';
+
+    //act
+    const password1 = Password.createFromText(text1);
+    const result = password1.hash();
+    //assert
+    expect(result).not.toBe(text1);
+    expect(result.length).toBe(64);
+    expect(/^[a-fA-F0-9]{64}$/.test(result)).toBe(true);
+  });
 });

@@ -1,4 +1,5 @@
 import { PASSWORD_ERRORS, PasswordError } from './PasswordError';
+import HashService from '@application/services/HashService';
 
 const MINLENGTH = 6;
 
@@ -53,5 +54,9 @@ export class Password {
 
   isEqual(password: Password): boolean {
     return this.value === password.value;
+  }
+
+  hash(): string {
+    return HashService.generateHash(this.value);
   }
 }
