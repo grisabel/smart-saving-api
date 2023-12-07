@@ -17,19 +17,19 @@ export class Password {
   static ensureRules(value: string): void {
     const errorsPasswordMap = new Map<string, string>();
 
-    if (!this.hasMinLength(value)) {
+    if (!Password.hasMinLength(value)) {
       errorsPasswordMap.set('length', PASSWORD_ERRORS.length);
     }
-    if (!this.hasNumber(value)) {
+    if (!Password.hasNumber(value)) {
       errorsPasswordMap.set('number', PASSWORD_ERRORS.number);
     }
-    if (!this.hasUpperCase(value)) {
+    if (!Password.hasUpperCase(value)) {
       errorsPasswordMap.set('upperCase', PASSWORD_ERRORS.upperCase);
     }
-    if (!this.hasLowerCase(value)) {
+    if (!Password.hasLowerCase(value)) {
       errorsPasswordMap.set('lowerCase', PASSWORD_ERRORS.lowerCase);
     }
-    if (!this.hasSpecialChar(value)) {
+    if (!Password.hasSpecialChar(value)) {
       errorsPasswordMap.set('specialChar', PASSWORD_ERRORS.specialChar);
     }
 
