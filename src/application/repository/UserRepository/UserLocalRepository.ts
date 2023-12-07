@@ -22,17 +22,29 @@ export class UserLocalRepository implements UserInterfaceRepository {
   }
 
   async delete(email: Email): Promise<void> {
-    this.localUsers = this.localUsers.filter((user) => {
+    const filterArray = this.localUsers.filter((user) => {
       return email.isEqual(user.getEmail());
     });
+
+    if (filterArray.length === 0) {
+      throw new Error('User not exist');
+    }
+
+    this.localUsers = filterArray;
   }
 
   async update(user: User): Promise<void> {
-    this.localUsers = this.localUsers.map((userLocal) => {
+    const filterArray = this.localUsers.map((userLocal) => {
       if (userLocal.isEqual(user)) {
         return user;
       }
       return userLocal;
     });
+
+    if (filterArray.length === 0) {
+      throw new Error('User not exist');
+    }
+
+    this.localUsers = filterArray;
   }
 }

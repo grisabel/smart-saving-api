@@ -46,6 +46,13 @@ describe('La clase UserLocalRepository', () => {
     expect(promise).resolves.toEqual([user1, user2]);
   });
 
+  it('obtiene un array vacio si no se han guardado usurios', () => {
+    const promise = userRepository.findAll();
+    //assert
+    expect.assertions(1);
+    expect(promise).resolves.toEqual([]);
+  });
+
   it('elimina un usuario', () => {
     //arrange
     const user1 = UserExample.user1();
@@ -59,6 +66,22 @@ describe('La clase UserLocalRepository', () => {
     //assert
     expect.assertions(1);
     expect(promise).resolves.toEqual([user1]);
+  });
+
+  it('lanza una excepción si se intenta eliminar un usuario no existente', async () => {
+    //arrange
+    const user1 = UserExample.user1();
+    let throwError;
+
+    //act
+    try {
+      await userRepository.delete(user1.getEmail());
+    } catch (error) {
+      throwError = error;
+    }
+    //assert
+    expect.assertions(1);
+    expect(throwError.message).toEqual('User not exist');
   });
 
   it('actualiza un usuario existente', () => {
@@ -75,5 +98,24 @@ describe('La clase UserLocalRepository', () => {
     //assert
     expect.assertions(1);
     expect(promise).resolves.toEqual(user1);
+  });
+
+  it('lanza una excepción si se intenta actualizar un usuario no existente', async () => {
+    //arrange
+    const user1 = UserExample.user1();
+    const pwd = Password.createFromText('Aabb@1UpdateRepository');
+    user1.changePassword(pwd);
+
+    let throwError;
+    //act
+    try {
+      await userRepository.update(user1);
+    } catch (error) {
+      throwError = error;
+    }
+
+    //assert
+    expect.assertions(1);
+    expect(throwError.message).toEqual('User not exist');
   });
 });
