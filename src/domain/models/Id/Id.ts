@@ -15,4 +15,8 @@ export class Id {
   isEqual(id: Id) {
     return this.value === id.value;
   }
+
+  getValue() {
+    return this.value;
+  }
 }
