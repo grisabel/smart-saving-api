@@ -1,3 +1,4 @@
+//TODO review texts
 export const PASSWORD_ERRORS = {
   length: 'La contraseña debe tener al menos 6 caracteres.',
   number: 'La contraseña debe contener al menos un número.',
