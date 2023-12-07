@@ -1,13 +1,13 @@
 import { EmailError } from './EmailError';
 
 export class Email {
-  static createFromText(value: string) {
+  static createFromText(value: string): Email {
     Email.ensureEmail(value);
 
     return new Email(value);
   }
 
-  static ensureEmail(value: string) {
+  static ensureEmail(value: string): void {
     if (!Email.isValid(value)) {
       throw new EmailError();
     }
@@ -18,4 +18,8 @@ export class Email {
   }
 
   private constructor(private value: string) {}
+
+  isEquals(email: Email): boolean {
+    return this.value === email.value;
+  }
 }

@@ -81,4 +81,31 @@ describe('La clase Email', () => {
     //assert
     expect(throwError.message).toEqual(EmailError.msg);
   });
+  it('comprueba si dos emails son iguales', () => {
+    //arrange
+    const text1: string = 'test@test.com';
+    const text2: string = 'test@test.com';
+
+    //act
+    const email1 = Email.createFromText(text1);
+    const email2 = Email.createFromText(text2);
+    const result = email1.isEquals(email2);
+
+    //assert
+    expect(result).toEqual(true);
+  });
+
+  it('comprueba si dos emails son distintos', () => {
+    //arrange
+    const text1: string = 'test1@test.com';
+    const text2: string = 'test2@test.com';
+
+    //act
+    const email1 = Email.createFromText(text1);
+    const email2 = Email.createFromText(text2);
+    const result = email1.isEquals(email2);
+
+    //assert
+    expect(result).toEqual(false);
+  });
 });
