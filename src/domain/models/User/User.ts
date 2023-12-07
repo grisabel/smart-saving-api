@@ -12,7 +12,23 @@ export class User {
     private password: Password
   ) {}
 
-  isEqual(user: User) {
+  changePassword(newPassword: Password) {
+    this.password = newPassword;
+  }
+
+  isEqual(user: User): boolean {
     return this.email === user.email;
+  }
+
+  getJSON() {
+    return {
+      email: this.email,
+      firtname: this.firtname,
+      lastname: this.lastname,
+      dateBirth: this.dateBirth,
+      objective: this.objective,
+      lastSession: this.lastSession,
+      password: this.password,
+    };
   }
 }
