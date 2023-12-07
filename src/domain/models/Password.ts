@@ -27,30 +27,28 @@ export class PasswordError extends Error {
 }
 
 export class Password {
-  private constructor(private password: string) {}
+  static createFromText(value: string): Password {
+    this.ensureRules(value);
 
-  static createFromText(password: string): Password {
-    this.ensureRules(password);
-
-    return new Password(password);
+    return new Password(value);
   }
 
-  static ensureRules(password: string): void {
+  static ensureRules(value: string): void {
     const errorsPasswordMap = new Map<string, string>();
 
-    if (!this.hasMinLength(password)) {
+    if (!this.hasMinLength(value)) {
       errorsPasswordMap.set('length', PASSWORD_ERRORS.length);
     }
-    if (!this.hasNumber(password)) {
+    if (!this.hasNumber(value)) {
       errorsPasswordMap.set('number', PASSWORD_ERRORS.number);
     }
-    if (!this.hasUpperCase(password)) {
+    if (!this.hasUpperCase(value)) {
       errorsPasswordMap.set('upperCase', PASSWORD_ERRORS.upperCase);
     }
-    if (!this.hasLowerCase(password)) {
+    if (!this.hasLowerCase(value)) {
       errorsPasswordMap.set('lowerCase', PASSWORD_ERRORS.lowerCase);
     }
-    if (!this.hasSpecialChar(password)) {
+    if (!this.hasSpecialChar(value)) {
       errorsPasswordMap.set('specialChar', PASSWORD_ERRORS.specialChar);
     }
 
@@ -59,19 +57,25 @@ export class Password {
     }
   }
 
-  static hasMinLength(password: string): boolean {
-    return password.length >= MINLENGTH;
+  static hasMinLength(value: string): boolean {
+    return value.length >= MINLENGTH;
   }
-  static hasNumber(password: string): boolean {
-    return /\d/.test(password);
+  static hasNumber(value: string): boolean {
+    return /\d/.test(value);
   }
-  static hasUpperCase(password: string): boolean {
-    return /[A-Z]/.test(password);
+  static hasUpperCase(value: string): boolean {
+    return /[A-Z]/.test(value);
   }
-  static hasLowerCase(password: string): boolean {
-    return /[a-z]/.test(password);
+  static hasLowerCase(value: string): boolean {
+    return /[a-z]/.test(value);
   }
-  static hasSpecialChar(password: string): boolean {
-    return /[_@#!]/.test(password);
+  static hasSpecialChar(value: string): boolean {
+    return /[_@#!]/.test(value);
+  }
+
+  private constructor(private value: string) {}
+
+  isEqual(password: Password): boolean {
+    return this.value === password.value;
   }
 }
