@@ -63,4 +63,8 @@ export class Password {
   hash(): string {
     return HashService.generateHash(this.value);
   }
+
+  getValue() {
+    return this.value;
+  }
 }
