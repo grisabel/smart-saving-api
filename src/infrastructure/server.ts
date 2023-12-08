@@ -3,6 +3,7 @@ import cors from 'cors';
 
 const server = express();
 
+//TODO move to environment
 server.use(
   cors({
     origin: '*',
@@ -10,8 +11,8 @@ server.use(
   })
 );
 
-server.get('/', (req, res) => {
-  res.send({ message: 'Hello API' });
+server.get('/status', (req, res) => {
+  res.status(200).json({ status: 'OK' });
 });
 
 export default server;

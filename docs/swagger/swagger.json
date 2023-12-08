@@ -12,6 +12,10 @@
     ],
     "tags": [
       {
+        "name": "test",
+        "description": "Test endpoint"
+      },
+      {
         "name": "user",
         "description": "Operations about user"
       },
@@ -29,21 +33,27 @@
       }
     ],
     "paths": {
-      "/": {
+      "/status": {
         "get": {
           "tags": [
-            "user"
+            "test"
           ],
-          "summary": "Get user by user id",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "getUserById",
+          "summary": "Check if server is running",
+          "description": "",
+          "operationId": "getStatus",
           "responses": {
             "200": {
               "description": "successful operation",
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/User"
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "OK"
+                      }
+                    }
                   }
                 }
               }
