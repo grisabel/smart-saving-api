@@ -2,7 +2,7 @@ import app from '../../src/infrastructure/server';
 
 function startServer() {
   const host = process.env.HOST ?? 'localhost';
-  const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+  const port = process.env.PORT ? Number(process.env.PORT) : 3001;
 
   return new Promise((resolve, reject) => {
     const server = app.listen(port, host, () => {
