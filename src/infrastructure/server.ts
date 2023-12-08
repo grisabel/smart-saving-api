@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import { ServerRoutes } from './ServerRoutes';
 import UserRouter from './modules/users/UserRouter';
 
-const server = express();
+const server: Express = express();
 
 //TODO move to environment
 server.use(
@@ -13,7 +13,7 @@ server.use(
   })
 );
 
-server.get('/status', (req, res) => {
+server.get('/status', (req: Request, res: Response) => {
   res.status(200).json({ status: 'OK' });
 });
 
