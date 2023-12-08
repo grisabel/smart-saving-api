@@ -1,5 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
+
 import { ServerRoutes } from './ServerRoutes';
 import UserRouter from './modules/users/UserRouter';
 
@@ -12,6 +14,7 @@ server.use(
     methods: ['OPTIONS', 'GET', 'PUT', 'POST'],
   })
 );
+server.use(bodyParser.json());
 
 server.get('/status', (req: Request, res: Response) => {
   res.status(200).json({ status: 'OK' });
