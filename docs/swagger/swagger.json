@@ -757,7 +757,7 @@
               "type": "string",
               "example": "User Surname"
             },
-            "date_birth": {
+            "dateBirth": {
               "type": "string",
               "example": "1997-01-30",
               "format": "date",
@@ -771,7 +771,7 @@
               "type": "string",
               "example": "user@email.com"
             },
-            "repeat_email": {
+            "repeatEmail": {
               "type": "string",
               "example": "user@email.com"
             },
@@ -779,7 +779,7 @@
               "type": "string",
               "example": "12345@Aa"
             },
-            "repeat_password": {
+            "repeatPassword": {
               "type": "string",
               "example": "12345@Aa"
             }
@@ -810,7 +810,7 @@
         "ResetPasswordBody": {
           "type": "object",
           "properties": {
-            "date_birth": {
+            "dateBirth": {
               "type": "string",
               "example": "1997-01-30",
               "format": "date",
@@ -829,7 +829,7 @@
               "type": "string",
               "example": "12345@Aa"
             },
-            "repeat_password": {
+            "repeatPassword": {
               "type": "string",
               "example": "12345@Aa"
             },
