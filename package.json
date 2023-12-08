@@ -6,7 +6,7 @@
     "start": "npx nx serve smart-savings-api",
     "build": "npx nx build smart-savings-api",
     "test": "npx nx test smart-savings-api",
-    "lint": "npx nx lint smart-savings-api"
+    "lint": "nx run-many --target=lint --projects=smart-savings-api,smart-savings-api-e2e"
   },
   "private": true,
   "dependencies": {

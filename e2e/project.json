@@ -1,5 +1,5 @@
 {
-  "name": "e2e",
+  "name": "smart-savings-api-e2e",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
   "implicitDependencies": ["smart-savings-api"],
   "projectType": "application",
