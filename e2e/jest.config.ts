@@ -2,9 +2,9 @@
 export default {
   displayName: 'smart-savings-api-e2e',
   preset: '../jest.preset.js',
-  globalSetup: '<rootDir>/src/support/global-setup.ts',
-  globalTeardown: '<rootDir>/src/support/global-teardown.ts',
-  setupFiles: ['<rootDir>/src/support/test-setup.ts'],
+  globalSetup: '<rootDir>/scripts/global-setup.ts',
+  globalTeardown: '<rootDir>/scripts/global-teardown.ts',
+  setupFiles: ['<rootDir>/scripts/test-setup.ts'],
   testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': [
