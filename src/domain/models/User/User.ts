@@ -5,7 +5,7 @@ import { UserError } from './UserError';
 export class User {
   constructor(
     private email: Email,
-    private firtname: string,
+    private firstname: string,
     private lastname: string,
     private dateBirth: string, //'dd-mm-aaaa'
     private objective: string,
@@ -21,18 +21,46 @@ export class User {
   }
 
   isEqual(user: User): boolean {
-    return this.email === user.email;
+    return this.email.isEqual(user.email);
   }
 
-  getJSON() {
+  getValue() {
     return {
-      email: this.email,
-      firtname: this.firtname,
+      email: this.email.getValue(),
+      firtname: this.firstname,
       lastname: this.lastname,
       dateBirth: this.dateBirth,
       objective: this.objective,
       lastSession: this.lastSession,
-      password: this.password,
+      password: this.password.getValue(),
     };
+  }
+
+  public getEmail(): Email {
+    return this.email;
+  }
+
+  public getFirtname(): string {
+    return this.firstname;
+  }
+
+  public getLastname(): string {
+    return this.lastname;
+  }
+
+  public getDateBirth(): string {
+    return this.dateBirth;
+  }
+
+  public getObjective(): string {
+    return this.objective;
+  }
+
+  public getLastSession(): string {
+    return this.lastSession;
+  }
+
+  public getPassword(): Password {
+    return this.password;
   }
 }
