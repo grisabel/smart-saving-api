@@ -8,7 +8,7 @@ const createUser = [
   body('dateBirth').not().isEmpty(),
   body('objetive').not().isEmpty(),
   body('email').not().isEmpty(),
-  body('repeatEmail').not().isEmpty(),
+  body('repeatEmail').not().isEmpty().equals('email'),
   body('password').not().isEmpty(),
   body('repeatPassword').not().isEmpty(),
 ];

@@ -58,4 +58,36 @@ describe('POST /user', () => {
       ])
     );
   });
+  it('debe retornar un status 422 si el email y el repeatEmail no coinciden', async () => {
+    //arrange
+    const body = {
+      firstName: 'User Name',
+      lastName: 'User Surname',
+      dateBirth: '1997-01-30',
+      objetive: 'Personal Objetive',
+      email: 'user@email.com',
+      repeatEmail: 'user1@email.com',
+      password: '12345@Aa',
+      repeatPassword: '12345@Aa',
+    };
+    let throwError;
+    const response422 = {
+      message: 'Validación incorrecta',
+      errors: [{ path: 'repeatEmail' }],
+    };
+
+    //act
+    try {
+      await axios.post(`/user`, body);
+    } catch (error) {
+      throwError = error;
+    }
+
+    //assert
+    expect(throwError.response.status).toBe(422);
+    expect(throwError.response.data.message).toEqual(response422.message);
+    expect(throwError.response.data.errors).toEqual(
+      expect.arrayContaining([expect.objectContaining(response422.errors[0])])
+    );
+  });
 });
