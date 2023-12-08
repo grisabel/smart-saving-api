@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npx nx serve smart-savings-api",
     "swagger": "node docs/swagger/swagger.js",
-    "start:swagger":  "npx concurrently --kill-other -n \"SERVER,SWAGGER\" -c \"bgBlue,bgGreen\" \"npm run start\" \"npm run e2e\"",
+    "start:swagger":  "npx concurrently --kill-other -n \"SERVER,SWAGGER\" -c \"bgBlue,bgGreen\" \"npm run start\" \"npm run swagger\"",
     "build": "npx nx build smart-savings-api",
     "test": "npx nx test smart-savings-api",
     "test:e2e": "npx concurrently --kill-other -n \"SERVER,TEST:E2E\" -c \"bgBlue,bgGreen\" \"npm run start\" \"npm run e2e\"",
