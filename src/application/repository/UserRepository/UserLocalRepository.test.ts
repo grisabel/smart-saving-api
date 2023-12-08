@@ -24,15 +24,22 @@ describe('La clase UserLocalRepository', () => {
     expect(promise).resolves.toEqual(user1);
   });
 
-  it('comprueba que no existe el usuario por email', () => {
+  it('comprueba que no existe el usuario por email', async () => {
     //arrange
     const user1 = UserExample.user1();
-
+    let throwError;
     //act
-    const promise = userRepository.findByEmail(user1.getEmail());
+    try {
+      await userRepository.findByEmail(user1.getEmail());
+    } catch (error) {
+      throwError = error;
+    }
+
     //assert
     expect.assertions(1);
-    expect(promise).resolves.toEqual(null);
+    expect(throwError.data).toEqual({
+      userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+    });
   });
 
   it('guarda varios usuarios y obtiene todos', () => {

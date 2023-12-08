@@ -5,54 +5,77 @@ import {
   UserInterfaceRepository,
   UserRepositoryError,
 } from './UserInterfaceRepository';
+import { rejects } from 'assert';
 
 export class UserLocalRepository implements UserInterfaceRepository {
   private localUsers: User[] = [];
 
   async save(user: User): Promise<void> {
-    this.localUsers.push(user);
+    return new Promise((resolve) => {
+      this.localUsers.push(user);
+      resolve();
+    });
   }
 
-  async findByEmail(email: Email): Promise<User | null> {
-    const filterArray = this.localUsers.filter((user) => {
-      return email.isEqual(user.getEmail());
-    });
+  async findByEmail(email: Email): Promise<User> {
+    return new Promise((resolve, reject) => {
+      const filterArray = this.localUsers.filter((user) => {
+        return email.isEqual(user.getEmail());
+      });
 
-    return filterArray.length === 0 ? null : filterArray[0];
+      if (filterArray.length === 0) {
+        const error = new UserRepositoryError({
+          userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+        });
+        reject(error);
+      } else {
+        resolve(filterArray[0]);
+      }
+    });
   }
 
   async findAll(): Promise<User[]> {
-    return this.localUsers;
+    return new Promise((resolve) => {
+      resolve(this.localUsers);
+    });
   }
 
   async delete(email: Email): Promise<void> {
-    const filterArray = this.localUsers.filter((user) => {
-      return email.isEqual(user.getEmail());
-    });
-
-    if (filterArray.length === 0) {
-      throw new UserRepositoryError({
-        userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+    return new Promise((resolve, reject) => {
+      const filterArray = this.localUsers.filter((user) => {
+        return email.isEqual(user.getEmail());
       });
-    }
 
-    this.localUsers = filterArray;
+      if (filterArray.length === 0) {
+        const error = new UserRepositoryError({
+          userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+        });
+        reject(error);
+      } else {
+        this.localUsers = filterArray;
+        resolve();
+      }
+    });
   }
 
   async update(user: User): Promise<void> {
-    const filterArray = this.localUsers.map((userLocal) => {
-      if (userLocal.isEqual(user)) {
-        return user;
-      }
-      return userLocal;
-    });
-
-    if (filterArray.length === 0) {
-      throw new UserRepositoryError({
-        userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+    return new Promise((resolve, reject) => {
+      const updateArray = this.localUsers.map((userLocal) => {
+        if (userLocal.isEqual(user)) {
+          return user;
+        }
+        return userLocal;
       });
-    }
 
-    this.localUsers = filterArray;
+      if (updateArray.length === 0) {
+        const error = new UserRepositoryError({
+          userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+        });
+        reject(error);
+      } else {
+        this.localUsers = updateArray;
+        resolve();
+      }
+    });
   }
 }

@@ -3,7 +3,7 @@ import { User } from '@domain/models/User';
 
 //TODO review texts
 export const USER_REPOSITORY_ERROR = {
-  userNotExist: 'User not exist',
+  userNotExist: 'El usuario no existe',
 };
 export interface UserRepositoryErrorParams {
   userNotExist?: string;
@@ -21,7 +21,7 @@ export class UserRepositoryError extends Error {
 
 export interface UserInterfaceRepository {
   save(user: User): Promise<void>;
-  findByEmail(email: Email): Promise<User | null>;
+  findByEmail(email: Email): Promise<User>;
   findAll(): Promise<User[]>;
   delete(email: Email): Promise<void>;
   update(user: User): Promise<void>;
