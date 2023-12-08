@@ -6,6 +6,8 @@
     "start": "npx nx serve smart-savings-api",
     "build": "npx nx build smart-savings-api",
     "test": "npx nx test smart-savings-api",
+    "test:e2e": "npx concurrently --kill-other -n \"SERVER,TEST:E2E\" -c \"bgBlue,bgGreen\" \"npm run start\" \"npm run e2e\"",
+    "e2e": "npx nx e2e smart-savings-api-e2e",
     "lint": "nx run-many --target=lint --projects=smart-savings-api,smart-savings-api-e2e"
   },
   "private": true,
@@ -30,6 +32,7 @@
     "@types/node": "~18.7.1",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.9.1",
+    "concurrently": "^8.2.2",
     "esbuild": "^0.19.2",
     "eslint": "~8.46.0",
     "eslint-config-prettier": "^9.0.0",
