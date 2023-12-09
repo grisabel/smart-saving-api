@@ -1,6 +1,8 @@
 import express from 'express';
+import { validate } from '@infrastructure/validators/Validate';
+
 import UserController from './controllers/UserController';
-import UserValidator, { validate } from './validators/UserValidator';
+import UserValidator from './validators/UserValidator';
 
 const router = express.Router();
 

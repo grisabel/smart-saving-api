@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import equalFields from '@infrastructure/validators/EqualFieldsValidator';
 import { body, validationResult } from 'express-validator';
 
 // prettier-ignore
@@ -15,36 +15,16 @@ const createUser = [
     .not().isEmpty(),
   body('repeatEmail')
     .not().isEmpty()
-    .custom((value, { req }) => {
-      if (value !== req.body.email) {
-        throw new Error('El email y la repetición del email no coinciden');
-      }
-      return true;
-    }),
+    .custom(equalFields('email', 'El email y la repetición del email no coinciden')),
   body('password')
     .not().isEmpty(),
   body('repeatPassword')
     .not().isEmpty()
-    .custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error('El email y la repetición del email no coinciden');
-      }
-      return true;
-    }),
+    .custom(equalFields('password', 'El email y la repetición del email no coinciden')),
+
 ];
 // prettier-ignore
 
-export const validate = (req: Request, res: Response, next: NextFunction) => {
-  const error = validationResult(req);
-  if (error.isEmpty()) {
-    next();
-    return;
-  }
-
-  res
-    .status(422)
-    .json({ message: 'Validación incorrecta', errors: error.array() });
-};
 export default {
   createUser,
 };
