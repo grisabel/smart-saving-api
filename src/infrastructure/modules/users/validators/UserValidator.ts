@@ -20,7 +20,7 @@ const createUser = [
     .required(),
   Body('repeatPassword')
     .required()
-    .equalFields('password', 'El email y la repetición del email no coinciden'),
+    .equalFields('password', 'La contraseña y la repetición de la contraseña no coinciden'),
 ];
 // prettier-ignore
 

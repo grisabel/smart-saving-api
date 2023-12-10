@@ -5,11 +5,11 @@ import {
 } from '../../dtos/response/ErrorResponseDto';
 
 export class DomainErrorResponseMapper {
-  static toResponse<T>(error: DomainError<T>): ErrorResponseDto {
+  static toResponse<T>(error: DomainError<T>, title: string): ErrorResponseDto {
     const errorMessages = !error?.data ? [] : Object.values(error.data);
 
     return {
-      message: 'Validación de Dominio',
+      message: 'Validación de Dominio. ' + title,
       errors: errorMessages.map((errorMsg) => {
         return DomainErrorValidationMapper.toResponse(error.message, errorMsg);
       }),

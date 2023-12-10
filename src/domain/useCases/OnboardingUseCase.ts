@@ -3,6 +3,9 @@ import { Email } from '../models/Email';
 import { Password } from '../models/Password';
 import { User } from '../models/User';
 import { PostUserDTO } from '../../infrastructure/modules/users/dtos/request/PostUserDTO';
+import { EmailError } from '../models/Email/EmailError';
+import { PasswordError } from '../models/Password/PasswordError';
+import { DomainErrorResponseMapper } from '../../infrastructure/mappers/response/DomainErrorResponseMapper';
 
 const userRepository = new UserLocalRepository();
 export class OnboardingUseCase {
@@ -23,7 +26,21 @@ export class OnboardingUseCase {
         userRepository.save(user);
         resolve();
       } catch (error) {
-        reject();
+        if (error instanceof EmailError) {
+          const dto = DomainErrorResponseMapper.toResponse(
+            error,
+            'Error al validar el email'
+          );
+          reject(dto);
+        } else if (error instanceof PasswordError) {
+          const dto = DomainErrorResponseMapper.toResponse(
+            error,
+            'Error al validar la contraseña'
+          );
+          reject(dto);
+        }
+
+        reject(error);
       }
     });
   }

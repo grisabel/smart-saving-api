@@ -122,4 +122,84 @@ describe('POST /user', () => {
       expect.arrayContaining([expect.objectContaining(response422.errors[0])])
     );
   });
+  it('debe retornar un status 422 si el email no sigue el formato definido', async () => {
+    //arrange
+    const body = {
+      firstName: 'User Name',
+      lastName: 'User Surname',
+      dateBirth: '1997-01-30',
+      objetive: 'Personal Objetive',
+      email: 'useremail.com',
+      repeatEmail: 'useremail.com',
+      password: '12345@A',
+      repeatPassword: '12345@A',
+    };
+    let throwError;
+    // TODO
+    const response422 = {
+      message: 'Validación de Dominio. Error al validar el email',
+      errors: [
+        {
+          type: 'EmailError',
+          msg: 'El email no tiene un formato válido <nombre>@<dominio>.<extensión_de_dominio>',
+        },
+      ],
+    };
+
+    //act
+    try {
+      await axios.post(`/user`, body);
+    } catch (error) {
+      throwError = error;
+    }
+
+    console.log(throwError.response.data.errors);
+
+    //assert
+    expect(throwError.response.status).toBe(422);
+    expect(throwError.response.data.message).toEqual(response422.message);
+    expect(throwError.response.data.errors).toEqual(
+      expect.arrayContaining([expect.objectContaining(response422.errors[0])])
+    );
+  });
+  it('debe retornar un status 422 si la contraseña no sigue el formato definido', async () => {
+    //arrange
+    const body = {
+      firstName: 'User Name',
+      lastName: 'User Surname',
+      dateBirth: '1997-01-30',
+      objetive: 'Personal Objetive',
+      email: 'user@email.com',
+      repeatEmail: 'user@email.com',
+      password: '12345Aa',
+      repeatPassword: '12345Aa',
+    };
+    let throwError;
+    // TODO
+    const response422 = {
+      message: 'Validación de Dominio. Error al validar la contraseña',
+      errors: [
+        {
+          type: 'PasswordError',
+          msg: 'La contraseña debe contener al menos alguno de los siguientes caracteres: _ @ # !',
+        },
+      ],
+    };
+
+    //act
+    try {
+      await axios.post(`/user`, body);
+    } catch (error) {
+      throwError = error;
+    }
+
+    console.log(throwError.response.data.errors);
+
+    //assert
+    expect(throwError.response.status).toBe(422);
+    expect(throwError.response.data.message).toEqual(response422.message);
+    expect(throwError.response.data.errors).toEqual(
+      expect.arrayContaining([expect.objectContaining(response422.errors[0])])
+    );
+  });
 });
