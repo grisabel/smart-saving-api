@@ -1,6 +1,9 @@
-export class EmailError extends Error {
+import { DomainError } from '../Error/DomainError';
+
+//Todo añadir data
+export class EmailError extends DomainError<null> {
   static msg: string = 'EmailError';
   constructor() {
-    super(EmailError.msg);
+    super(DomainError.msg, null);
   }
 }

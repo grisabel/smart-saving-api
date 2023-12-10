@@ -1,3 +1,5 @@
+import { DomainError } from '../Error/DomainError';
+
 //TODO review texts
 export const PASSWORD_ERRORS = {
   length: 'La contraseña debe tener al menos 6 caracteres.',
@@ -15,12 +17,10 @@ interface PasswordErrorParams {
   specialChar?: string;
 }
 
-export class PasswordError extends Error {
+export class PasswordError extends DomainError<PasswordErrorParams> {
   static msg: string = 'PasswordError';
-  public data: PasswordErrorParams;
 
   constructor(data: PasswordErrorParams) {
-    super(PasswordError.msg);
-    this.data = data;
+    super(PasswordError.msg, data);
   }
 }
