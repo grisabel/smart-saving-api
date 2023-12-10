@@ -1,3 +1,5 @@
+import 'tsconfig-paths/register';
+
 import app from '../../src/infrastructure/server';
 
 function startServer() {
