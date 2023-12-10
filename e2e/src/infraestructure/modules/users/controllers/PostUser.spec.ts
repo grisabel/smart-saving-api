@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 describe('POST /user', () => {
-  it('debe retornar un status 200 al crear un usuario satisfactoriamente', async () => {
+  it('debe retornar un status 204 (No Content) al crear un usuario satisfactoriamente', async () => {
     const body = {
       firstName: 'User Name',
       lastName: 'User Surname',
@@ -14,8 +14,7 @@ describe('POST /user', () => {
     };
     const res = await axios.post(`/user`, body);
 
-    expect(res.status).toBe(200);
-    expect(res.data).toEqual({ status: 'OK' });
+    expect(res.status).toBe(204);
   });
   it('debe retornar un status 422 si el body está incompleto', async () => {
     //arrange

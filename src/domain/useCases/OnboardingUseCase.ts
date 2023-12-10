@@ -6,11 +6,12 @@ import { PostUserDTO } from '../../infrastructure/modules/users/dtos/request/Pos
 import { EmailError } from '../models/Email/EmailError';
 import { PasswordError } from '../models/Password/PasswordError';
 import { DomainErrorResponseMapper } from '../../infrastructure/mappers/response/DomainErrorResponseMapper';
+import { ErrorResponseDto } from '../../infrastructure/dtos/response/ErrorResponseDto';
 
 const userRepository = new UserLocalRepository();
 export class OnboardingUseCase {
-  saveUser(userDTO: PostUserDTO): Promise<void> {
-    return new Promise((resolve, reject) => {
+  saveUser(userDTO: PostUserDTO): Promise<[ErrorResponseDto]> {
+    return new Promise((resolve) => {
       try {
         const email = Email.createFromText(userDTO.email);
         const password = Password.createFromText(userDTO.password);
@@ -24,23 +25,23 @@ export class OnboardingUseCase {
           password
         );
         userRepository.save(user);
-        resolve();
+        resolve([null]);
       } catch (error) {
         if (error instanceof EmailError) {
-          const dto = DomainErrorResponseMapper.toResponse(
+          const errorDto = DomainErrorResponseMapper.toResponse(
             error,
             'Error al validar el email'
           );
-          reject(dto);
+          resolve([errorDto]);
         } else if (error instanceof PasswordError) {
-          const dto = DomainErrorResponseMapper.toResponse(
+          const errorDto = DomainErrorResponseMapper.toResponse(
             error,
             'Error al validar la contraseña'
           );
-          reject(dto);
+          resolve([errorDto]);
         }
 
-        reject(error);
+        resolve([error]);
       }
     });
   }

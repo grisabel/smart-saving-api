@@ -10,12 +10,14 @@ const obtainUser = async (req: Request, res: Response) => {
 
 const createUser = async (req: Request<PostUserDTO>, res: Response) => {
   const body = req.body;
-  try {
-    await onboardingUseCase.saveUser(body);
-    res.status(200).json({ status: 'OK' });
-  } catch (error) {
+
+  const [error] = await onboardingUseCase.saveUser(body);
+
+  if (error) {
     res.status(422).json(error);
+    return;
   }
+  res.status(204).json();
 };
 
 export default {
