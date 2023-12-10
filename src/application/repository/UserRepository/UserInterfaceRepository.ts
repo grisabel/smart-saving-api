@@ -1,5 +1,5 @@
-import { Email } from '@domain/models/Email';
-import { User } from '@domain/models/User';
+import { Email } from '../../../domain/models/Email';
+import { User } from '../../../domain/models/User';
 
 //TODO review texts
 export const USER_REPOSITORY_ERROR = {

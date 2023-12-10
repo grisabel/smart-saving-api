@@ -1,5 +1,5 @@
 import { PASSWORD_ERRORS, PasswordError } from './PasswordError';
-import HashService from '@application/services/HashService';
+import HashService from '../../../application/services/HashService';
 
 const MINLENGTH = 6;
 

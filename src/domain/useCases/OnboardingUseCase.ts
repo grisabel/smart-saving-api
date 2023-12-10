@@ -1,8 +1,8 @@
-import { UserLocalRepository } from '@application/repository/UserRepository/UserLocalRepository';
-import { Email } from '@domain/models/Email';
-import { Password } from '@domain/models/Password';
-import { User } from '@domain/models/User';
-import { PostUserDTO } from '@infrastructure/modules/users/dtos/request/PostUserDTO';
+import { UserLocalRepository } from '../../application/repository/UserRepository/UserLocalRepository';
+import { Email } from '../models/Email';
+import { Password } from '../models/Password';
+import { User } from '../models/User';
+import { PostUserDTO } from '../../infrastructure/modules/users/dtos/request/PostUserDTO';
 
 const userRepository = new UserLocalRepository();
 export class OnboardingUseCase {

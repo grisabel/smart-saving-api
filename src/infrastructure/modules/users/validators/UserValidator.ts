@@ -1,27 +1,26 @@
-import equalFields from '@infrastructure/validators/EqualFieldsValidator';
-import { body, validationResult } from 'express-validator';
+import { Body } from '../../../../infrastructure/validators/body';
+import { equalFields } from '../../../../infrastructure/validators/body/EqualFieldsValidator';
 
 // prettier-ignore
 const createUser = [
-  body('firstName')
-    .not().isEmpty(),
-  body('lastName')
-    .not().isEmpty(),
-  body('dateBirth')
-    .not().isEmpty(),
-  body('objetive')
-    .not().isEmpty(),
-  body('email')
-    .not().isEmpty(),
-  body('repeatEmail')
-    .not().isEmpty()
-    .custom(equalFields('email', 'El email y la repetición del email no coinciden')),
-  body('password')
-    .not().isEmpty(),
-  body('repeatPassword')
-    .not().isEmpty()
-    .custom(equalFields('password', 'El email y la repetición del email no coinciden')),
-
+  Body('firstName')
+    .required(),
+  Body('lastName')
+    .required(),
+  Body('dateBirth')
+    .required(),
+  Body('objetive')
+    .required(),
+  Body('email')
+    .required(),
+  Body('repeatEmail')
+    .required()
+    .equalFields('email', 'El email y la repetición del email no coinciden'),
+  Body('password')
+    .required(),
+  Body('repeatPassword')
+    .required()
+    .equalFields('password', 'El email y la repetición del email no coinciden'),
 ];
 // prettier-ignore
 
