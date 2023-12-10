@@ -152,8 +152,6 @@ describe('POST /user', () => {
       throwError = error;
     }
 
-    console.log(throwError.response.data.errors);
-
     //assert
     expect(throwError.response.status).toBe(422);
     expect(throwError.response.data.message).toEqual(response422.message);
@@ -191,8 +189,6 @@ describe('POST /user', () => {
     } catch (error) {
       throwError = error;
     }
-
-    console.log(throwError.response.data.errors);
 
     //assert
     expect(throwError.response.status).toBe(422);

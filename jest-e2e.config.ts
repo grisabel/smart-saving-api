@@ -11,8 +11,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: './coverage/smart-savings-api-e2e',
-  testMatch: [
-    '<rootDir>/e2e/src/**/__tests__/**/*.[jt]s?(x)',
-    '<rootDir>/e2e/src/**/*(*.)@(spec|test).[jt]s?(x)',
-  ],
+  testMatch: ['<rootDir>/src/**/*(*.)@(itest).[jt]s?(x)'],
 };

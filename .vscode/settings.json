@@ -1,4 +1,6 @@
 {  
-    // "jestrunner.runOptions": ["--watch"],
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    // "jestrunner.jestCommand": "npm run test:e2e --",
+    "jestrunner.jestCommand": "npm run test --",
+    "jestrunner.runOptions": ["--watch"],
 }

@@ -19,7 +19,7 @@
       ]
     },
     "e2e": {
-      "cache": true
+      "cache": false
     },
     "@nx/jest:jest": {
       "cache": true,
