@@ -1,8 +1,8 @@
-import { DomainError } from '../../../domain/models/Error/DomainError';
+import { DomainError } from '@domain/models/Error/DomainError';
 import {
   ErrorResponseDto,
   DomainErrorDto,
-} from '../../dtos/response/ErrorResponseDto';
+} from '@infrastructure/dtos/response/ErrorResponseDto';
 
 export class DomainErrorResponseMapper {
   static toResponse<T>(error: DomainError<T>, title: string): ErrorResponseDto {

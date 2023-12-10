@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { PostUserDTO } from '../dtos/request/PostUserDTO';
-import { OnboardingUseCase } from '../../../../domain/useCases/OnboardingUseCase';
+import { PostUserDTO } from '@infrastructure/modules/users/dtos/request/PostUserDTO';
+// TODO maybe move to users
+import { OnboardingUseCase } from '@domain/useCases/OnboardingUseCase';
 
 const onboardingUseCase = new OnboardingUseCase();
 
