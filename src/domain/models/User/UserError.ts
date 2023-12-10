@@ -1,3 +1,5 @@
+import { DomainError } from '../Error/DomainError';
+
 //TODO review texts
 export const USER_ERRORS = {
   samePassword: 'La nueva contraseña no debe coincidir con la antigua.',
@@ -5,12 +7,12 @@ export const USER_ERRORS = {
 interface UserErrorParams {
   samePassword?: string;
 }
-export class UserError extends Error {
+export class UserError extends DomainError<UserErrorParams> {
   static msg: string = 'UserError';
   public data: UserErrorParams;
 
   constructor() {
-    super(UserError.msg);
-    this.data = { samePassword: USER_ERRORS.samePassword };
+    const data = { samePassword: USER_ERRORS.samePassword };
+    super(UserError.msg, data);
   }
 }

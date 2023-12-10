@@ -3,8 +3,8 @@ import {
   USER_REPOSITORY_ERROR,
   UserInterfaceRepository,
 } from './UserInterfaceRepository';
-import { UserExample } from '@domain/models/User/test/User.example';
-import { Password } from '@domain/models/Password';
+import { UserExample } from '../../../domain/models/User/test/User.example';
+import { Password } from '../../../domain/models/Password';
 
 describe('La clase UserLocalRepository', () => {
   let userRepository: UserInterfaceRepository;

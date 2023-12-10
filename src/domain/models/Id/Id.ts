@@ -1,4 +1,4 @@
-import IdService from '@application/services/IdService';
+import IdService from '../../../application/services/IdService';
 
 export class Id {
   static createId(): Id {
