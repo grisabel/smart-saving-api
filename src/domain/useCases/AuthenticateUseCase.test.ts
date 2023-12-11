@@ -1,4 +1,5 @@
 import { AuthenticateUseCase } from './AuthenticateUseCase';
+import JWTService from '@application/services/JWTService';
 describe('La clase AuthenticationUseCase', () => {
   it('debe devolver un jwt dado un usuario y contraseña correctos', async () => {
     //arrange
@@ -11,6 +12,6 @@ describe('La clase AuthenticationUseCase', () => {
     const result = await authenticateClass.authenticate(emailDTO, passwordDTO);
 
     //asert
-    expect(result).toEqual('');
+    expect(result.split('.').length).toEqual(3);
   });
 });
