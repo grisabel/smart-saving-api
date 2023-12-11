@@ -2,11 +2,15 @@ import { UserInterfaceRepository } from '@application/repository/UserRepository/
 import JWTService from '@application/services/JWTService';
 import { Email } from '@domain/models/Email';
 import { Password } from '@domain/models/Password';
-
+import { LoginResponseDto } from '@infrastructure/modules/users/dtos/response/LoginResponseDto';
+import { ErrorResponseDto } from '../../infrastructure/dtos/response/ErrorResponseDto';
 export class AuthenticateUseCase {
   constructor(private userRepository: UserInterfaceRepository) {}
-  authenticate(emailDTO: string, passwordDTO: string): Promise<string> {
-    return new Promise(async (resolve, reject) => {
+  authenticate(
+    emailDTO: string,
+    passwordDTO: string
+  ): Promise<[ErrorResponseDto | null, LoginResponseDto | null]> {
+    return new Promise(async (resolve) => {
       try {
         const email = Email.createFromText(emailDTO);
         const passwordHash = Password.createFromHash(passwordDTO);
@@ -17,12 +21,12 @@ export class AuthenticateUseCase {
         if (match) {
           const userPayload = { name: user.getFirtname() };
           const jwt = JWTService.createJWT(emailDTO, userPayload);
-          //todo crear dto
-          resolve(jwt);
+          const responseDTO = { accessToken: jwt };
+          resolve([null, responseDTO]);
         } else {
           //todo crear dto
           console.log('reject');
-          reject();
+          resolve([null, null]);
         }
       } catch (error) {
         console.log('error');
