@@ -18,9 +18,12 @@ describe('La clase AuthenticationUseCase', () => {
 
     //act
     await userRepository.save(user1);
-    const result = await authenticateClass.authenticate(emailDTO, passwordDTO);
+    const [error, resultDto] = await authenticateClass.authenticate(
+      emailDTO,
+      passwordDTO
+    );
 
     //asert
-    expect(result.split('.').length).toEqual(3);
+    expect(resultDto.accessToken.split('.').length).toEqual(3);
   });
 });
