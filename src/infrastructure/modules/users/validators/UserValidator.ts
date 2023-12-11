@@ -1,4 +1,4 @@
-import { Body } from '@infrastructure/validators/body';
+import { Body } from '../../../../infrastructure/validators/body';
 
 // prettier-ignore
 const createUser = [
