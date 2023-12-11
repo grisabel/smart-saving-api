@@ -1,14 +1,23 @@
+import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
 import { AuthenticateUseCase } from './AuthenticateUseCase';
-import JWTService from '@application/services/JWTService';
+import { UserLocalRepository } from '@application/repository/UserRepository/UserLocalRepository';
+import { UserExample } from '@domain/models/User/test/User.example';
+
 describe('La clase AuthenticationUseCase', () => {
+  let userRepository: UserInterfaceRepository;
+
+  beforeEach(() => {
+    userRepository = new UserLocalRepository();
+  });
   it('debe devolver un jwt dado un usuario y contraseña correctos', async () => {
     //arrange
-    const emailDTO = 'test@test.com';
-    const passwordDTO = 'Aabb@1';
-    const authenticateClass = new AuthenticateUseCase();
+    const user1 = UserExample.user1();
+    const emailDTO = user1.getEmail().getValue();
+    const passwordDTO = user1.getPassword().getValue();
+    const authenticateClass = new AuthenticateUseCase(userRepository);
 
     //act
-
+    await userRepository.save(user1);
     const result = await authenticateClass.authenticate(emailDTO, passwordDTO);
 
     //asert
