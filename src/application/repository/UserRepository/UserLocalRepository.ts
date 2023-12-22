@@ -6,7 +6,7 @@ import {
   UserRepositoryError,
 } from './UserInterfaceRepository';
 
-import { Password } from '@domain/models/Password';
+import { Password } from '../../../domain/models/Password';
 export class UserLocalRepository implements UserInterfaceRepository {
   private localUsers: User[] = [];
 

@@ -26,4 +26,39 @@ describe('La clase AuthenticationUseCase', () => {
     //asert
     expect(resultDto.accessToken.split('.').length).toEqual(3);
   });
+
+  it('debe lanzar un error si el usuario no existe', async () => {
+    //arrange
+    const user1 = UserExample.user1();
+    const emailDTO = user1.getEmail().getValue();
+    const passwordDTO = user1.getPassword().getValue();
+    const authenticateClass = new AuthenticateUseCase(userRepository);
+
+    //act
+    const [error, resultDto] = await authenticateClass.authenticate(
+      emailDTO,
+      passwordDTO
+    );
+
+    //asert
+    expect(error.message).toEqual('Usuario o contraseña incorrectos');
+  });
+
+  it('debe lanzar un error si el usuario y la contraseña no coinciden', async () => {
+    //arrange
+    const user1 = UserExample.user1();
+    const emailDTO = user1.getEmail().getValue();
+    const passwordDTO = user1.getPassword().getValue() + '0';
+    const authenticateClass = new AuthenticateUseCase(userRepository);
+
+    //act
+    await userRepository.save(user1);
+    const [error, resultDto] = await authenticateClass.authenticate(
+      emailDTO,
+      passwordDTO
+    );
+
+    //asert
+    expect(error.message).toEqual('Usuario o contraseña incorrectos');
+  });
 });
