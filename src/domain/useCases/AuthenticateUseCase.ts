@@ -1,13 +1,13 @@
-import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
-import JWTService from '@application/services/JWTService';
-import { Email } from '@domain/models/Email';
-import { Password } from '@domain/models/Password';
-import { LoginResponseDto } from '@infrastructure/modules/users/dtos/response/LoginResponseDto';
+import { UserInterfaceRepository } from '../../../src/application/repository/UserRepository/UserInterfaceRepository';
+import JWTService from '../../../src/application/services/JWTService';
+import { Email } from '../../../src/domain/models/Email';
+import { Password } from '../../../src/domain/models/Password';
+import { LoginResponseDto } from '../../../src/infrastructure/modules/users/dtos/response/LoginResponseDto';
 
 import {
   LOGIN_ERROR,
   LoginErrorDto,
-} from '@infrastructure/modules/users/dtos/response/LoginErrorDto';
+} from '../../../src/infrastructure/modules/users/dtos/response/LoginErrorDto';
 
 export class AuthenticateUseCase {
   constructor(private userRepository: UserInterfaceRepository) {}
