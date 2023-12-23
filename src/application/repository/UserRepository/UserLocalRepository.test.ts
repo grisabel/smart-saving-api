@@ -47,13 +47,16 @@ describe('La clase UserLocalRepository', () => {
     const user1 = UserExample.user1_text();
     const user2 = UserExample.user2_text();
 
+    const user1Hashed = UserExample.user1_hash();
+    const user2Hashed = UserExample.user2_hash();
+
     //act
     userRepository.save(user1);
     userRepository.save(user2);
     const promise = userRepository.findAll();
     //assert
     expect.assertions(1);
-    expect(promise).resolves.toEqual([user1, user2]);
+    expect(promise).resolves.toEqual([user1Hashed, user2Hashed]);
   });
 
   it('obtiene un array vacio si no se han guardado usurios', () => {
@@ -68,6 +71,8 @@ describe('La clase UserLocalRepository', () => {
     const user1 = UserExample.user1_text();
     const user2 = UserExample.user2_text();
 
+    const user1Hashed = UserExample.user1_hash();
+
     //act
     userRepository.save(user1);
     userRepository.save(user2);
@@ -75,7 +80,7 @@ describe('La clase UserLocalRepository', () => {
     const promise = userRepository.findAll();
     //assert
     expect.assertions(1);
-    expect(promise).resolves.toEqual([user1]);
+    expect(promise).resolves.toEqual([user1Hashed]);
   });
 
   it('lanza una excepción si se intenta eliminar un usuario no existente', async () => {
@@ -99,6 +104,8 @@ describe('La clase UserLocalRepository', () => {
   it('actualiza un usuario existente', () => {
     //arrange
     const user1 = UserExample.user1_text();
+    const user1Hashed = UserExample.user1_hash();
+
     //act
     userRepository.save(user1);
 
@@ -109,7 +116,7 @@ describe('La clase UserLocalRepository', () => {
     const promise = userRepository.findByEmail(user1.getEmail());
     //assert
     expect.assertions(1);
-    expect(promise).resolves.toEqual(user1);
+    expect(promise).resolves.toEqual(user1Hashed);
   });
 
   it('lanza una excepción si se intenta actualizar un usuario no existente', async () => {
