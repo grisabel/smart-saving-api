@@ -5,24 +5,14 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/esbuild:esbuild",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "platform": "node",
         "outputPath": "dist/smart-savings-api",
-        "format": ["cjs"],
-        "bundle": false,
         "main": "src/main.ts",
         "tsConfig": "tsconfig.app.json",
-        "assets": ["src/assets"],
-        "generatePackageJson": true,
-        "esbuildOptions": {
-          "sourcemap": true,
-          "outExtension": {
-            ".js": ".js"
-          }
-        }
+        "assets": ["src/assets"]
       },
       "configurations": {
         "development": {},
