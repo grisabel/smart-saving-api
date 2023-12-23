@@ -31,7 +31,7 @@ const createUser = async (req: Request<PostUserDTO>, res: Response) => {
 const loginUser = async (req: Request<PostUserLoginDTO>, res: Response) => {
   const body = req.body;
 
-  const [error] = await authenticateUseCase.authenticate(
+  const [error, responseDto] = await authenticateUseCase.authenticate(
     body.email,
     body.password
   );
@@ -40,7 +40,7 @@ const loginUser = async (req: Request<PostUserLoginDTO>, res: Response) => {
     res.status(401).json(error);
     return;
   }
-  res.status(204).json();
+  res.status(204).json(responseDto);
 };
 
 export default {
