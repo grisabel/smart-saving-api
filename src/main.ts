@@ -1,3 +1,5 @@
+import 'module-alias/register';
+
 import server from '@infrastructure/server';
 
 const host = process.env.HOST ?? 'localhost';
