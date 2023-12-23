@@ -26,8 +26,16 @@ export class AuthenticateUseCase {
 
         if (match) {
           const userPayload = { name: user.getFirtname() };
-          const jwt = JWTService.createJWT(emailDto, userPayload);
-          const responseDto = { accessToken: jwt };
+          const { token, expiresIn } = JWTService.createJWT(
+            emailDto,
+            userPayload
+          );
+          const responseDto: LoginResponseDto = {
+            accessToken: token,
+            tokenType: 'bearer',
+            scope: 'smart-saving-api',
+            expiresIn,
+          };
           resolve([null, responseDto]);
         } else {
           const errorDto = { message: LOGIN_ERROR.msg };
