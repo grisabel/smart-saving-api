@@ -1,15 +1,16 @@
-import { UserLocalRepository } from '../../application/repository/UserRepository/UserLocalRepository';
 import { Email } from '../models/Email';
 import { Password } from '../models/Password';
 import { User } from '../models/User';
-import { PostUserDTO } from '../../infrastructure/modules/users/dtos/request/PostUserDTO';
 import { EmailError } from '../models/Email/EmailError';
 import { PasswordError } from '../models/Password/PasswordError';
-import { DomainErrorResponseMapper } from '../../infrastructure/mappers/response/DomainErrorResponseMapper';
-import { ErrorResponseDto } from '../../infrastructure/dtos/response/ErrorResponseDto';
+import { PostUserDTO } from '@infrastructure/modules/users/dtos/request/PostUserDTO';
+import { DomainErrorResponseMapper } from '@infrastructure/mappers/response/DomainErrorResponseMapper';
+import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
+import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
+import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
 
-const userRepository = new UserLocalRepository();
-export class OnboardingUseCase {
+class OnboardingUseCase {
+  constructor(private userRepository: UserInterfaceRepository) {}
   saveUser(userDTO: PostUserDTO): Promise<[ErrorResponseDto]> {
     return new Promise((resolve) => {
       try {
@@ -46,3 +47,6 @@ export class OnboardingUseCase {
     });
   }
 }
+
+const userRepository = UserFactoryRepository.getInstance();
+export const onboardingUseCase = new OnboardingUseCase(userRepository);

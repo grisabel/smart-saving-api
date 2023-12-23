@@ -8,8 +8,9 @@ import {
   LOGIN_ERROR,
   LoginErrorDto,
 } from '@infrastructure/modules/users/dtos/response/LoginErrorDto';
+import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
 
-export class AuthenticateUseCase {
+class AuthenticateUseCase {
   constructor(private userRepository: UserInterfaceRepository) {}
   authenticate(
     emailDto: string,
@@ -39,3 +40,6 @@ export class AuthenticateUseCase {
     });
   }
 }
+
+const userRepository = UserFactoryRepository.getInstance();
+export const authenticateUseCase = new AuthenticateUseCase(userRepository);
