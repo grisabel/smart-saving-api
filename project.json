@@ -41,7 +41,8 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "smart-savings-api:build"
+        "buildTarget": "smart-savings-api:build",
+        "runtimeArgs": ["--require=./module-alias-bootstrap.js"]
       },
       "configurations": {
         "development": {
