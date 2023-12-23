@@ -50,10 +50,5 @@
     "ts-node": "10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "~5.2.2"
-  },
-  "_moduleAliases": {
-    "@infrastructure": "dist/smart-savings-api/src/infrastructure",
-    "@application": "dist/smart-savings-api/src/application",
-    "@domain": "dist/smart-savings-api/src/domain"
   }
 }
