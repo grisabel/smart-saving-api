@@ -11,7 +11,7 @@ describe('La clase AuthenticationUseCase', () => {
   });
   it('debe devolver un jwt dado un usuario y contraseña correctos', async () => {
     //arrange
-    const user1 = UserExample.user1();
+    const user1 = UserExample.user1_text();
     const emailDTO = user1.getEmail().getValue();
     const passwordDTO = user1.getPassword().getValue();
     const authenticateClass = new AuthenticateUseCase(userRepository);
@@ -29,7 +29,7 @@ describe('La clase AuthenticationUseCase', () => {
 
   it('debe lanzar un error si el usuario no existe', async () => {
     //arrange
-    const user1 = UserExample.user1();
+    const user1 = UserExample.user1_text();
     const emailDTO = user1.getEmail().getValue();
     const passwordDTO = user1.getPassword().getValue();
     const authenticateClass = new AuthenticateUseCase(userRepository);
@@ -46,7 +46,7 @@ describe('La clase AuthenticationUseCase', () => {
 
   it('debe lanzar un error si el usuario y la contraseña no coinciden', async () => {
     //arrange
-    const user1 = UserExample.user1();
+    const user1 = UserExample.user1_text();
     const emailDTO = user1.getEmail().getValue();
     const passwordDTO = user1.getPassword().getValue() + '0';
     const authenticateClass = new AuthenticateUseCase(userRepository);

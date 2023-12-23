@@ -15,7 +15,7 @@ describe('La clase UserLocalRepository', () => {
 
   it('guarda un usuario y comprueba si existe', () => {
     //arrange
-    const user1 = UserExample.user1();
+    const user1 = UserExample.user1_text();
     //act
     userRepository.save(user1);
     const promise = userRepository.findByEmail(user1.getEmail());
@@ -26,7 +26,7 @@ describe('La clase UserLocalRepository', () => {
 
   it('comprueba que no existe el usuario por email', async () => {
     //arrange
-    const user1 = UserExample.user1();
+    const user1 = UserExample.user1_text();
     let throwError;
     //act
     try {
@@ -44,8 +44,8 @@ describe('La clase UserLocalRepository', () => {
 
   it('guarda varios usuarios y obtiene todos', () => {
     //arrange
-    const user1 = UserExample.user1();
-    const user2 = UserExample.user2();
+    const user1 = UserExample.user1_text();
+    const user2 = UserExample.user2_text();
 
     //act
     userRepository.save(user1);
@@ -65,8 +65,8 @@ describe('La clase UserLocalRepository', () => {
 
   it('elimina un usuario', () => {
     //arrange
-    const user1 = UserExample.user1();
-    const user2 = UserExample.user2();
+    const user1 = UserExample.user1_text();
+    const user2 = UserExample.user2_text();
 
     //act
     userRepository.save(user1);
@@ -80,7 +80,7 @@ describe('La clase UserLocalRepository', () => {
 
   it('lanza una excepción si se intenta eliminar un usuario no existente', async () => {
     //arrange
-    const user1 = UserExample.user1();
+    const user1 = UserExample.user1_text();
     let throwError;
 
     //act
@@ -98,7 +98,7 @@ describe('La clase UserLocalRepository', () => {
 
   it('actualiza un usuario existente', () => {
     //arrange
-    const user1 = UserExample.user1();
+    const user1 = UserExample.user1_text();
     //act
     userRepository.save(user1);
 
@@ -114,7 +114,7 @@ describe('La clase UserLocalRepository', () => {
 
   it('lanza una excepción si se intenta actualizar un usuario no existente', async () => {
     //arrange
-    const user1 = UserExample.user1();
+    const user1 = UserExample.user1_text();
     const pwd = Password.createFromText('Aabb@1UpdateRepository');
     user1.changePassword(pwd);
 
