@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { PostUserDTO } from '../../../../../src/infrastructure/modules/users/dtos/request/PostUserDTO';
-import { PostUserLoginDTO } from '../../../../../src/infrastructure/modules/users/dtos/request/PostUserLoginDTO';
+import { PostUserDTO } from '@infrastructure/modules/users/dtos/request/PostUserDTO';
+import { PostUserLoginDTO } from '@infrastructure/modules/users/dtos/request/PostUserLoginDTO';
 // TODO maybe move to users
-import { OnboardingUseCase } from '../../../../../src/domain/useCases/OnboardingUseCase';
-import { AuthenticateUseCase } from '../../../../../src/domain/useCases/AuthenticateUseCase';
-import { UserLocalRepository } from '../../../../../src/application/repository/UserRepository/UserLocalRepository';
+import { OnboardingUseCase } from '@domain/useCases/OnboardingUseCase';
+import { AuthenticateUseCase } from '@domain/useCases/AuthenticateUseCase';
+import { UserLocalRepository } from '@application/repository/UserRepository/UserLocalRepository';
 import { LoginResponseDto } from '../dtos/response/LoginResponseDto';
 
 const onboardingUseCase = new OnboardingUseCase();

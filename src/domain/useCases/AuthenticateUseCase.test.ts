@@ -1,7 +1,7 @@
-import { UserInterfaceRepository } from '../../../src/application/repository/UserRepository/UserInterfaceRepository';
+import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
 import { AuthenticateUseCase } from './AuthenticateUseCase';
-import { UserLocalRepository } from '../../../src/application/repository/UserRepository/UserLocalRepository';
-import { UserExample } from '../../../src/domain/models/User/test/User.example';
+import { UserLocalRepository } from '@application/repository/UserRepository/UserLocalRepository';
+import { UserExample } from '@domain/models/User/test/User.example';
 
 describe('La clase AuthenticationUseCase', () => {
   let userRepository: UserInterfaceRepository;
