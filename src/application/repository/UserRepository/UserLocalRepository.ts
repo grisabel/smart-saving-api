@@ -70,10 +70,22 @@ export class UserLocalRepository implements UserInterfaceRepository {
   }
 
   async update(user: User): Promise<void> {
+    const _email = user.getEmail();
+    const _password = Password.createFromHash(user.getPassword().getValue());
+    const _user = new User(
+      _email,
+      user.getFirtname(),
+      user.getLastname(),
+      user.getDateBirth(),
+      user.getObjective(),
+      user.getLastSession(),
+      _password
+    );
+
     return new Promise((resolve, reject) => {
       const updateArray = this.localUsers.map((userLocal) => {
         if (userLocal.isEqual(user)) {
-          return user;
+          return _user;
         }
         return userLocal;
       });
