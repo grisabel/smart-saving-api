@@ -10,7 +10,7 @@ import {
 } from '@infrastructure/modules/users/dtos/response/LoginErrorDto';
 import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
 
-class AuthenticateUseCase {
+export class AuthenticateUseCase {
   constructor(private userRepository: UserInterfaceRepository) {}
   authenticate(
     emailDto: string,
@@ -41,5 +41,16 @@ class AuthenticateUseCase {
   }
 }
 
-const userRepository = UserFactoryRepository.getInstance();
-export const authenticateUseCase = new AuthenticateUseCase(userRepository);
+export class AuthenticateUseCaseFactory {
+  static instance: AuthenticateUseCase | null = null;
+
+  static getIntance(): AuthenticateUseCase {
+    if (!AuthenticateUseCaseFactory.instance) {
+      const userRepository = UserFactoryRepository.getInstance();
+      AuthenticateUseCaseFactory.instance = new AuthenticateUseCase(
+        userRepository
+      );
+    }
+    return AuthenticateUseCaseFactory.instance;
+  }
+}

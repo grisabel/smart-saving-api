@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 import { PostUserDTO } from '@infrastructure/modules/users/dtos/request/PostUserDTO';
 import { PostUserLoginDTO } from '@infrastructure/modules/users/dtos/request/PostUserLoginDTO';
+import { OnboardingUseCaseFactory } from '@domain/useCases/OnboardingUseCase';
+import { AuthenticateUseCaseFactory } from '@domain/useCases/AuthenticateUseCase';
 // TODO maybe move to users
-import { onboardingUseCase } from '@domain/useCases/OnboardingUseCase';
-import { authenticateUseCase } from '@domain/useCases/AuthenticateUseCase';
+const onboardingUseCase = OnboardingUseCaseFactory.getIntance();
+const authenticateUseCase = AuthenticateUseCaseFactory.getIntance();
 
 const obtainUser = async (req: Request, res: Response) => {
   res.status(200).json({ status: 'OK' });
