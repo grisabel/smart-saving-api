@@ -198,3 +198,4 @@ describe('POST /user', () => {
     );
   });
 });
+// TODO añadir error generico

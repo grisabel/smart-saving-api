@@ -5,14 +5,25 @@ import {
   UserInterfaceRepository,
   UserRepositoryError,
 } from './UserInterfaceRepository';
-import { rejects } from 'assert';
 
+import { Password } from '../../../domain/models/Password';
 export class UserLocalRepository implements UserInterfaceRepository {
   private localUsers: User[] = [];
 
   async save(user: User): Promise<void> {
+    const _email = user.getEmail();
+    const _password = Password.createFromHash(user.getPassword().getValue());
+    const _user = new User(
+      _email,
+      user.getFirtname(),
+      user.getLastname(),
+      user.getDateBirth(),
+      user.getObjective(),
+      user.getLastSession(),
+      _password
+    );
     return new Promise((resolve) => {
-      this.localUsers.push(user);
+      this.localUsers.push(_user);
       resolve();
     });
   }
@@ -59,10 +70,22 @@ export class UserLocalRepository implements UserInterfaceRepository {
   }
 
   async update(user: User): Promise<void> {
+    const _email = user.getEmail();
+    const _password = Password.createFromHash(user.getPassword().getValue());
+    const _user = new User(
+      _email,
+      user.getFirtname(),
+      user.getLastname(),
+      user.getDateBirth(),
+      user.getObjective(),
+      user.getLastSession(),
+      _password
+    );
+
     return new Promise((resolve, reject) => {
       const updateArray = this.localUsers.map((userLocal) => {
         if (userLocal.isEqual(user)) {
-          return user;
+          return _user;
         }
         return userLocal;
       });

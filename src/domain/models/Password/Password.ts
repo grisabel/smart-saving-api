@@ -1,5 +1,5 @@
 import { PASSWORD_ERRORS, PasswordError } from './PasswordError';
-import HashService from '../../../application/services/HashService';
+import HashService from '@application/services/HashService';
 
 const MINLENGTH = 6;
 
@@ -11,7 +11,7 @@ export class Password {
   }
 
   static createFromHash(value: string): Password {
-    return new Password(value, true);
+    return new Password(HashService.generateHash(value), true);
   }
 
   static ensureRules(value: string): void {

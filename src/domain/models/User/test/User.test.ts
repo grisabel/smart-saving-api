@@ -5,12 +5,12 @@ import { UserExample } from './User.example';
 
 describe('La clase usuario', () => {
   it('puede generar una instacia a través de su constructor', () => {
-    expect(UserExample.user1()).toBeInstanceOf(User);
+    expect(UserExample.user1_text()).toBeInstanceOf(User);
   });
 
   it('debe determinar si dos usuarios son el mismo', () => {
-    const user1 = UserExample.user1();
-    const user2 = UserExample.user1();
+    const user1 = UserExample.user1_text();
+    const user2 = UserExample.user1_text();
 
     const result = user1.isEqual(user2);
 
@@ -20,8 +20,8 @@ describe('La clase usuario', () => {
 
   it('debe determinar si dos usuarios son distintos', () => {
     //arange
-    const user1 = UserExample.user1();
-    const user2 = UserExample.user2();
+    const user1 = UserExample.user1_text();
+    const user2 = UserExample.user2_text();
 
     //act
     const result = user1.isEqual(user2);
@@ -34,7 +34,7 @@ describe('La clase usuario', () => {
     //arange
     const textNewPassword = 'Aabb@2';
     const newPassword = Password.createFromText(textNewPassword);
-    const user = UserExample.user1();
+    const user = UserExample.user1_text();
 
     //act;
     user.changePassword(newPassword);
@@ -46,7 +46,7 @@ describe('La clase usuario', () => {
 
   it('puede detectar si dos contraseñas son iguales y por tanto no puede ser cambiada', () => {
     //arange
-    const user = UserExample.user1();
+    const user = UserExample.user1_text();
     const newPassword = Password.createFromText(user.getPassword().getValue());
 
     //act
