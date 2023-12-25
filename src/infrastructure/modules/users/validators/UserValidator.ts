@@ -30,7 +30,10 @@ const loginUser = [
     .required(),
 ]
 
+const refreshToken = [Body('refreshToken').required()];
+
 export default {
   createUser,
   loginUser,
+  refreshToken,
 };

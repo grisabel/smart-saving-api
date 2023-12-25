@@ -14,5 +14,11 @@ router.post(
   validate,
   UserController.loginUser
 );
+router.post(
+  '/refreshToken',
+  UserValidator.refreshToken,
+  validate,
+  UserController.refreshToken
+);
 
 export default router;
