@@ -1,24 +1,36 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
 import config from '@infrastructure/config';
 
-const createJWT = <T extends object>(
+const createAccessToken = <T extends object>(
   emailDTO: string,
   payload: T
-): { token: string; expiresIn: number } => {
+): string => {
   let signOption: SignOptions = {
-    expiresIn: config.JWT.expires_time,
+    expiresIn: config.JWT.ACCESS_TOKEN.EXPIRES_TIME,
     algorithm: 'HS256',
     subject: emailDTO,
   };
-  const token = jwt.sign(payload, config.JWT.secret, signOption);
-  const decodedToken = jwt.decode(token, { json: true });
+  const token = jwt.sign(
+    payload,
+    config.JWT.ACCESS_TOKEN.PRIVATE_KEY,
+    signOption
+  );
 
-  return {
-    token,
-    expiresIn: decodedToken.exp,
+  return token;
+};
+
+const createRefreshToken = <T extends object>(emailDTO: string): string => {
+  let signOption: SignOptions = {
+    expiresIn: config.JWT.REFRESH_TOKEN.EXPIRES_TIME,
+    algorithm: 'HS256',
+    subject: emailDTO,
   };
+  const token = jwt.sign({}, config.JWT.REFRESH_TOKEN.EXPIRES_TIME, signOption);
+
+  return token;
 };
 
 export default {
-  createJWT,
+  createAccessToken,
+  createRefreshToken,
 };

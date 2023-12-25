@@ -25,16 +25,18 @@ export class AuthenticateUseCase {
         const match = passwordHash.isEqual(user.getPassword());
 
         if (match) {
-          const userPayload = { name: user.getFirtname() };
-          const { token, expiresIn } = JWTService.createJWT(
+          const userPayload = {
+            scope: 'smart-saving-api',
+          };
+          const accessToken = JWTService.createAccessToken(
             emailDto,
             userPayload
           );
+          const refreshToken = JWTService.createRefreshToken(emailDto);
+
           const responseDto: LoginResponseDto = {
-            accessToken: token,
-            tokenType: 'bearer',
-            scope: 'smart-saving-api',
-            expiresIn,
+            accessToken,
+            refreshToken,
           };
           resolve([null, responseDto]);
         } else {

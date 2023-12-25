@@ -10,6 +10,7 @@ describe('POST /user/login', () => {
 
     expect(res.status).toBe(200);
     expect(res.data.accessToken.split('.').length).toEqual(3);
+    expect(res.data.refreshToken.split('.').length).toEqual(3);
   });
   it('debe retornar un status 422 si el body está incompleto', async () => {
     //arrange
