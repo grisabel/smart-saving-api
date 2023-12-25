@@ -790,11 +790,11 @@
           "properties": {
             "email": {
               "type": "string",
-              "example": "user@email.com"
+              "example": "test@test.com"
             },
             "password": {
               "type": "string",
-              "example": "12345@Aa"
+              "example": "Aabb@1"
             }
           }
         },
