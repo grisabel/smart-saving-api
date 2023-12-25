@@ -9,9 +9,22 @@ import {
   LoginErrorDto,
 } from '@infrastructure/modules/users/dtos/response/LoginErrorDto';
 import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
+import {
+  TokenInterfaceRepository,
+  TokenRepositoryError,
+} from '@application/repository/TokenRepositorty/TokenInterfaceRepositoty';
+import { TokenFactoryRepository } from '@application/repository/TokenRepositorty/TokenFactoryRepository';
+import { RefreshTokenErrorDto } from '@infrastructure/modules/users/dtos/response/RefreshTokenErrorDto';
+import { AccessTokenPayload } from '@application/services/JWTService/JWTService';
+import { RefreshTokenResponseDto } from '@infrastructure/modules/users/dtos/response/RefreshTokenDto';
 
 export class AuthenticateUseCase {
-  constructor(private userRepository: UserInterfaceRepository) {}
+  constructor(
+    private jwtService: typeof JWTService,
+    private userRepository: UserInterfaceRepository,
+    private tokenRepository: TokenInterfaceRepository
+  ) {}
+
   authenticate(
     emailDto: string,
     passwordDto: string
@@ -25,14 +38,14 @@ export class AuthenticateUseCase {
         const match = passwordHash.isEqual(user.getPassword());
 
         if (match) {
-          const userPayload = {
+          const userPayload: AccessTokenPayload = {
             scope: 'smart-saving-api',
           };
-          const accessToken = JWTService.createAccessToken(
+          const accessToken = this.jwtService.createAccessToken(
             emailDto,
             userPayload
           );
-          const refreshToken = JWTService.createRefreshToken(emailDto);
+          const refreshToken = this.jwtService.createRefreshToken(emailDto);
 
           const responseDto: LoginResponseDto = {
             accessToken,
@@ -44,8 +57,40 @@ export class AuthenticateUseCase {
           resolve([errorDto, null]);
         }
       } catch (error) {
-        const errorDto = { message: LOGIN_ERROR.msg };
+        const errorDto: LoginErrorDto = { message: LOGIN_ERROR.msg };
         resolve([errorDto, null]);
+      }
+    });
+  }
+
+  async verifyRefreshToken(
+    refreshToken: string
+  ): Promise<[RefreshTokenErrorDto | null, any | null]> {
+    return new Promise(async (resolve) => {
+      try {
+        await this.tokenRepository.find(refreshToken);
+        const tokenDetails = await this.jwtService.verifyRefreshToken(
+          refreshToken
+        );
+
+        const userPayload: AccessTokenPayload = {
+          scope: 'smart-saving-api',
+        };
+        const accessToken = this.jwtService.createAccessToken(
+          tokenDetails.sub,
+          userPayload
+        );
+
+        const dto: RefreshTokenResponseDto = {
+          accessToken,
+        };
+
+        resolve([null, dto]);
+      } catch (error) {
+        const dto: RefreshTokenErrorDto = {
+          message: 'Invalid Refresh Token', //todo
+        };
+        resolve([dto, null]);
       }
     });
   }
@@ -57,8 +102,12 @@ export class AuthenticateUseCaseFactory {
   static getIntance(): AuthenticateUseCase {
     if (!AuthenticateUseCaseFactory.instance) {
       const userRepository = UserFactoryRepository.getInstance();
+      const tokenRepository = TokenFactoryRepository.getInstance();
+
       AuthenticateUseCaseFactory.instance = new AuthenticateUseCase(
-        userRepository
+        JWTService,
+        userRepository,
+        tokenRepository
       );
     }
     return AuthenticateUseCaseFactory.instance;
