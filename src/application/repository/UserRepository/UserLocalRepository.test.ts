@@ -77,7 +77,7 @@ describe('La clase UserLocalRepository', () => {
     //act
     userRepository.save(user1);
     userRepository.save(user2);
-    userRepository.delete(user1.getEmail());
+    userRepository.delete(user2.getEmail());
     const promise = userRepository.findAll();
     //assert
     expect.assertions(1);

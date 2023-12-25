@@ -6,7 +6,7 @@ export class UserExample {
   static user1_text(): User {
     const _textEmail = 'test@test.com';
     const _textPassword = 'Aabb@1';
-    const _firstName = 'TestName';
+    const _firstName = 'User1Name';
     const _lastname = 'TestLastName';
     const _dateBirth = '01/01/2000';
     const _objective = 'Jubilación';
@@ -30,7 +30,7 @@ export class UserExample {
   static user2_text(): User {
     const textEmail = 'test2@test.com';
     const textPassword = 'Aabb@2';
-    const firstName = 'TestName';
+    const firstName = 'User2Name';
     const lastname = 'TestLastName';
     const dateBirth = '01/01/2000';
     const objective = 'Jubilación';
@@ -54,7 +54,7 @@ export class UserExample {
   static user1_hash(): User {
     const _textEmail = 'test@test.com';
     const _textPassword = 'Aabb@1';
-    const _firstName = 'TestName';
+    const _firstName = 'User1Name';
     const _lastname = 'TestLastName';
     const _dateBirth = '01/01/2000';
     const _objective = 'Jubilación';
@@ -78,7 +78,7 @@ export class UserExample {
   static user2_hash(): User {
     const textEmail = 'test2@test.com';
     const textPassword = 'Aabb@2';
-    const firstName = 'TestName';
+    const firstName = 'User2Name';
     const lastname = 'TestLastName';
     const dateBirth = '01/01/2000';
     const objective = 'Jubilación';

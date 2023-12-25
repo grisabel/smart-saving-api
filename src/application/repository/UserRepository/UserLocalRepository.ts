@@ -1,5 +1,5 @@
-import { Email } from '../../../domain/models/Email';
-import { User } from '../../../domain/models/User';
+import { Email } from '@domain/models/Email';
+import { User } from '@domain/models/User';
 import {
   USER_REPOSITORY_ERROR,
   UserInterfaceRepository,
@@ -54,10 +54,10 @@ export class UserLocalRepository implements UserInterfaceRepository {
   async delete(email: Email): Promise<void> {
     return new Promise((resolve, reject) => {
       const filterArray = this.localUsers.filter((user) => {
-        return email.isEqual(user.getEmail());
+        return !email.isEqual(user.getEmail());
       });
 
-      if (filterArray.length === 0) {
+      if (filterArray.length === this.localUsers.length) {
         const error = new UserRepositoryError({
           userNotExist: USER_REPOSITORY_ERROR.userNotExist,
         });
