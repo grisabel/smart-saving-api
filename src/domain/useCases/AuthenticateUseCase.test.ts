@@ -5,6 +5,7 @@ import { UserExample } from '@domain/models/User/test/User.example';
 import { TokenInterfaceRepository } from '@application/repository/TokenRepositorty/TokenInterfaceRepositoty';
 import JWTService from '@application/services/JWTService';
 import { TokenLocalRepository } from '@application/repository/TokenRepositorty/TokenLocalRepository';
+import { TokenExample } from '@application/services/JWTService/test/Token.example';
 
 describe('La clase AuthenticationUseCase', () => {
   let userRepository: UserInterfaceRepository;
@@ -95,6 +96,30 @@ describe('La clase AuthenticationUseCase', () => {
 
       //asert
       expect(verifyRTokenDto.accessToken.split('.').length).toEqual(3);
+    });
+    it('debe lanzar un error si el refreshToken no existe', async () => {
+      //arrange
+      const refreshToken = TokenExample.refreshToken();
+
+      //act
+      const [error] = await authenticationUseCase.verifyRefreshToken(
+        refreshToken
+      );
+
+      //asert
+      expect(error.message).toEqual('Invalid Refresh Token');
+    });
+    it('debe lanzar un error si el refreshToken no es válido', async () => {
+      const refreshToken = TokenExample.invalidToken();
+
+      //act
+      await tokenRepository.save(refreshToken);
+      const [error] = await authenticationUseCase.verifyRefreshToken(
+        refreshToken
+      );
+
+      //asert
+      expect(error.message).toEqual('Invalid Refresh Token');
     });
   });
 });

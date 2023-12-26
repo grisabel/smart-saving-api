@@ -1,9 +1,9 @@
+import { TokenExample } from '@application/services/JWTService/test/Token.example';
 import {
   TOKEN_REPOSITORY_ERROR,
   TokenInterfaceRepository,
 } from './TokenInterfaceRepositoty';
 import { TokenLocalRepository } from './TokenLocalRepository';
-import { TokenExample } from './test/Token.example';
 
 describe('La clase TokenLocalRepository', () => {
   let tokenRepository: TokenInterfaceRepository;
