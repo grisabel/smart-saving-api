@@ -122,4 +122,31 @@ describe('La clase AuthenticationUseCase', () => {
       expect(error.message).toEqual('Invalid Refresh Token');
     });
   });
+
+  describe('el método deleteRefreshToken', () => {
+    it('debe eliminar un refreshToken', async () => {
+      //arrange
+      const refreshToken = TokenExample.refreshToken();
+
+      //act
+      await tokenRepository.save(refreshToken);
+      const [, deleteRTokenDto] =
+        await authenticationUseCase.deleteRefreshToken(refreshToken);
+
+      //asert
+      expect(deleteRTokenDto).toEqual(null);
+    });
+    it('debe lanzar un error si el refreshToken no existe', async () => {
+      //arrange
+      const refreshToken = TokenExample.refreshToken();
+
+      //act
+      const [error] = await authenticationUseCase.deleteRefreshToken(
+        refreshToken
+      );
+
+      //asert
+      expect(error.message).toEqual('Invalid Refresh Token');
+    });
+  });
 });
