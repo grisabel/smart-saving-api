@@ -3,6 +3,7 @@ import { PostUserDTO } from '@infrastructure/modules/users/dtos/request/PostUser
 import { PostUserLoginDTO } from '@infrastructure/modules/users/dtos/request/PostUserLoginDTO';
 import { OnboardingUseCaseFactory } from '@domain/useCases/OnboardingUseCase';
 import { AuthenticateUseCaseFactory } from '@domain/useCases/AuthenticateUseCase';
+import { RefreshTojenRequestDto } from '../dtos/request/RefreshTokenRequestDto';
 // TODO maybe move to users
 const onboardingUseCase = OnboardingUseCaseFactory.getIntance();
 const authenticateUseCase = AuthenticateUseCaseFactory.getIntance();
@@ -38,8 +39,26 @@ const loginUser = async (req: Request<PostUserLoginDTO>, res: Response) => {
   res.status(200).json(responseDto);
 };
 
+const refreshToken = async (
+  req: Request<RefreshTojenRequestDto>,
+  res: Response
+) => {
+  const body = req.body;
+
+  const [error, responseDto] = await authenticateUseCase.verifyRefreshToken(
+    body.refreshToken
+  );
+
+  if (error) {
+    res.status(401).json(error); //todo
+    return;
+  }
+  res.status(200).json(responseDto);
+};
+
 export default {
   obtainUser,
   createUser,
   loginUser,
+  refreshToken,
 };

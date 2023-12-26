@@ -146,6 +146,40 @@
           }
         }
       },
+      "/user/refreshToken": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Obtain an accessToken by refreshToken",
+          "description": "Use RefreshToken",
+          "operationId": "refreshToken",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshToken"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid username/password supplied"
+            }
+          }
+        }
+      },
       "/user/logout": {
         "post": {
           "tags": [
@@ -790,11 +824,20 @@
           "properties": {
             "email": {
               "type": "string",
-              "example": "user@email.com"
+              "example": "test@test.com"
             },
             "password": {
               "type": "string",
-              "example": "12345@Aa"
+              "example": "Aabb@1"
+            }
+          }
+        },
+        "RefreshToken": {
+          "type": "object",
+          "properties": {
+            "refreshToken": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDM1MjczNzcsImV4cCI6MTcwMzYxMzc3Nywic3ViIjoidGVzdEB0ZXN0LmNvbSJ9.s9rDV-zVSLllLje7GjtAy6Sl2nV8SJ9DP4IYnEvDEbc"
             }
           }
         },
