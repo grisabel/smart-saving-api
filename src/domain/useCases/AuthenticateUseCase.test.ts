@@ -75,4 +75,26 @@ describe('La clase AuthenticationUseCase', () => {
       expect(error.message).toEqual('Usuario o contraseña incorrectos');
     });
   });
+
+  describe('el método verifyRefreshToken', () => {
+    it('debe retornar un nuevo accessToken dado un refreshToken válido', async () => {
+      //arrange
+      const user1 = UserExample.user1_text();
+      const emailDTO = user1.getEmail().getValue();
+      const passwordDTO = user1.getPassword().getValue();
+
+      //act
+      await userRepository.save(user1);
+      const [, loginDto] = await authenticationUseCase.authenticate(
+        emailDTO,
+        passwordDTO
+      );
+
+      const [, verifyRTokenDto] =
+        await authenticationUseCase.verifyRefreshToken(loginDto.refreshToken);
+
+      //asert
+      expect(verifyRTokenDto.accessToken.split('.').length).toEqual(3);
+    });
+  });
 });

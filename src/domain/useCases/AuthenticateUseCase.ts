@@ -51,6 +51,8 @@ export class AuthenticateUseCase {
             accessToken,
             refreshToken,
           };
+
+          await this.tokenRepository.save(refreshToken);
           resolve([null, responseDto]);
         } else {
           const errorDto = { message: LOGIN_ERROR.msg };
