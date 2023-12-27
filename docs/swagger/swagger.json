@@ -16,6 +16,10 @@
         "description": "Test endpoint"
       },
       {
+        "name": "session",
+        "description": "Operations about user session"
+      },
+      {
         "name": "user",
         "description": "Operations about user"
       },
@@ -112,10 +116,10 @@
           }
         }
       },
-      "/user/login": {
+      "/session/login": {
         "post": {
           "tags": [
-            "user"
+            "session"
           ],
           "summary": "Logs user into the system",
           "description": "Allows a user to log in",
@@ -146,10 +150,10 @@
           }
         }
       },
-      "/user/refreshToken": {
+      "/session/refreshToken": {
         "post": {
           "tags": [
-            "user"
+            "session"
           ],
           "summary": "Obtain an accessToken by refreshToken",
           "description": "Use RefreshToken",
@@ -180,10 +184,10 @@
           }
         }
       },
-      "/user/refreshToken/{refreshToken}": {
+      "/session/refreshToken/{refreshToken}": {
         "delete": {
           "tags": [
-            "user"
+            "session"
           ],
           "summary": "Delete refreshToken",
           "description": "Delete RefreshToken",
@@ -209,10 +213,10 @@
           }
         }
       },
-      "/user/logout": {
+      "/session/logout": {
         "post": {
           "tags": [
-            "user"
+            "session"
           ],
           "summary": "Logs out current logged in user session",
           "description": "This can only be done by the logged in user.",

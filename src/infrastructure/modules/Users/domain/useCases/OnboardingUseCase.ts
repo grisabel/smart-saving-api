@@ -34,16 +34,17 @@ export class OnboardingUseCase {
         resolve([null, null]);
       } catch (error) {
         if (error instanceof EmailError) {
-          const errorDto = ErrorResponseMapper.toResponse(
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            message: 'Error al validar el email',
             error,
-            'Error al validar el email'
-          );
+          });
+
           resolve([errorDto, null]);
         } else if (error instanceof PasswordError) {
-          const errorDto = ErrorResponseMapper.toResponse(
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            message: 'Error al validar la contraseña',
             error,
-            'Error al validar la contraseña'
-          );
+          });
           resolve([errorDto, null]);
         }
 

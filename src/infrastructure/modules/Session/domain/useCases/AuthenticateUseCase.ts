@@ -21,6 +21,7 @@ import { Password } from '@domain/models/Password';
 import { LoginResponseDto } from '@Session/infrastructure/dtos/response/LoginResponseDto';
 import { RefreshTokenResponseDto } from '@Session/infrastructure/dtos/response/RefreshTokenResponseDto';
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
+import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorResponseMapper';
 
 export class AuthenticateUseCase {
   constructor(
@@ -59,16 +60,16 @@ export class AuthenticateUseCase {
           await this.tokenRepository.save(refreshToken);
           resolve([null, responseDto]);
         } else {
-          const errorDto: ErrorResponseDto = {
+          const errorDto = ErrorResponseMapper.toResponseDto({
             message: 'Usuario o contraseña incorrectos',
-          };
+          });
           resolve([errorDto, null]);
         }
       } catch (error) {
         if (error instanceof UserRepositoryError) {
-          const errorDto: ErrorResponseDto = {
+          const errorDto = ErrorResponseMapper.toResponseDto({
             message: 'Usuario o contraseña incorrectos',
-          };
+          });
           resolve([errorDto, null]);
         }
 
@@ -105,9 +106,9 @@ export class AuthenticateUseCase {
           error instanceof TokenRepositoryError ||
           error instanceof JWTServiceError
         ) {
-          const dto: ErrorResponseDto = {
+          const dto = ErrorResponseMapper.toResponseDto({
             message: 'Invalid Refresh Token', //todo
-          };
+          });
           resolve([dto, null]);
         }
 
@@ -129,9 +130,9 @@ export class AuthenticateUseCase {
           error instanceof TokenRepositoryError ||
           error instanceof JWTServiceError
         ) {
-          const dto: ErrorResponseDto = {
+          const dto = ErrorResponseMapper.toResponseDto({
             message: 'Invalid Refresh Token', //todo
-          };
+          });
           resolve([dto, null]);
         }
 

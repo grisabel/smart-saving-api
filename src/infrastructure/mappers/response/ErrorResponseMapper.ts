@@ -4,11 +4,20 @@ import {
   ErrorFieldResponseDto,
 } from '@infrastructure/dtos/response/ErrorResponseDto';
 
+interface ErrorResponseMapperParams<T> {
+  message: string;
+  error?: DomainError<T>;
+}
+
 export class ErrorResponseMapper {
-  static toResponse<T>(
-    error: DomainError<T>,
-    message: string
-  ): ErrorResponseDto {
+  static toResponseDto<T>({
+    message,
+    error,
+  }: ErrorResponseMapperParams<T>): ErrorResponseDto {
+    if (!error) {
+      return { message };
+    }
+
     const errorMessages = !error?.data ? [] : Object.values(error.data);
 
     return {
