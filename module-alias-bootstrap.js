@@ -9,7 +9,11 @@ moduleAlias.addAliases({
 
     "@Session/infrastructure": outputPath+"/src/infrastructure/modules/Session/infrastructure",
     "@Session/application": outputPath+"/src/infrastructure/modules/Session/application",
-    "@Session/domain": outputPath+"/src/infrastructure/modules/Session/domain"
+    "@Session/domain": outputPath+"/src/infrastructure/modules/Session/domain",
+
+    "@Users/infrastructure": outputPath+"/src/infrastructure/modules/Users/infrastructure",
+    "@Users/application": outputPath+"/src/infrastructure/modules/Users/application",
+    "@Users/domain": outputPath+"/src/infrastructure/modules/Users/domain",
 })
 
 moduleAlias()

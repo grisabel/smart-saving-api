@@ -7,7 +7,7 @@ import { PasswordError } from '@domain/models/Password/PasswordError';
 import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
 import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
 
-import { DomainErrorResponseMapper } from '@infrastructure/mappers/response/DomainErrorResponseMapper';
+import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorResponseMapper';
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 
 import { OnboardingUserRequestDto } from '@Users/infrastructure/dtos/request/OnboardingUserRequestDto';
@@ -34,13 +34,13 @@ export class OnboardingUseCase {
         resolve([null, null]);
       } catch (error) {
         if (error instanceof EmailError) {
-          const errorDto = DomainErrorResponseMapper.toResponse(
+          const errorDto = ErrorResponseMapper.toResponse(
             error,
             'Error al validar el email'
           );
           resolve([errorDto, null]);
         } else if (error instanceof PasswordError) {
-          const errorDto = DomainErrorResponseMapper.toResponse(
+          const errorDto = ErrorResponseMapper.toResponse(
             error,
             'Error al validar la contraseña'
           );

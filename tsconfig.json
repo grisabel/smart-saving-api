@@ -23,7 +23,7 @@
       "@Session/domain/*": ["src/infrastructure/modules/Session/domain/*"],
       "@Users/infrastructure/*": ["src/infrastructure/modules/Users/infrastructure/*"],
       "@Users/application/*": ["src/infrastructure/modules/Users/application/*"],
-      "@Users/domain/*": ["src/infrastructure/modules/Users/domain/*"],
+      "@Users/domain/*": ["src/infrastructure/modules/Users/domain/*"]
     }
   },
   "files": [],

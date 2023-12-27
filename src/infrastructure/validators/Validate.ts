@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
+import {
+  ValidationErrorResponseDto,
+  ValidationErrorFieldResponseDto,
+} from '@infrastructure/dtos/response/ValidationErrorResponseDto';
 
 // TODO añadir mapper y sacar a constate literal
 export const validate = (req: Request, res: Response, next: NextFunction) => {
@@ -9,7 +13,10 @@ export const validate = (req: Request, res: Response, next: NextFunction) => {
     return;
   }
 
-  res
-    .status(422)
-    .json({ message: 'Validación incorrecta', errors: error.array() });
+  const responseDto: ValidationErrorResponseDto = {
+    message: 'Validación incorrecta',
+    errors: error.array() as ValidationErrorFieldResponseDto[],
+  };
+
+  res.status(422).json(responseDto);
 };

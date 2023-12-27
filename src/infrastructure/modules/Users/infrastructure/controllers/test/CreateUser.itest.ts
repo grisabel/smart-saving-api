@@ -136,7 +136,7 @@ describe('POST /user', () => {
     let throwError;
     // TODO
     const response422 = {
-      message: 'Validación de Dominio. Error al validar el email',
+      message: 'Error al validar el email',
       errors: [
         {
           type: 'EmailError',
@@ -174,7 +174,7 @@ describe('POST /user', () => {
     let throwError;
     // TODO
     const response422 = {
-      message: 'Validación de Dominio. Error al validar la contraseña',
+      message: 'Error al validar la contraseña',
       errors: [
         {
           type: 'PasswordError',
