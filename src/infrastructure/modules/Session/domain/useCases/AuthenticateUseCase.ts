@@ -1,19 +1,20 @@
 import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
-import JWTService from '@application/services/JWTService';
+import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
+
+import { TokenInterfaceRepository } from '@Session/application/TokenRepositorty/TokenInterfaceRepositoty';
+import { TokenFactoryRepository } from '@Session/application/TokenRepositorty/TokenFactoryRepository';
+
+import JWTService, {
+  AccessTokenPayload,
+} from '@application/services/JWTService';
+
 import { Email } from '@domain/models/Email';
 import { Password } from '@domain/models/Password';
-import { LoginResponseDto } from '@infrastructure/modules/Session/dtos/response/LoginResponseDto';
 
-import { LoginErrorResponseDto } from '@infrastructure/modules/Session/dtos/response/LoginErrorResponseDto';
-import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
-import {
-  TokenInterfaceRepository,
-  TokenRepositoryError,
-} from '@application/repository/TokenRepositorty/TokenInterfaceRepositoty';
-import { TokenFactoryRepository } from '@application/repository/TokenRepositorty/TokenFactoryRepository';
-import { RefreshTokenErrorResponseDto } from '@infrastructure/modules/Session/dtos/response/RefreshTokenErrorResponseDto';
-import { AccessTokenPayload } from '@application/services/JWTService/JWTService';
-import { RefreshTokenResponseDto } from '@infrastructure/modules/Session/dtos/response/RefreshTokenResponseDto';
+import { LoginResponseDto } from '@Session/infrastructure/dtos/response/LoginResponseDto';
+import { LoginErrorResponseDto } from '@Session/infrastructure/dtos/response/LoginErrorResponseDto';
+import { RefreshTokenErrorResponseDto } from '@Session/infrastructure/dtos/response/RefreshTokenErrorResponseDto';
+import { RefreshTokenResponseDto } from '@Session/infrastructure/dtos/response/RefreshTokenResponseDto';
 
 export class AuthenticateUseCase {
   constructor(

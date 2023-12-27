@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { AuthenticateUseCaseFactory } from '@domain/useCases/AuthenticateUseCase';
+import { AuthenticateUseCaseFactory } from '@Session/domain/useCases/AuthenticateUseCase';
 
 import { LoginUserRequestDto } from '../dtos/request/LoginUserRequestDto';
 import { LoginResponseDto } from '../dtos/response/LoginResponseDto';

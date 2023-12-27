@@ -17,7 +17,10 @@
     "paths": {
       "@infrastructure/*": ["src/infrastructure/*"],
       "@application/*": ["src/application/*"],
-      "@domain/*": ["src/domain/*"]
+      "@domain/*": ["src/domain/*"],
+      "@Session/infrastructure/*": ["src/infrastructure/modules/Session/infrastructure/*"],
+      "@Session/application/*": ["src/infrastructure/modules/Session/application/*"],
+      "@Session/domain/*": ["src/infrastructure/modules/Session/domain/*"],
     }
   },
   "files": [],

@@ -1,11 +1,14 @@
 import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
-import { AuthenticateUseCase } from './AuthenticateUseCase';
 import { UserLocalRepository } from '@application/repository/UserRepository/UserLocalRepository';
 import { UserExample } from '@domain/models/User/test/User.example';
-import { TokenInterfaceRepository } from '@application/repository/TokenRepositorty/TokenInterfaceRepositoty';
-import JWTService from '@application/services/JWTService';
-import { TokenLocalRepository } from '@application/repository/TokenRepositorty/TokenLocalRepository';
+
+import { TokenLocalRepository } from '@Session/application/TokenRepositorty/TokenLocalRepository';
+import { TokenInterfaceRepository } from '@Session/application/TokenRepositorty/TokenInterfaceRepositoty';
 import { TokenExample } from '@application/services/JWTService/test/Token.example';
+
+import JWTService from '@application/services/JWTService';
+
+import { AuthenticateUseCase } from './AuthenticateUseCase';
 
 describe('La clase AuthenticationUseCase', () => {
   let userRepository: UserInterfaceRepository;

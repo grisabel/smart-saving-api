@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 
 import { ServerRoutes } from './ServerRoutes';
 import UserRouter from './modules/users/UserRouter';
-import SessionRouter from './modules/Session/infraestructure/SessionRouter';
+import SessionRouter from './modules/Session/infrastructure/SessionRouter';
 
 const server: Express = express();
 
