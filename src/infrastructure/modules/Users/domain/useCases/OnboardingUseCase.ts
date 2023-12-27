@@ -1,17 +1,22 @@
-import { Email } from '../models/Email';
-import { Password } from '../models/Password';
-import { User } from '../models/User';
-import { EmailError } from '../models/Email/EmailError';
-import { PasswordError } from '../models/Password/PasswordError';
-import { PostUserDTO } from '@infrastructure/modules/users/dtos/request/PostUserDTO';
-import { DomainErrorResponseMapper } from '@infrastructure/mappers/response/DomainErrorResponseMapper';
-import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
+import { Email } from '@domain/models/Email';
+import { Password } from '@domain/models/Password';
+import { User } from '@domain/models/User';
+import { EmailError } from '@domain/models/Email/EmailError';
+import { PasswordError } from '@domain/models/Password/PasswordError';
+
 import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
 import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
 
+import { DomainErrorResponseMapper } from '@infrastructure/mappers/response/DomainErrorResponseMapper';
+import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
+
+import { OnboardingUserRequestDto } from '@Users/infrastructure/dtos/request/OnboardingUserRequestDto';
+
 export class OnboardingUseCase {
   constructor(private userRepository: UserInterfaceRepository) {}
-  saveUser(userDTO: PostUserDTO): Promise<[ErrorResponseDto]> {
+  saveUser(
+    userDTO: OnboardingUserRequestDto
+  ): Promise<[ErrorResponseDto | Error, null]> {
     return new Promise((resolve) => {
       try {
         const email = Email.createFromText(userDTO.email);
@@ -26,23 +31,23 @@ export class OnboardingUseCase {
           password
         );
         this.userRepository.save(user);
-        resolve([null]);
+        resolve([null, null]);
       } catch (error) {
         if (error instanceof EmailError) {
           const errorDto = DomainErrorResponseMapper.toResponse(
             error,
             'Error al validar el email'
           );
-          resolve([errorDto]);
+          resolve([errorDto, null]);
         } else if (error instanceof PasswordError) {
           const errorDto = DomainErrorResponseMapper.toResponse(
             error,
             'Error al validar la contraseña'
           );
-          resolve([errorDto]);
+          resolve([errorDto, null]);
         }
 
-        resolve([error]);
+        resolve([error, null]);
       }
     });
   }

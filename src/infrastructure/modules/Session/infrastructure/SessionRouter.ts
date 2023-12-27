@@ -1,8 +1,8 @@
 import express from 'express';
 import { validate } from '@infrastructure/validators/Validate';
 
-import UserController from './controllers/SessionController';
-import SessionValidator from './validators/SessionValidator';
+import UserController from '@Session/infrastructure/controllers/SessionController';
+import SessionValidator from '@Session/infrastructure/validators/SessionValidator';
 
 const router = express.Router();
 

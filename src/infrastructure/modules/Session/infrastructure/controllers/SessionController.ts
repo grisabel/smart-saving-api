@@ -2,15 +2,14 @@ import { Request, Response } from 'express';
 
 import { AuthenticateUseCaseFactory } from '@Session/domain/useCases/AuthenticateUseCase';
 
-import { LoginUserRequestDto } from '../dtos/request/LoginUserRequestDto';
-import { LoginResponseDto } from '../dtos/response/LoginResponseDto';
-import { LoginErrorResponseDto } from '../dtos/response/LoginErrorResponseDto';
+import { LoginUserRequestDto } from '@Session/infrastructure/dtos/request/LoginUserRequestDto';
+import { LoginResponseDto } from '@Session/infrastructure/dtos/response/LoginResponseDto';
+import { LoginErrorResponseDto } from '@Session/infrastructure/dtos/response/LoginErrorResponseDto';
 
-import { RefreshTokenRequestDto } from '../dtos/request/RefreshTokenRequestDto';
-import { RefreshTokenErrorResponseDto } from '../dtos/response/RefreshTokenErrorResponseDto';
-import { RefreshTokenResponseDto } from '../dtos/response/RefreshTokenResponseDto';
+import { RefreshTokenRequestDto } from '@Session/infrastructure/dtos/request/RefreshTokenRequestDto';
+import { RefreshTokenErrorResponseDto } from '@Session/infrastructure/dtos/response/RefreshTokenErrorResponseDto';
+import { RefreshTokenResponseDto } from '@Session/infrastructure/dtos/response/RefreshTokenResponseDto';
 
-// TODO maybe move to session
 const authenticateUseCase = AuthenticateUseCaseFactory.getIntance();
 
 const loginUser = async (

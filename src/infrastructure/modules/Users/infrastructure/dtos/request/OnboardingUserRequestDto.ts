@@ -1,4 +1,4 @@
-export interface PostUserDTO {
+export interface OnboardingUserRequestDto {
   firstName: string;
   lastName: string;
   dateBirth: string;
