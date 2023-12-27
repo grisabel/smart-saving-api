@@ -18,6 +18,28 @@ describe('RefreshToken', () => {
       expect(res.status).toBe(200);
       expect(res.data.accessToken.split('.').length).toEqual(3);
     });
+    it('debe retornar un status 422 si el formato de la petición no es válido', async () => {
+      const body = {};
+      let throwError;
+      const response422 = {
+        message: 'Validación incorrecta',
+        errors: [{ path: 'refreshToken' }],
+      };
+
+      //act
+      try {
+        await axios.post(`/user/refreshToken`, body);
+      } catch (error) {
+        throwError = error;
+      }
+
+      //assert
+      expect(throwError.response.status).toBe(422);
+      expect(throwError.response.data.message).toEqual(response422.message);
+      expect(throwError.response.data.errors).toEqual(
+        expect.arrayContaining([expect.objectContaining(response422.errors[0])])
+      );
+    });
     it('debe retornar un status 401 si el refresh token es inválido', async () => {
       const body = {
         refreshToken: TokenExample.invalidToken(),
