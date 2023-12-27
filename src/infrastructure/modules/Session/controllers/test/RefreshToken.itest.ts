@@ -2,19 +2,19 @@ import { TokenExample } from '@application/services/JWTService/test/Token.exampl
 import axios from 'axios';
 
 describe('RefreshToken', () => {
-  describe('POST /user/refreshToken', () => {
+  describe('POST /session/refreshToken', () => {
     it('debe retornar un status 200 y un accesToken al refrescar la sesión con el refreshToken', async () => {
       const bodyLogin = {
         email: 'test@test.com',
         password: 'Aabb@1',
       };
 
-      const resLogin = await axios.post(`/user/login`, bodyLogin);
+      const resLogin = await axios.post(`/session/login`, bodyLogin);
 
       const refreshTokenBody = {
         refreshToken: resLogin.data.refreshToken,
       };
-      const res = await axios.post(`/user/refreshToken`, refreshTokenBody);
+      const res = await axios.post(`/session/refreshToken`, refreshTokenBody);
       expect(res.status).toBe(200);
       expect(res.data.accessToken.split('.').length).toEqual(3);
     });
@@ -28,7 +28,7 @@ describe('RefreshToken', () => {
 
       //act
       try {
-        await axios.post(`/user/refreshToken`, body);
+        await axios.post(`/session/refreshToken`, body);
       } catch (error) {
         throwError = error;
       }
@@ -51,7 +51,7 @@ describe('RefreshToken', () => {
 
       //act
       try {
-        await axios.post(`/user/refreshToken`, body);
+        await axios.post(`/session/refreshToken`, body);
       } catch (error) {
         throwError = error;
       }
@@ -61,17 +61,17 @@ describe('RefreshToken', () => {
       expect(throwError.response.data.message).toEqual(response401.message);
     });
   });
-  describe('DELETE /user/refreshToken', () => {
+  describe('DELETE /session/refreshToken', () => {
     it('debe retornar un status 201 y al eliminar un refreshToken', async () => {
       const bodyLogin = {
         email: 'test@test.com',
         password: 'Aabb@1',
       };
 
-      const resLogin = await axios.post(`/user/login`, bodyLogin);
+      const resLogin = await axios.post(`/session/login`, bodyLogin);
 
       const refreshToken = resLogin.data.refreshToken;
-      const res = await axios.delete(`/user/refreshToken/${refreshToken}`);
+      const res = await axios.delete(`/session/refreshToken/${refreshToken}`);
       expect(res.status).toBe(201);
     });
     it('debe retornar un status 422 si el formato de la petición no es válido', async () => {
@@ -83,7 +83,7 @@ describe('RefreshToken', () => {
 
       //act
       try {
-        await axios.delete(`/user/refreshToken`);
+        await axios.delete(`/session/refreshToken`);
       } catch (error) {
         throwError = error;
       }
@@ -105,7 +105,7 @@ describe('RefreshToken', () => {
 
       //act
       try {
-        await axios.delete(`/user/refreshToken/${refreshToken}`);
+        await axios.delete(`/session/refreshToken/${refreshToken}`);
       } catch (error) {
         throwError = error;
       }

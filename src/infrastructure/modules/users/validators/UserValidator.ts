@@ -23,20 +23,6 @@ const createUser = [
 ];
 // prettier-ignore
 
-const loginUser = [
-  Body('email')
-    .required(),
-  Body('password')
-    .required(),
-]
-
-const refreshTokenBody = [Body('refreshToken').required()];
-
-const refreshTokenUrl = [Param('refreshToken').required()];
-
 export default {
   createUser,
-  loginUser,
-  refreshTokenBody,
-  refreshTokenUrl,
 };

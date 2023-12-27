@@ -2,21 +2,18 @@ import { UserInterfaceRepository } from '@application/repository/UserRepository/
 import JWTService from '@application/services/JWTService';
 import { Email } from '@domain/models/Email';
 import { Password } from '@domain/models/Password';
-import { LoginResponseDto } from '@infrastructure/modules/users/dtos/response/LoginResponseDto';
+import { LoginResponseDto } from '@infrastructure/modules/Session/dtos/response/LoginResponseDto';
 
-import {
-  LOGIN_ERROR,
-  LoginErrorDto,
-} from '@infrastructure/modules/users/dtos/response/LoginErrorDto';
+import { LoginErrorResponseDto } from '@infrastructure/modules/Session/dtos/response/LoginErrorResponseDto';
 import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
 import {
   TokenInterfaceRepository,
   TokenRepositoryError,
 } from '@application/repository/TokenRepositorty/TokenInterfaceRepositoty';
 import { TokenFactoryRepository } from '@application/repository/TokenRepositorty/TokenFactoryRepository';
-import { RefreshTokenErrorDto } from '@infrastructure/modules/users/dtos/response/RefreshTokenErrorDto';
+import { RefreshTokenErrorResponseDto } from '@infrastructure/modules/Session/dtos/response/RefreshTokenErrorResponseDto';
 import { AccessTokenPayload } from '@application/services/JWTService/JWTService';
-import { RefreshTokenResponseDto } from '@infrastructure/modules/users/dtos/response/RefreshTokenDto';
+import { RefreshTokenResponseDto } from '@infrastructure/modules/Session/dtos/response/RefreshTokenResponseDto';
 
 export class AuthenticateUseCase {
   constructor(
@@ -28,7 +25,7 @@ export class AuthenticateUseCase {
   authenticate(
     emailDto: string,
     passwordDto: string
-  ): Promise<[LoginErrorDto | null, LoginResponseDto | null]> {
+  ): Promise<[LoginErrorResponseDto | null, LoginResponseDto | null]> {
     return new Promise(async (resolve) => {
       try {
         const email = Email.createFromText(emailDto);
@@ -55,11 +52,13 @@ export class AuthenticateUseCase {
           await this.tokenRepository.save(refreshToken);
           resolve([null, responseDto]);
         } else {
-          const errorDto = { message: LOGIN_ERROR.msg };
+          const errorDto = { message: 'Usuario o contraseña incorrectos' };
           resolve([errorDto, null]);
         }
       } catch (error) {
-        const errorDto: LoginErrorDto = { message: LOGIN_ERROR.msg };
+        const errorDto: LoginErrorResponseDto = {
+          message: 'Usuario o contraseña incorrectos',
+        };
         resolve([errorDto, null]);
       }
     });
@@ -67,7 +66,9 @@ export class AuthenticateUseCase {
 
   async verifyRefreshToken(
     refreshToken: string
-  ): Promise<[RefreshTokenErrorDto | null, RefreshTokenResponseDto | null]> {
+  ): Promise<
+    [RefreshTokenErrorResponseDto | null, RefreshTokenResponseDto | null]
+  > {
     return new Promise(async (resolve) => {
       try {
         await this.tokenRepository.find(refreshToken);
@@ -89,7 +90,7 @@ export class AuthenticateUseCase {
 
         resolve([null, dto]);
       } catch (error) {
-        const dto: RefreshTokenErrorDto = {
+        const dto: RefreshTokenErrorResponseDto = {
           message: 'Invalid Refresh Token', //todo
         };
         resolve([dto, null]);
@@ -99,14 +100,14 @@ export class AuthenticateUseCase {
 
   async deleteRefreshToken(
     refreshToken: string
-  ): Promise<[RefreshTokenErrorDto | null, null]> {
+  ): Promise<[RefreshTokenErrorResponseDto | null, null]> {
     return new Promise(async (resolve) => {
       try {
         await this.tokenRepository.delete(refreshToken);
 
         resolve([null, null]);
       } catch (error) {
-        const dto: RefreshTokenErrorDto = {
+        const dto: RefreshTokenErrorResponseDto = {
           message: 'Invalid Refresh Token', //todo
         };
         resolve([dto, null]);

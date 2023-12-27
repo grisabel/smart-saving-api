@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-describe('POST /user/login', () => {
+describe('POST /session/login', () => {
   it('debe retornar un status 200 y un accesToken al loguear un usuario satisfactoriamente', async () => {
     const body = {
       email: 'test@test.com',
       password: 'Aabb@1',
     };
-    const res = await axios.post(`/user/login`, body);
+    const res = await axios.post(`/session/login`, body);
 
     expect(res.status).toBe(200);
     expect(res.data.accessToken.split('.').length).toEqual(3);
@@ -23,7 +23,7 @@ describe('POST /user/login', () => {
 
     //act
     try {
-      await axios.post(`/user/login`, body);
+      await axios.post(`/session/login`, body);
     } catch (error) {
       throwError = error;
     }
@@ -51,7 +51,7 @@ describe('POST /user/login', () => {
 
     //act
     try {
-      await axios.post(`/user/login`, body);
+      await axios.post(`/session/login`, body);
     } catch (error) {
       throwError = error;
     }

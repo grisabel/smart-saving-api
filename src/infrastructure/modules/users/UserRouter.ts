@@ -8,24 +8,5 @@ const router = express.Router();
 
 router.get('/', UserController.obtainUser);
 router.post('/', UserValidator.createUser, validate, UserController.createUser);
-router.post(
-  '/login',
-  UserValidator.loginUser,
-  validate,
-  UserController.loginUser
-);
-router.post(
-  '/refreshToken',
-  UserValidator.refreshTokenBody,
-  validate,
-  UserController.refreshToken
-);
-
-router.delete(
-  '/refreshToken/:refreshToken?',
-  UserValidator.refreshTokenUrl,
-  validate,
-  UserController.deleteRefreshToken
-);
 
 export default router;
