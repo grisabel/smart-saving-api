@@ -1,16 +1,9 @@
 export interface ErrorResponseDto {
   message: string;
-  errors: DomainErrorDto[];
+  errors: ErrorFieldResponseDto[];
 }
 
-export interface DomainErrorDto {
+export interface ErrorFieldResponseDto {
   type: string;
   msg: string;
-}
-
-export interface ValidationErrorDto {
-  type: string;
-  msg: string;
-  path: string;
-  location: string;
 }
