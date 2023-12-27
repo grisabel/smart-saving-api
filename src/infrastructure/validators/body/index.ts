@@ -1,4 +1,4 @@
-import { ValidationChain, body } from 'express-validator';
+import { ValidationChain, body, param } from 'express-validator';
 import { required } from './RequiredFieldValidator';
 import { equalFields } from './EqualFieldsValidator';
 
@@ -33,6 +33,35 @@ export function Body(fieldname: string): CustomValidationChain {
     },
     equalFields: (otherFieldName, errorMsg) => {
       return chain.custom(equalFields(otherFieldName, errorMsg));
+    },
+  };
+
+  const apiProxy = new Proxy(api, {
+    get(target, prop) {
+      const value = target[prop];
+
+      if (value instanceof Function) {
+        return function (...args) {
+          const resul = value.apply(target, args);
+          return Object.assign(resul, bindAll(target));
+        };
+      }
+      return value;
+    },
+  });
+
+  return Object.assign(
+    chain,
+    bindAll(apiProxy)
+  ) as unknown as CustomValidationChain;
+}
+
+export function Param(fieldname: string): CustomValidationChain {
+  const chain = param(fieldname);
+
+  const api = {
+    required: () => {
+      return required(chain, fieldname);
     },
   };
 

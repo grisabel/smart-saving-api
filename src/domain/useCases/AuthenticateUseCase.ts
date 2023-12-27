@@ -67,7 +67,7 @@ export class AuthenticateUseCase {
 
   async verifyRefreshToken(
     refreshToken: string
-  ): Promise<[RefreshTokenErrorDto | null, any | null]> {
+  ): Promise<[RefreshTokenErrorDto | null, RefreshTokenResponseDto | null]> {
     return new Promise(async (resolve) => {
       try {
         await this.tokenRepository.find(refreshToken);
@@ -88,6 +88,23 @@ export class AuthenticateUseCase {
         };
 
         resolve([null, dto]);
+      } catch (error) {
+        const dto: RefreshTokenErrorDto = {
+          message: 'Invalid Refresh Token', //todo
+        };
+        resolve([dto, null]);
+      }
+    });
+  }
+
+  async deleteRefreshToken(
+    refreshToken: string
+  ): Promise<[RefreshTokenErrorDto | null, null]> {
+    return new Promise(async (resolve) => {
+      try {
+        await this.tokenRepository.delete(refreshToken);
+
+        resolve([null, null]);
       } catch (error) {
         const dto: RefreshTokenErrorDto = {
           message: 'Invalid Refresh Token', //todo

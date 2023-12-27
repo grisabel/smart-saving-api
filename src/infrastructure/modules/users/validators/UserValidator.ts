@@ -1,4 +1,4 @@
-import { Body } from '@infrastructure/validators/body';
+import { Body, Param } from '@infrastructure/validators/body';
 
 // prettier-ignore
 const createUser = [
@@ -30,10 +30,13 @@ const loginUser = [
     .required(),
 ]
 
-const refreshToken = [Body('refreshToken').required()];
+const refreshTokenBody = [Body('refreshToken').required()];
+
+const refreshTokenUrl = [Param('refreshToken').required()];
 
 export default {
   createUser,
   loginUser,
-  refreshToken,
+  refreshTokenBody,
+  refreshTokenUrl,
 };

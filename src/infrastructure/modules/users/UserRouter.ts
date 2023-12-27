@@ -16,9 +16,16 @@ router.post(
 );
 router.post(
   '/refreshToken',
-  UserValidator.refreshToken,
+  UserValidator.refreshTokenBody,
   validate,
   UserController.refreshToken
+);
+
+router.delete(
+  '/refreshToken/:refreshToken?',
+  UserValidator.refreshTokenUrl,
+  validate,
+  UserController.deleteRefreshToken
 );
 
 export default router;

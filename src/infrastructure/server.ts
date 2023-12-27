@@ -11,7 +11,7 @@ const server: Express = express();
 server.use(
   cors({
     origin: '*',
-    methods: ['OPTIONS', 'GET', 'PUT', 'POST'],
+    methods: ['OPTIONS', 'GET', 'PUT', 'POST', 'DELETE'],
   })
 );
 server.use(bodyParser.json());

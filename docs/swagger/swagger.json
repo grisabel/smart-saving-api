@@ -180,6 +180,35 @@
           }
         }
       },
+      "/user/refreshToken/{refreshToken}": {
+        "delete": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Delete refreshToken",
+          "description": "Delete RefreshToken",
+          "operationId": "deleteToken",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "refreshToken",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "RefreshToken JWT"
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "successful operation"
+            },
+            "400": {
+              "description": "Invalid refreshToken"
+            }
+          }
+        }
+      },
       "/user/logout": {
         "post": {
           "tags": [

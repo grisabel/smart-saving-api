@@ -56,9 +56,27 @@ const refreshToken = async (
   res.status(200).json(responseDto);
 };
 
+const deleteRefreshToken = async (
+  req: Request<RefreshTojenRequestDto>,
+  res: Response
+) => {
+  const params = req.params;
+
+  const [error] = await authenticateUseCase.deleteRefreshToken(
+    params.refreshToken
+  );
+
+  if (error) {
+    res.status(404).json(error); //todo
+    return;
+  }
+  res.status(201).send();
+};
+
 export default {
   obtainUser,
   createUser,
   loginUser,
   refreshToken,
+  deleteRefreshToken,
 };
