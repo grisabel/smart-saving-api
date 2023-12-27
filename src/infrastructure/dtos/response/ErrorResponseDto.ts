@@ -1,6 +1,6 @@
 export interface ErrorResponseDto {
   message: string;
-  errors: ErrorFieldResponseDto[];
+  errors?: ErrorFieldResponseDto[];
 }
 
 export interface ErrorFieldResponseDto {

@@ -4,17 +4,16 @@ import { AuthenticateUseCaseFactory } from '@Session/domain/useCases/Authenticat
 
 import { LoginUserRequestDto } from '@Session/infrastructure/dtos/request/LoginUserRequestDto';
 import { LoginResponseDto } from '@Session/infrastructure/dtos/response/LoginResponseDto';
-import { LoginErrorResponseDto } from '@Session/infrastructure/dtos/response/LoginErrorResponseDto';
 
 import { RefreshTokenRequestDto } from '@Session/infrastructure/dtos/request/RefreshTokenRequestDto';
-import { RefreshTokenErrorResponseDto } from '@Session/infrastructure/dtos/response/RefreshTokenErrorResponseDto';
 import { RefreshTokenResponseDto } from '@Session/infrastructure/dtos/response/RefreshTokenResponseDto';
+import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 
 const authenticateUseCase = AuthenticateUseCaseFactory.getIntance();
 
 const loginUser = async (
   req: Request<LoginUserRequestDto>,
-  res: Response<LoginErrorResponseDto | LoginResponseDto>
+  res: Response<ErrorResponseDto | LoginResponseDto>
 ) => {
   const body = req.body;
 
@@ -32,7 +31,7 @@ const loginUser = async (
 
 const refreshToken = async (
   req: Request<RefreshTokenRequestDto>,
-  res: Response<RefreshTokenErrorResponseDto | RefreshTokenResponseDto>
+  res: Response<ErrorResponseDto | RefreshTokenResponseDto>
 ) => {
   const body = req.body;
 
@@ -49,7 +48,7 @@ const refreshToken = async (
 
 const deleteRefreshToken = async (
   req: Request<RefreshTokenRequestDto>,
-  res: Response<RefreshTokenErrorResponseDto>
+  res: Response<ErrorResponseDto>
 ) => {
   const params = req.params;
 

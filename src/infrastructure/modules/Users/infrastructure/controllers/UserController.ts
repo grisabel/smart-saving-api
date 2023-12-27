@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { OnboardingUseCaseFactory } from '@Users/domain/useCases/OnboardingUseCase';
 
 import { OnboardingUserRequestDto } from '@Users/infrastructure/dtos/request/OnboardingUserRequestDto';
+import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 
 const onboardingUseCase = OnboardingUseCaseFactory.getIntance();
 
@@ -12,7 +13,7 @@ const obtainUser = async (req: Request, res: Response) => {
 
 const createUser = async (
   req: Request<OnboardingUserRequestDto>,
-  res: Response
+  res: Response<ErrorResponseDto>
 ) => {
   const body = req.body;
 
