@@ -1,5 +1,5 @@
 import express from 'express';
-import { validate } from '@infrastructure/validators/Validate';
+import { validate } from '@infrastructure/middlewares/validators/validate';
 
 import UserController from '@Users/infrastructure/controllers/UserController';
 import UserValidator from '@Users/infrastructure/validators/UserValidator';
