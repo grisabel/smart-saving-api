@@ -8,5 +8,6 @@ const router = express.Router();
 
 router.get('/', UserController.obtainUser);
 router.post('/', UserValidator.createUser, validate, UserController.createUser);
+router.post('/delete-account', UserController.deleteUser);
 
 export default router;

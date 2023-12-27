@@ -26,7 +26,12 @@ const createUser = async (
   res.status(204).json();
 };
 
+const deleteUser = async (req: Request, res: Response) => {
+  res.status(200).json({ ok: 'ok' });
+};
+
 export default {
   obtainUser,
   createUser,
+  deleteUser,
 };
