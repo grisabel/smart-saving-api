@@ -1,11 +1,18 @@
-import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
+import {
+  UserInterfaceRepository,
+  UserRepositoryError,
+} from '@application/repository/UserRepository/UserInterfaceRepository';
 import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
 
-import { TokenInterfaceRepository } from '@Session/application/TokenRepositorty/TokenInterfaceRepositoty';
+import {
+  TokenInterfaceRepository,
+  TokenRepositoryError,
+} from '@Session/application/TokenRepositorty/TokenInterfaceRepositoty';
 import { TokenFactoryRepository } from '@Session/application/TokenRepositorty/TokenFactoryRepository';
 
 import JWTService, {
   AccessTokenPayload,
+  JWTServiceError,
 } from '@application/services/JWTService';
 
 import { Email } from '@domain/models/Email';
@@ -57,10 +64,14 @@ export class AuthenticateUseCase {
           resolve([errorDto, null]);
         }
       } catch (error) {
-        const errorDto: LoginErrorResponseDto = {
-          message: 'Usuario o contraseña incorrectos',
-        };
-        resolve([errorDto, null]);
+        if (error instanceof UserRepositoryError) {
+          const errorDto: LoginErrorResponseDto = {
+            message: 'Usuario o contraseña incorrectos',
+          };
+          resolve([errorDto, null]);
+        }
+
+        resolve([error, null]);
       }
     });
   }
@@ -91,10 +102,17 @@ export class AuthenticateUseCase {
 
         resolve([null, dto]);
       } catch (error) {
-        const dto: RefreshTokenErrorResponseDto = {
-          message: 'Invalid Refresh Token', //todo
-        };
-        resolve([dto, null]);
+        if (
+          error instanceof TokenRepositoryError ||
+          error instanceof JWTServiceError
+        ) {
+          const dto: RefreshTokenErrorResponseDto = {
+            message: 'Invalid Refresh Token', //todo
+          };
+          resolve([dto, null]);
+        }
+
+        resolve([error, null]);
       }
     });
   }
@@ -108,10 +126,17 @@ export class AuthenticateUseCase {
 
         resolve([null, null]);
       } catch (error) {
-        const dto: RefreshTokenErrorResponseDto = {
-          message: 'Invalid Refresh Token', //todo
-        };
-        resolve([dto, null]);
+        if (
+          error instanceof TokenRepositoryError ||
+          error instanceof JWTServiceError
+        ) {
+          const dto: RefreshTokenErrorResponseDto = {
+            message: 'Invalid Refresh Token', //todo
+          };
+          resolve([dto, null]);
+        }
+
+        resolve([error, null]);
       }
     });
   }
