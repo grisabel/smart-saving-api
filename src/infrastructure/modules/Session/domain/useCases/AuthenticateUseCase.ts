@@ -22,6 +22,7 @@ import { LoginResponseDto } from '@Session/infrastructure/dtos/response/LoginRes
 import { RefreshTokenResponseDto } from '@Session/infrastructure/dtos/response/RefreshTokenResponseDto';
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorResponseMapper';
+import { EmailError } from '@domain/models/Email/EmailError';
 
 export class AuthenticateUseCase {
   constructor(
@@ -68,7 +69,10 @@ export class AuthenticateUseCase {
           resolve([errorDto, null]);
         }
       } catch (error) {
-        if (error instanceof UserRepositoryError) {
+        if (
+          error instanceof UserRepositoryError ||
+          error instanceof EmailError
+        ) {
           const errorDto = ErrorResponseMapper.toResponseDto({
             message: 'Usuario o contraseña incorrectos',
           });
@@ -117,6 +121,28 @@ export class AuthenticateUseCase {
         }
 
         resolve([error, null]);
+      }
+    });
+  }
+
+  verifyAccessToken(accessToken: string): Promise<[Error, { email: string }]> {
+    return new Promise(async (resolve) => {
+      try {
+        // TODO change repository
+        const revokeToken = await this.tokenRepository.find(accessToken);
+        if (revokeToken) {
+          const error = new Error('Revoke Token');
+          resolve([error, null]);
+          return;
+        }
+      } catch (error) {
+        try {
+          const decodeToken = JWTService.verifyAcessToken(accessToken);
+          const user = { email: decodeToken.sub };
+          resolve([null, user]);
+        } catch (error) {
+          resolve([error, null]);
+        }
       }
     });
   }

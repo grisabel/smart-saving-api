@@ -218,6 +218,38 @@
           }
         }
       },
+      "/session/revoke": {
+        "post": {
+          "tags": [
+            "session"
+          ],
+          "summary": "Revoke accessToken",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "revokeToken",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessToken"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/user/delete-account": {
         "post": {
           "tags": [
@@ -853,6 +885,15 @@
             "refreshToken": {
               "type": "string",
               "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDM1MjczNzcsImV4cCI6MTcwMzYxMzc3Nywic3ViIjoidGVzdEB0ZXN0LmNvbSJ9.s9rDV-zVSLllLje7GjtAy6Sl2nV8SJ9DP4IYnEvDEbc"
+            }
+          }
+        },
+        "AccessToken": {
+          "type": "object",
+          "properties": {
+            "accessToken": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InNtYXJ0LXNhdmluZy1hcGkiLCJpYXQiOjE3MDM3ODQyNTgsImV4cCI6MTcwMzc4NTE1OCwic3ViIjoidGVzdEB0ZXN0LmNvbSJ9.rJL4l6Ka56eWyvpWhBDe7ZmjjykiQZEQAUE0c0CQrBE"
             }
           }
         },
