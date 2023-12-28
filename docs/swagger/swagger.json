@@ -65,7 +65,7 @@
           }
         }
       },
-      "/user": {
+      "/user/register": {
         "post": {
           "tags": [
             "user"
@@ -94,7 +94,9 @@
               }
             }
           }
-        },
+        }
+      },
+      "/user": {
         "get": {
           "tags": [
             "user"
