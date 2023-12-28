@@ -152,7 +152,7 @@
           }
         }
       },
-      "/session/refreshToken": {
+      "/session/token": {
         "post": {
           "tags": [
             "session"

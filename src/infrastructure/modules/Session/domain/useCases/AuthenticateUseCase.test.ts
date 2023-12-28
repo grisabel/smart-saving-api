@@ -44,6 +44,8 @@ describe('La clase AuthenticationUseCase', () => {
       //asert
       expect(resultDto.accessToken.split('.').length).toEqual(3);
       expect(resultDto.refreshToken.split('.').length).toEqual(3);
+      expect(resultDto.token_type).toEqual('bearer');
+      expect(typeof resultDto.expires).toBe('number');
     });
 
     it('debe lanzar un error si el usuario no existe', async () => {
@@ -99,6 +101,8 @@ describe('La clase AuthenticationUseCase', () => {
 
       //asert
       expect(verifyRTokenDto.accessToken.split('.').length).toEqual(3);
+      expect(verifyRTokenDto.token_type).toEqual('bearer');
+      expect(typeof verifyRTokenDto.expires).toBe('number');
     });
     it('debe lanzar un error si el refreshToken no existe', async () => {
       //arrange

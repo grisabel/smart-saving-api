@@ -2,7 +2,7 @@ import { TokenExample } from '@application/services/JWTService/test/Token.exampl
 import axios from 'axios';
 
 describe('RefreshToken', () => {
-  describe('POST /session/refreshToken', () => {
+  describe('POST /session/token', () => {
     it('debe retornar un status 200 y un accesToken al refrescar la sesión con el refreshToken', async () => {
       const bodyLogin = {
         email: 'test@test.com',
@@ -14,9 +14,11 @@ describe('RefreshToken', () => {
       const refreshTokenBody = {
         refreshToken: resLogin.data.refreshToken,
       };
-      const res = await axios.post(`/session/refreshToken`, refreshTokenBody);
+      const res = await axios.post(`/session/token`, refreshTokenBody);
       expect(res.status).toBe(200);
       expect(res.data.accessToken.split('.').length).toEqual(3);
+      expect(res.data.token_type).toEqual('bearer');
+      expect(typeof res.data.expires).toBe('number');
     });
     it('debe retornar un status 422 si el formato de la petición no es válido', async () => {
       const body = {};
@@ -28,7 +30,7 @@ describe('RefreshToken', () => {
 
       //act
       try {
-        await axios.post(`/session/refreshToken`, body);
+        await axios.post(`/session/token`, body);
       } catch (error) {
         throwError = error;
       }
@@ -51,7 +53,7 @@ describe('RefreshToken', () => {
 
       //act
       try {
-        await axios.post(`/session/refreshToken`, body);
+        await axios.post(`/session/token`, body);
       } catch (error) {
         throwError = error;
       }

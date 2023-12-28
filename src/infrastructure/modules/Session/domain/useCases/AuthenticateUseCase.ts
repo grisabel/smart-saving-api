@@ -46,7 +46,7 @@ export class AuthenticateUseCase {
           const userPayload: AccessTokenPayload = {
             scope: 'smart-saving-api',
           };
-          const accessToken = this.jwtService.createAccessToken(
+          const { accessToken, expiredIn } = this.jwtService.createAccessToken(
             emailDto,
             userPayload
           );
@@ -55,6 +55,8 @@ export class AuthenticateUseCase {
           const responseDto: LoginResponseDto = {
             accessToken,
             refreshToken,
+            token_type: 'bearer',
+            expires: expiredIn,
           };
 
           await this.tokenRepository.save(refreshToken);
@@ -91,13 +93,15 @@ export class AuthenticateUseCase {
         const userPayload: AccessTokenPayload = {
           scope: 'smart-saving-api',
         };
-        const accessToken = this.jwtService.createAccessToken(
+        const { accessToken, expiredIn } = this.jwtService.createAccessToken(
           tokenDetails.sub,
           userPayload
         );
 
         const dto: RefreshTokenResponseDto = {
           accessToken,
+          token_type: 'bearer',
+          expires: expiredIn,
         };
 
         resolve([null, dto]);

@@ -13,7 +13,7 @@ router.post(
   UserController.loginUser
 );
 router.post(
-  '/refreshToken',
+  '/token',
   SessionValidator.refreshTokenBody,
   validate,
   UserController.refreshToken
