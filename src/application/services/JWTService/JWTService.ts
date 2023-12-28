@@ -3,7 +3,8 @@ import config from '@infrastructure/config';
 
 //TODO review texts
 export const JWR_SERVICE_ERROR = {
-  verifyTokenError: 'Error al verificar el token',
+  verifyRefreshTokenError: 'Error al verificar el refreshToken',
+  verifyAcessTokenError: 'Error al verificar el accessToken',
 };
 export interface JWTServiceErrorParams {
   verifyTokenError?: string;
@@ -70,7 +71,25 @@ const verifyRefreshToken = (
     };
   } catch (error) {
     throw new JWTServiceError({
-      verifyTokenError: JWR_SERVICE_ERROR.verifyTokenError,
+      verifyTokenError: JWR_SERVICE_ERROR.verifyRefreshTokenError,
+    });
+  }
+};
+
+export interface VerifyAcessTokenResponse {
+  sub: string;
+}
+const verifyAcessToken = (refreshToken: string): VerifyAcessTokenResponse => {
+  try {
+    jwt.verify(refreshToken, config.JWT.ACCESS_TOKEN.PRIVATE_KEY);
+    const decodedToken = jwt.decode(refreshToken, { json: true });
+
+    return {
+      sub: decodedToken.sub,
+    };
+  } catch (error) {
+    throw new JWTServiceError({
+      verifyTokenError: JWR_SERVICE_ERROR.verifyAcessTokenError,
     });
   }
 };
@@ -79,4 +98,5 @@ export default {
   createAccessToken,
   createRefreshToken,
   verifyRefreshToken,
+  verifyAcessToken,
 };
