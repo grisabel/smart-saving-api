@@ -44,6 +44,8 @@ describe('La clase AuthenticationUseCase', () => {
       //asert
       expect(resultDto.accessToken.split('.').length).toEqual(3);
       expect(resultDto.refreshToken.split('.').length).toEqual(3);
+      expect(resultDto.token_type).toEqual('bearer');
+      expect(typeof resultDto.expires).toBe('number');
     });
 
     it('debe lanzar un error si el usuario no existe', async () => {
@@ -99,6 +101,8 @@ describe('La clase AuthenticationUseCase', () => {
 
       //asert
       expect(verifyRTokenDto.accessToken.split('.').length).toEqual(3);
+      expect(verifyRTokenDto.token_type).toEqual('bearer');
+      expect(typeof verifyRTokenDto.expires).toBe('number');
     });
     it('debe lanzar un error si el refreshToken no existe', async () => {
       //arrange
@@ -150,6 +154,20 @@ describe('La clase AuthenticationUseCase', () => {
 
       //asert
       expect(error.message).toEqual('Invalid Refresh Token');
+    });
+  });
+
+  describe('el método revokeAccessToken', () => {
+    it('debe añadir un accessToken al repositorio de token', async () => {
+      //arrange
+      const accessToken = TokenExample.accessToken();
+
+      //act
+      await authenticationUseCase.revokeAccessToken(accessToken);
+      const savedToken = await tokenRepository.find(accessToken);
+
+      //asert
+      expect(accessToken).toEqual(savedToken);
     });
   });
 });

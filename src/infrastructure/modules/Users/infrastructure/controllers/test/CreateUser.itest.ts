@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-describe('POST /user', () => {
+describe('POST /user/register', () => {
   it('debe retornar un status 204 (No Content) al crear un usuario satisfactoriamente', async () => {
     const body = {
       firstName: 'User Name',
@@ -12,7 +12,7 @@ describe('POST /user', () => {
       password: '12345@Aa',
       repeatPassword: '12345@Aa',
     };
-    const res = await axios.post(`/user`, body);
+    const res = await axios.post(`/user/register`, body);
 
     expect(res.status).toBe(204);
   });
@@ -36,7 +36,7 @@ describe('POST /user', () => {
 
     //act
     try {
-      await axios.post(`/user`, body);
+      await axios.post(`/user/register`, body);
     } catch (error) {
       throwError = error;
     }
@@ -77,7 +77,7 @@ describe('POST /user', () => {
 
     //act
     try {
-      await axios.post(`/user`, body);
+      await axios.post(`/user/register`, body);
     } catch (error) {
       throwError = error;
     }
@@ -109,7 +109,7 @@ describe('POST /user', () => {
 
     //act
     try {
-      await axios.post(`/user`, body);
+      await axios.post(`/user/register`, body);
     } catch (error) {
       throwError = error;
     }
@@ -147,7 +147,7 @@ describe('POST /user', () => {
 
     //act
     try {
-      await axios.post(`/user`, body);
+      await axios.post(`/user/register`, body);
     } catch (error) {
       throwError = error;
     }
@@ -185,7 +185,7 @@ describe('POST /user', () => {
 
     //act
     try {
-      await axios.post(`/user`, body);
+      await axios.post(`/user/register`, body);
     } catch (error) {
       throwError = error;
     }

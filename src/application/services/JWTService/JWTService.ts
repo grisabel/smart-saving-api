@@ -27,7 +27,7 @@ export interface AccessTokenPayload {
 const createAccessToken = (
   emailDTO: string,
   payload: AccessTokenPayload
-): string => {
+): { accessToken: string; expiredIn: number } => {
   let signOption: SignOptions = {
     expiresIn: config.JWT.ACCESS_TOKEN.EXPIRES_TIME,
     algorithm: 'HS256',
@@ -38,8 +38,12 @@ const createAccessToken = (
     config.JWT.ACCESS_TOKEN.PRIVATE_KEY,
     signOption
   );
+  const decodedToken = jwt.decode(token, { json: true });
 
-  return token;
+  return {
+    accessToken: token,
+    expiredIn: decodedToken.exp,
+  };
 };
 
 const createRefreshToken = (emailDTO: string): string => {

@@ -1,8 +1,8 @@
 import { TokenExample } from '@application/services/JWTService/test/Token.example';
 import axios from 'axios';
 
-describe('POST /session/token', () => {
-  it('debe retornar un status 200 y un accesToken al refrescar la sesión con el refreshToken', async () => {
+describe('POST /session/logout', () => {
+  it('debe retornar un status 201 y al eliminar un refreshToken', async () => {
     const bodyLogin = {
       email: 'test@test.com',
       password: 'Aabb@1',
@@ -10,17 +10,14 @@ describe('POST /session/token', () => {
 
     const resLogin = await axios.post(`/session/login`, bodyLogin);
 
-    const refreshTokenBody = {
+    const bodyLogout = {
       refreshToken: resLogin.data.refreshToken,
     };
-    const res = await axios.post(`/session/token`, refreshTokenBody);
-    expect(res.status).toBe(200);
-    expect(res.data.accessToken.split('.').length).toEqual(3);
-    expect(res.data.token_type).toEqual('bearer');
-    expect(typeof res.data.expires).toBe('number');
+    const res = await axios.post(`/session/logout`, bodyLogout);
+    expect(res.status).toBe(201);
   });
   it('debe retornar un status 422 si el formato de la petición no es válido', async () => {
-    const body = {};
+    const bodyLogout = {};
     let throwError;
     const response422 = {
       message: 'Validación incorrecta',
@@ -29,7 +26,7 @@ describe('POST /session/token', () => {
 
     //act
     try {
-      await axios.post(`/session/token`, body);
+      await axios.post(`/session/logout`, bodyLogout);
     } catch (error) {
       throwError = error;
     }
@@ -41,24 +38,26 @@ describe('POST /session/token', () => {
       expect.arrayContaining([expect.objectContaining(response422.errors[0])])
     );
   });
-  it('debe retornar un status 401 si el refresh token es inválido', async () => {
-    const body = {
-      refreshToken: TokenExample.invalidToken(),
+  it('debe retornar un status 404 si el refresh token no existe', async () => {
+    const refreshToken = TokenExample.invalidToken();
+    const bodyLogout = {
+      refreshToken,
     };
+
     let throwError;
-    const response401 = {
+    const response404 = {
       message: 'Invalid Refresh Token',
     };
 
     //act
     try {
-      await axios.post(`/session/token`, body);
+      await axios.post(`/session/logout`, bodyLogout);
     } catch (error) {
       throwError = error;
     }
 
     //assert
-    expect(throwError.response.status).toBe(401);
-    expect(throwError.response.data.message).toEqual(response401.message);
+    expect(throwError.response.status).toBe(404);
+    expect(throwError.response.data.message).toEqual(response404.message);
   });
 });

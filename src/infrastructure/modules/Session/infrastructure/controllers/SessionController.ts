@@ -8,6 +8,7 @@ import { LoginResponseDto } from '@Session/infrastructure/dtos/response/LoginRes
 import { RefreshTokenRequestDto } from '@Session/infrastructure/dtos/request/RefreshTokenRequestDto';
 import { RefreshTokenResponseDto } from '@Session/infrastructure/dtos/response/RefreshTokenResponseDto';
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
+import { RevokeAccessTokenRequestDto } from '../dtos/request/RevokeAccessTokenRequestDto';
 
 const authenticateUseCase = AuthenticateUseCaseFactory.getIntance();
 
@@ -50,11 +51,26 @@ const deleteRefreshToken = async (
   req: Request<RefreshTokenRequestDto>,
   res: Response<ErrorResponseDto>
 ) => {
-  const params = req.params;
+  const body = req.body;
 
   const [error] = await authenticateUseCase.deleteRefreshToken(
-    params.refreshToken
+    body.refreshToken
   );
+
+  if (error) {
+    res.status(404).json(error); //todo
+    return;
+  }
+  res.status(201).send();
+};
+
+const revokeAccessToken = async (
+  req: Request<RevokeAccessTokenRequestDto>,
+  res: Response<ErrorResponseDto>
+) => {
+  const body = req.body;
+
+  const [error] = await authenticateUseCase.revokeAccessToken(body.accessToken);
 
   if (error) {
     res.status(404).json(error); //todo
@@ -67,4 +83,5 @@ export default {
   loginUser,
   refreshToken,
   deleteRefreshToken,
+  revokeAccessToken,
 };

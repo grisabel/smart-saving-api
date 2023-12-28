@@ -22,6 +22,7 @@ import { LoginResponseDto } from '@Session/infrastructure/dtos/response/LoginRes
 import { RefreshTokenResponseDto } from '@Session/infrastructure/dtos/response/RefreshTokenResponseDto';
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorResponseMapper';
+import { EmailError } from '@domain/models/Email/EmailError';
 
 export class AuthenticateUseCase {
   constructor(
@@ -46,7 +47,7 @@ export class AuthenticateUseCase {
           const userPayload: AccessTokenPayload = {
             scope: 'smart-saving-api',
           };
-          const accessToken = this.jwtService.createAccessToken(
+          const { accessToken, expiredIn } = this.jwtService.createAccessToken(
             emailDto,
             userPayload
           );
@@ -55,6 +56,8 @@ export class AuthenticateUseCase {
           const responseDto: LoginResponseDto = {
             accessToken,
             refreshToken,
+            token_type: 'bearer',
+            expires: expiredIn,
           };
 
           await this.tokenRepository.save(refreshToken);
@@ -66,7 +69,10 @@ export class AuthenticateUseCase {
           resolve([errorDto, null]);
         }
       } catch (error) {
-        if (error instanceof UserRepositoryError) {
+        if (
+          error instanceof UserRepositoryError ||
+          error instanceof EmailError
+        ) {
           const errorDto = ErrorResponseMapper.toResponseDto({
             message: 'Usuario o contraseña incorrectos',
           });
@@ -91,13 +97,15 @@ export class AuthenticateUseCase {
         const userPayload: AccessTokenPayload = {
           scope: 'smart-saving-api',
         };
-        const accessToken = this.jwtService.createAccessToken(
+        const { accessToken, expiredIn } = this.jwtService.createAccessToken(
           tokenDetails.sub,
           userPayload
         );
 
         const dto: RefreshTokenResponseDto = {
           accessToken,
+          token_type: 'bearer',
+          expires: expiredIn,
         };
 
         resolve([null, dto]);
@@ -113,6 +121,28 @@ export class AuthenticateUseCase {
         }
 
         resolve([error, null]);
+      }
+    });
+  }
+
+  verifyAccessToken(accessToken: string): Promise<[Error, { email: string }]> {
+    return new Promise(async (resolve) => {
+      try {
+        // TODO change repository
+        const revokeToken = await this.tokenRepository.find(accessToken);
+        if (revokeToken) {
+          const error = new Error('Revoke Token');
+          resolve([error, null]);
+          return;
+        }
+      } catch (error) {
+        try {
+          const decodeToken = JWTService.verifyAcessToken(accessToken);
+          const user = { email: decodeToken.sub };
+          resolve([null, user]);
+        } catch (error) {
+          resolve([error, null]);
+        }
       }
     });
   }
@@ -136,6 +166,20 @@ export class AuthenticateUseCase {
           resolve([dto, null]);
         }
 
+        resolve([error, null]);
+      }
+    });
+  }
+
+  async revokeAccessToken(
+    accessToken: string
+  ): Promise<[ErrorResponseDto | null, null]> {
+    return new Promise(async (resolve) => {
+      try {
+        await this.tokenRepository.save(accessToken); // TODO
+
+        resolve([null, null]);
+      } catch (error) {
         resolve([error, null]);
       }
     });

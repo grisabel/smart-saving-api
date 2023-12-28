@@ -8,7 +8,12 @@ import UserValidator from '@Users/infrastructure/validators/UserValidator';
 const router = express.Router();
 
 router.get('/', UserController.obtainUser);
-router.post('/', UserValidator.createUser, validate, UserController.createUser);
+router.post(
+  '/register',
+  UserValidator.createUser,
+  validate,
+  UserController.createUser
+);
 router.post('/delete-account', isLoggedIn, UserController.deleteUser);
 
 export default router;

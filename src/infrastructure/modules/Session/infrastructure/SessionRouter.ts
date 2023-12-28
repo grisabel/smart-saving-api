@@ -13,17 +13,24 @@ router.post(
   UserController.loginUser
 );
 router.post(
-  '/refreshToken',
+  '/token',
   SessionValidator.refreshTokenBody,
   validate,
   UserController.refreshToken
 );
 
-router.delete(
-  '/refreshToken/:refreshToken?',
-  SessionValidator.refreshTokenUrl,
+router.post(
+  '/logout',
+  SessionValidator.refreshTokenBody,
   validate,
   UserController.deleteRefreshToken
+);
+
+router.post(
+  '/revoke',
+  SessionValidator.accesTokenBody,
+  validate,
+  UserController.revokeAccessToken
 );
 
 export default router;
