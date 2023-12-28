@@ -144,6 +144,20 @@ export class AuthenticateUseCase {
       }
     });
   }
+
+  async revokeAccessToken(
+    accessToken: string
+  ): Promise<[ErrorResponseDto | null, null]> {
+    return new Promise(async (resolve) => {
+      try {
+        await this.tokenRepository.save(accessToken); // TODO
+
+        resolve([null, null]);
+      } catch (error) {
+        resolve([error, null]);
+      }
+    });
+  }
 }
 
 export class AuthenticateUseCaseFactory {

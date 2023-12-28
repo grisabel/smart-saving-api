@@ -26,4 +26,11 @@ router.post(
   UserController.deleteRefreshToken
 );
 
+router.post(
+  '/revoke',
+  SessionValidator.accesTokenBody,
+  validate,
+  UserController.revokeAccessToken
+);
+
 export default router;
