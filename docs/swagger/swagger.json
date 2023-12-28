@@ -186,35 +186,6 @@
           }
         }
       },
-      "/session/refreshToken/{refreshToken}": {
-        "delete": {
-          "tags": [
-            "session"
-          ],
-          "summary": "Delete refreshToken",
-          "description": "Delete RefreshToken",
-          "operationId": "deleteToken",
-          "parameters": [
-            {
-              "in": "path",
-              "name": "refreshToken",
-              "schema": {
-                "type": "string"
-              },
-              "required": true,
-              "description": "RefreshToken JWT"
-            }
-          ],
-          "responses": {
-            "201": {
-              "description": "successful operation"
-            },
-            "400": {
-              "description": "Invalid refreshToken"
-            }
-          }
-        }
-      },
       "/session/logout": {
         "post": {
           "tags": [
@@ -224,6 +195,15 @@
           "description": "This can only be done by the logged in user.",
           "operationId": "logoutUser",
           "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshToken"
+                }
+              }
+            }
+          },
           "responses": {
             "200": {
               "description": "successful operation",

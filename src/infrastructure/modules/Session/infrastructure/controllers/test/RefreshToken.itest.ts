@@ -63,7 +63,7 @@ describe('RefreshToken', () => {
       expect(throwError.response.data.message).toEqual(response401.message);
     });
   });
-  describe('DELETE /session/refreshToken', () => {
+  describe('POST /session/logout', () => {
     it('debe retornar un status 201 y al eliminar un refreshToken', async () => {
       const bodyLogin = {
         email: 'test@test.com',
@@ -72,11 +72,14 @@ describe('RefreshToken', () => {
 
       const resLogin = await axios.post(`/session/login`, bodyLogin);
 
-      const refreshToken = resLogin.data.refreshToken;
-      const res = await axios.delete(`/session/refreshToken/${refreshToken}`);
+      const bodyLogout = {
+        refreshToken: resLogin.data.refreshToken,
+      };
+      const res = await axios.post(`/session/logout`, bodyLogout);
       expect(res.status).toBe(201);
     });
     it('debe retornar un status 422 si el formato de la petición no es válido', async () => {
+      const bodyLogout = {};
       let throwError;
       const response422 = {
         message: 'Validación incorrecta',
@@ -85,7 +88,7 @@ describe('RefreshToken', () => {
 
       //act
       try {
-        await axios.delete(`/session/refreshToken`);
+        await axios.post(`/session/logout`, bodyLogout);
       } catch (error) {
         throwError = error;
       }
@@ -99,6 +102,9 @@ describe('RefreshToken', () => {
     });
     it('debe retornar un status 404 si el refresh token no existe', async () => {
       const refreshToken = TokenExample.invalidToken();
+      const bodyLogout = {
+        refreshToken,
+      };
 
       let throwError;
       const response404 = {
@@ -107,7 +113,7 @@ describe('RefreshToken', () => {
 
       //act
       try {
-        await axios.delete(`/session/refreshToken/${refreshToken}`);
+        await axios.post(`/session/logout`, bodyLogout);
       } catch (error) {
         throwError = error;
       }

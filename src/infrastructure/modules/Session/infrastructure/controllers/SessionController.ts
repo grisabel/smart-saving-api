@@ -50,10 +50,10 @@ const deleteRefreshToken = async (
   req: Request<RefreshTokenRequestDto>,
   res: Response<ErrorResponseDto>
 ) => {
-  const params = req.params;
+  const body = req.body;
 
   const [error] = await authenticateUseCase.deleteRefreshToken(
-    params.refreshToken
+    body.refreshToken
   );
 
   if (error) {

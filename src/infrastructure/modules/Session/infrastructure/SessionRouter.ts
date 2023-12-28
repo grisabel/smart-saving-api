@@ -19,9 +19,9 @@ router.post(
   UserController.refreshToken
 );
 
-router.delete(
-  '/refreshToken/:refreshToken?',
-  SessionValidator.refreshTokenUrl,
+router.post(
+  '/logout',
+  SessionValidator.refreshTokenBody,
   validate,
   UserController.deleteRefreshToken
 );
