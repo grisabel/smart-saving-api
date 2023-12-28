@@ -20,11 +20,25 @@ export class TokenExample {
   static refreshToken(): string {
     return refreshToken;
   }
+  static accessToken(): string {
+    let signOption: SignOptions = {
+      expiresIn: '15m',
+      algorithm: 'HS256',
+      subject: 'test@test.com',
+    };
+    const token = jwt.sign(
+      { scope: 'smart-saving-api' },
+      config.JWT.REFRESH_TOKEN.PRIVATE_KEY,
+      signOption
+    );
+
+    return token;
+  }
   static invalidToken(): string {
     let signOption: SignOptions = {
       expiresIn: '1',
       algorithm: 'HS256',
-      subject: 'uesr1@test.com',
+      subject: 'test@test.com',
     };
     const token = jwt.sign(
       {},

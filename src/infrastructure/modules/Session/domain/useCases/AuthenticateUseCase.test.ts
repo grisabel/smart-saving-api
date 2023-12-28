@@ -156,4 +156,18 @@ describe('La clase AuthenticationUseCase', () => {
       expect(error.message).toEqual('Invalid Refresh Token');
     });
   });
+
+  describe('el método revokeAccessToken', () => {
+    it('debe añadir un accessToken al repositorio de token', async () => {
+      //arrange
+      const accessToken = TokenExample.accessToken();
+
+      //act
+      await authenticationUseCase.revokeAccessToken(accessToken);
+      const savedToken = await tokenRepository.find(accessToken);
+
+      //asert
+      expect(accessToken).toEqual(savedToken);
+    });
+  });
 });
