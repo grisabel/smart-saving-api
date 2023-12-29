@@ -10,6 +10,7 @@ const createUser = [
   Body('lastName')
     .required(),
   Body('dateBirth')
+    .date()
     .required(),
   Body('objetive')
     .required(),
@@ -28,18 +29,8 @@ const createUser = [
 
 const resetPassword = [
   Body('dateBirth')
-  .required()
-  .custom((value) => {
-    const resul = DateTimeService.isValid({
-      date: value,
-      format: DATE_FORMATS.Date
-    })
-
-    if (!resul) {
-      throw new Error(`El formato valido debe ser ${ DATE_FORMATS.Date}`);
-    }
-    return true; 
-  }),
+    .date()
+    .required(),
  Body('email')
   .required(),
 ]
