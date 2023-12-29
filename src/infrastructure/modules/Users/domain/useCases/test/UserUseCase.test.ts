@@ -93,7 +93,7 @@ describe('La clase UserUseCase', () => {
 
       //assert
       expect(resend.emails.send).toHaveBeenCalledWith({
-        from: 'onboarding@resend.dev',
+        from: 'notify@smartsavings.dev',
         to: user1.getEmail().getValue(),
         subject: 'Hello World',
         html: '<p>Congrats on sending your <strong>first email</strong>!</p>',

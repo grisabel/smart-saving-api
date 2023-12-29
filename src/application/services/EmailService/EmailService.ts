@@ -27,7 +27,7 @@ export class EmailService {
     return new Promise(async (resolve, reject) => {
       try {
         const { error } = await this.resend.emails.send({
-          from: 'onboarding@resend.dev',
+          from: 'notify@smartsavings.dev',
           to: email.getValue(),
           subject: 'Hello World',
           html: '<p>Congrats on sending your <strong>first email</strong>!</p>',
