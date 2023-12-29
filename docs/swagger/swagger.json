@@ -250,37 +250,6 @@
           }
         }
       },
-      "/user/delete-account": {
-        "post": {
-          "tags": [
-            "user"
-          ],
-          "summary": "Delete user",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "deleteUser",
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteUserBody"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "/user/reset-password": {
         "post": {
           "tags": [
@@ -312,7 +281,7 @@
           }
         }
       },
-      "/user/reset-password/confirm": {
+      "/user/reset-password/{operationId}/confirm": {
         "post": {
           "tags": [
             "user"
@@ -325,6 +294,49 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ResetPasswordConfirmBody"
+                }
+              }
+            }
+          },
+          "parameters": [
+            {
+              "in": "path",
+              "name": "operationId",
+              "schema": {
+                "type": "string",
+                "example": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+              },
+              "required": true,
+              "description": "Numeric ID of the user to get"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/delete-account": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Delete user",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "deleteUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteUserBody"
                 }
               }
             }
@@ -931,10 +943,6 @@
             "repeatPassword": {
               "type": "string",
               "example": "12345@Aa"
-            },
-            "operation_id": {
-              "type": "string",
-              "example": "000414000"
             }
           }
         },
