@@ -80,6 +80,18 @@ const resetPassword = async (
   }
 };
 
+const resetPasswordConfirm = async (
+  req: Request<ResetPasswordRequestDto>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res.status(200).json({ ok: 'ok' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ ok: 'ok' });
 };
@@ -88,5 +100,6 @@ export default {
   obtainUserInfo,
   createUser,
   resetPassword,
+  resetPasswordConfirm,
   deleteUser,
 };

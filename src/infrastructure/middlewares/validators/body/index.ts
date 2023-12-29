@@ -3,6 +3,7 @@ import { required } from './RequiredFieldValidator';
 import { equalFields } from './EqualFieldsValidator';
 import { date } from './DateValidator';
 import { email } from './EmailValidator';
+import { password } from './PasswordValidator';
 
 const bindAll = <T>(object: T): { [K in keyof T]: T[K] } => {
   const protoKeys = Object.getOwnPropertyNames(
@@ -22,6 +23,7 @@ type CustomValidationChain = ValidationChain & {
   required: () => CustomValidationChain;
   date: () => CustomValidationChain;
   email: () => CustomValidationChain;
+  password: () => CustomValidationChain;
   equalFields: (
     otherFieldName: string,
     errorMsg: string
@@ -40,6 +42,9 @@ export function Body(fieldname: string): CustomValidationChain {
     },
     email: () => {
       return chain.custom(email());
+    },
+    password: () => {
+      return chain.custom(password());
     },
     equalFields: (otherFieldName, errorMsg) => {
       return chain.custom(equalFields(otherFieldName, errorMsg));
@@ -78,6 +83,9 @@ export function Param(fieldname: string): CustomValidationChain {
     },
     email: () => {
       return chain.custom(email());
+    },
+    password: () => {
+      return chain.custom(password());
     },
   };
 
