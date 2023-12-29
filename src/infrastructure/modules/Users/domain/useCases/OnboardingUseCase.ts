@@ -17,7 +17,7 @@ export class OnboardingUseCase {
   saveUser(
     userDTO: OnboardingUserRequestDto
   ): Promise<[ErrorResponseDto | Error, null]> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       try {
         const email = Email.createFromText(userDTO.email);
         const password = Password.createFromText(userDTO.password);
@@ -48,7 +48,7 @@ export class OnboardingUseCase {
           resolve([errorDto, null]);
         }
 
-        resolve([error, null]);
+        reject(error);
       }
     });
   }

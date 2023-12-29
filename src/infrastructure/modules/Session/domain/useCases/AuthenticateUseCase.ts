@@ -35,7 +35,7 @@ export class AuthenticateUseCase {
     emailDto: string,
     passwordDto: string
   ): Promise<[ErrorResponseDto | null, LoginResponseDto | null]> {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       try {
         const email = Email.createFromText(emailDto);
         const passwordHash = Password.createFromHash(passwordDto);
@@ -79,7 +79,7 @@ export class AuthenticateUseCase {
           resolve([errorDto, null]);
         }
 
-        resolve([error, null]);
+        reject(error);
       }
     });
   }
@@ -87,7 +87,7 @@ export class AuthenticateUseCase {
   async verifyRefreshToken(
     refreshToken: string
   ): Promise<[ErrorResponseDto | null, RefreshTokenResponseDto | null]> {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       try {
         await this.tokenRepository.find(refreshToken);
         const tokenDetails = await this.jwtService.verifyRefreshToken(
@@ -120,13 +120,13 @@ export class AuthenticateUseCase {
           resolve([dto, null]);
         }
 
-        resolve([error, null]);
+        reject(error);
       }
     });
   }
 
   verifyAccessToken(accessToken: string): Promise<[Error, { email: string }]> {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       try {
         // TODO change repository
         const revokeToken = await this.tokenRepository.find(accessToken);
@@ -141,7 +141,10 @@ export class AuthenticateUseCase {
           const user = { email: decodeToken.sub };
           resolve([null, user]);
         } catch (error) {
-          resolve([error, null]);
+          if (error instanceof JWTServiceError) {
+            resolve([error, null]);
+          }
+          reject(error);
         }
       }
     });
@@ -150,7 +153,7 @@ export class AuthenticateUseCase {
   async deleteRefreshToken(
     refreshToken: string
   ): Promise<[ErrorResponseDto | null, null]> {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       try {
         await this.tokenRepository.delete(refreshToken);
 
@@ -166,7 +169,7 @@ export class AuthenticateUseCase {
           resolve([dto, null]);
         }
 
-        resolve([error, null]);
+        reject(error);
       }
     });
   }
@@ -174,13 +177,13 @@ export class AuthenticateUseCase {
   async revokeAccessToken(
     accessToken: string
   ): Promise<[ErrorResponseDto | null, null]> {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       try {
         await this.tokenRepository.save(accessToken); // TODO
 
         resolve([null, null]);
       } catch (error) {
-        resolve([error, null]);
+        reject(error);
       }
     });
   }
