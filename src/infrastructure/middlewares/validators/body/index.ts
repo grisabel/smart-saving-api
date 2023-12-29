@@ -2,6 +2,7 @@ import { ValidationChain, body, param } from 'express-validator';
 import { required } from './RequiredFieldValidator';
 import { equalFields } from './EqualFieldsValidator';
 import { date } from './DateValidator';
+import { email } from './EmailValidator';
 
 const bindAll = <T>(object: T): { [K in keyof T]: T[K] } => {
   const protoKeys = Object.getOwnPropertyNames(
@@ -20,6 +21,7 @@ const bindAll = <T>(object: T): { [K in keyof T]: T[K] } => {
 type CustomValidationChain = ValidationChain & {
   required: () => CustomValidationChain;
   date: () => CustomValidationChain;
+  email: () => CustomValidationChain;
   equalFields: (
     otherFieldName: string,
     errorMsg: string
@@ -35,6 +37,9 @@ export function Body(fieldname: string): CustomValidationChain {
     },
     date: () => {
       return chain.custom(date(fieldname));
+    },
+    email: () => {
+      return chain.custom(email());
     },
     equalFields: (otherFieldName, errorMsg) => {
       return chain.custom(equalFields(otherFieldName, errorMsg));
@@ -70,6 +75,9 @@ export function Param(fieldname: string): CustomValidationChain {
     },
     date: () => {
       return chain.custom(date(fieldname));
+    },
+    email: () => {
+      return chain.custom(email());
     },
   };
 

@@ -14,7 +14,7 @@ const createUser = [
     .required(),
   Body('objetive')
     .required(),
-  Body('email')
+  Body('email') // todo
     .required(),
   Body('repeatEmail')
     .required()
@@ -32,7 +32,8 @@ const resetPassword = [
     .date()
     .required(),
  Body('email')
-  .required(),
+    .email()
+    .required(),
 ]
 
 export default {

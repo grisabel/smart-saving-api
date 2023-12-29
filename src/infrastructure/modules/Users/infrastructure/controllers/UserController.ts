@@ -65,14 +65,6 @@ const resetPassword = async (
     const email = Email.createFromText(req.body.email);
     res.status(200).json({ ok: 'ok' });
   } catch (error) {
-    if (error instanceof EmailError) {
-      const errorDto = ErrorResponseMapper.toResponseDto({
-        message: 'Email Inválido', // todo
-        error,
-      });
-      res.status(422).json(errorDto);
-      return;
-    }
     next(error);
   }
 };
