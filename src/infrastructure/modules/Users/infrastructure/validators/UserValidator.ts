@@ -37,7 +37,7 @@ const resetPassword = [
 ]
 
 const resetPasswordConfirm = [
-  Param('operationId').required(),
+  Param('operationId').id().required(),
   Body('password').password().required(),
   Body('repeatPassword')
     .required()

@@ -1,4 +1,7 @@
 import { Id } from './Id';
+import IdService from '@application/services/IdService';
+import { ID_ERRORS } from './IdError';
+
 describe('La clase Id', () => {
   it('debe generar un identificador', () => {
     //act
@@ -6,6 +9,7 @@ describe('La clase Id', () => {
 
     //assert
     expect(result).toBeInstanceOf(Id);
+    expect(IdService.isValid(result.getValue())).toEqual(true);
   });
   it('debe crear una instacia a partir de un identificador(string) existente', () => {
     //arrange
@@ -15,6 +19,19 @@ describe('La clase Id', () => {
 
     //assert
     expect(result).toBeInstanceOf(Id);
+  });
+
+  it('debe lanzar un error a partir de un identificador(string) inválido', () => {
+    //arrange
+    const text = '1234';
+    let throwError;
+    //act
+    try {
+      Id.createFrom(text);
+    } catch (error) {
+      throwError = error;
+    }
+    expect(throwError.data).toEqual({ format: ID_ERRORS.format });
   });
 
   it('debe comprobar si dos Id son iguales', () => {
