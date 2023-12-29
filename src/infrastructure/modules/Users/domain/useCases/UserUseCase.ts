@@ -9,6 +9,7 @@ import { UserInfoResponseMapper } from '../../infrastructure/mappers/response/Us
 import { UserInfoResponseDto } from '../../infrastructure/dtos/response/UserInfoResponseDto';
 import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorResponseMapper';
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
+import { EmailError } from '@domain/models/Email/EmailError';
 
 export class UserUseCase {
   constructor(private userRepository: UserInterfaceRepository) {}
@@ -24,9 +25,12 @@ export class UserUseCase {
         const responseDto = UserInfoResponseMapper.toResponseDto(userInfo);
         resolve([null, responseDto]);
       } catch (error) {
-        if (error instanceof UserRepositoryError) {
+        if (
+          error instanceof UserRepositoryError ||
+          error instanceof EmailError
+        ) {
           const errorDto = ErrorResponseMapper.toResponseDto({
-            message: 'Usuario no encontrado', // todo y create userUseCase
+            message: 'Usuario no encontrado', // todo
           });
           resolve([errorDto, null]);
         }
