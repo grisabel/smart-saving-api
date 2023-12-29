@@ -22,7 +22,7 @@ export class OperationsIdRepositoryError extends Error {
 }
 
 export interface OperationsIdInterfaceRepository {
-  save(id: Id, email: Email, type: OperationType): Promise<void>;
+  save(operation: Operation): Promise<void>;
   find(id: Id): Promise<Operation>;
   delete(id: Id): Promise<void>;
 }

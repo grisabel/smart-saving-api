@@ -12,13 +12,7 @@ export class OperationsIdLocalRepository
 {
   private localOperations: Operation[] = [];
 
-  async save(id: Id, email: Email, type: OperationType): Promise<void> {
-    const operation: Operation = {
-      email: email.getValue(),
-      id: id.getValue(),
-      type: type,
-      expiresIn: new Date().getMilliseconds() + 60 * 60 * 1000,
-    };
+  async save(operation: Operation): Promise<void> {
     return new Promise((resolve) => {
       this.localOperations.push(operation);
       resolve();
@@ -28,7 +22,7 @@ export class OperationsIdLocalRepository
   async find(id: Id): Promise<Operation> {
     return new Promise((resolve, reject) => {
       const filterArray = this.localOperations.filter((operation) => {
-        return operation.id !== id.getValue();
+        return operation.id === id.getValue();
       });
 
       if (filterArray.length === 0) {
