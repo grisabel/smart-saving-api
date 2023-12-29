@@ -14,6 +14,7 @@ import {
   EmailService,
   EmailServiceFactory,
 } from '@application/services/EmailService/EmailService';
+import config from '@infrastructure/config';
 
 export class UserUseCase {
   constructor(
@@ -56,7 +57,9 @@ export class UserUseCase {
         const user = await this.userRepository.findByEmail(email);
 
         if (user.getDateBirth() === dateBirth) {
-          await this.emailService.send();
+          if (config.ENV === 'PROD') {
+            await this.emailService.send();
+          }
         }
 
         const responseDto: ResetPasswordResponseDto = {

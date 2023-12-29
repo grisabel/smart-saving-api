@@ -1,4 +1,5 @@
 const config = {
+  ENV: process.env.ENV,
   JWT: {
     ACCESS_TOKEN: {
       EXPIRES_TIME: '15m',
