@@ -10,27 +10,31 @@ export const isLoggedIn = async (
   res: Response,
   next: NextFunction
 ) => {
-  const authorizationArray = req.headers?.authorization?.split('Bearer ') ?? [];
-  const accessToken = authorizationArray[1];
+  try {
+    // const authorizationArray = req.headers?.authorization?.split('Bearer ') ?? [];
+    const accessToken = req.headers.authorization.split('Bearer ')[1];
 
-  if (accessToken) {
-    const [error, user] = await authenticateUseCase.verifyAccessToken(
-      accessToken
-    );
-    if (!error) {
-      req.user = user;
-      next();
-      return;
+    if (accessToken) {
+      const [error, user] = await authenticateUseCase.verifyAccessToken(
+        accessToken
+      );
+      if (!error) {
+        req.user = user;
+        next();
+        return;
+      }
+      const responseDto = ErrorResponseMapper.toResponseDto({
+        message: 'Access token is invalid. Please verify your credentials.',
+      });
+      res.status(401).send(responseDto);
+    } else {
+      const responseDto = ErrorResponseMapper.toResponseDto({
+        message:
+          'Access token is missing. Please provide a valid token in headers to continue.',
+      });
+      return res.status(401).send(responseDto);
     }
-    const responseDto = ErrorResponseMapper.toResponseDto({
-      message: 'Access token is invalid. Please verify your credentials.',
-    });
-    res.status(401).send(responseDto);
-  } else {
-    const responseDto = ErrorResponseMapper.toResponseDto({
-      message:
-        'Access token is missing. Please provide a valid token in headers to continue.',
-    });
-    return res.status(401).send(responseDto);
+  } catch (error) {
+    next(error);
   }
 };

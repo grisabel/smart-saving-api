@@ -79,7 +79,7 @@ export class AuthenticateUseCase {
           resolve([errorDto, null]);
         }
 
-        resolve([error, null]);
+        throw error;
       }
     });
   }
@@ -120,7 +120,7 @@ export class AuthenticateUseCase {
           resolve([dto, null]);
         }
 
-        resolve([error, null]);
+        throw error;
       }
     });
   }
@@ -141,7 +141,10 @@ export class AuthenticateUseCase {
           const user = { email: decodeToken.sub };
           resolve([null, user]);
         } catch (error) {
-          resolve([error, null]);
+          if (error instanceof JWTServiceError) {
+            resolve([error, null]);
+          }
+          throw error;
         }
       }
     });
@@ -166,7 +169,7 @@ export class AuthenticateUseCase {
           resolve([dto, null]);
         }
 
-        resolve([error, null]);
+        throw error;
       }
     });
   }
@@ -180,7 +183,7 @@ export class AuthenticateUseCase {
 
         resolve([null, null]);
       } catch (error) {
-        resolve([error, null]);
+        throw error;
       }
     });
   }

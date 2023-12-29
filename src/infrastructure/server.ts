@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 
 import { ServerRoutes } from './ServerRoutes';
+import errorHandler from './middlewares/validators/error/errorHandler';
 import UserRouter from './modules/Users/infrastructure/UserRouter';
 import SessionRouter from './modules/Session/infrastructure/SessionRouter';
 
@@ -23,5 +24,7 @@ server.get('/status', (req: Request, res: Response) => {
 
 server.use(ServerRoutes.session, SessionRouter);
 server.use(ServerRoutes.user, UserRouter);
+
+server.use(errorHandler);
 
 export default server;

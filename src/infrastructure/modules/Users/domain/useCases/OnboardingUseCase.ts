@@ -48,7 +48,7 @@ export class OnboardingUseCase {
           resolve([errorDto, null]);
         }
 
-        resolve([error, null]);
+        throw error;
       }
     });
   }
