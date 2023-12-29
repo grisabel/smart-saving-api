@@ -6,7 +6,7 @@ describe('POST /user/info', () => {
     const body = {
       firstName: 'User Name',
       lastName: 'User Surname',
-      dateBirth: '1997-01-30',
+      dateBirth: '30/01/1997',
       objetive: 'Personal Objetive',
       email: 'user@email.com',
       repeatEmail: 'user@email.com',

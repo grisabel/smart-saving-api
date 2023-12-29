@@ -250,37 +250,6 @@
           }
         }
       },
-      "/user/delete-account": {
-        "post": {
-          "tags": [
-            "user"
-          ],
-          "summary": "Delete user",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "deleteUser",
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteUserBody"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "/user/reset-password": {
         "post": {
           "tags": [
@@ -312,7 +281,7 @@
           }
         }
       },
-      "/user/reset-password/confirm": {
+      "/user/reset-password/{operationId}/confirm": {
         "post": {
           "tags": [
             "user"
@@ -325,6 +294,49 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ResetPasswordConfirmBody"
+                }
+              }
+            }
+          },
+          "parameters": [
+            {
+              "in": "path",
+              "name": "operationId",
+              "schema": {
+                "type": "string",
+                "example": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+              },
+              "required": true,
+              "description": "Numeric ID of the user to get"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/delete-account": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Delete user",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "deleteUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteUserBody"
                 }
               }
             }
@@ -533,9 +545,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-01-31",
+                "example": "31/01/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             },
             {
@@ -545,9 +557,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-02-28",
+                "example": "28/02/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             }
           ],
@@ -591,9 +603,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-01-31",
+                "example": "31/01/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             },
             {
@@ -603,9 +615,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-02-28",
+                "example": "28/02/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             }
           ],
@@ -639,9 +651,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-01-30",
+                "example": "30/01/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             },
             {
@@ -651,9 +663,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-02-28",
+                "example": "28/02/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             }
           ],
@@ -697,9 +709,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-01-30",
+                "example": "30/01/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             },
             {
@@ -709,9 +721,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-02-28",
+                "example": "28/02/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             }
           ],
@@ -840,9 +852,9 @@
             },
             "dateBirth": {
               "type": "string",
-              "example": "1997-01-30",
+              "example": "30/01/1997",
               "format": "date",
-              "pattern": "YYYY-MM-DD"
+              "pattern": "DD/MM/YYYY"
             },
             "objetive": {
               "type": "string",
@@ -850,11 +862,11 @@
             },
             "email": {
               "type": "string",
-              "example": "user@email.com"
+              "example": "isabelchele26@gmail.com"
             },
             "repeatEmail": {
               "type": "string",
-              "example": "user@email.com"
+              "example": "isabelchele26@gmail.com"
             },
             "password": {
               "type": "string",
@@ -871,11 +883,11 @@
           "properties": {
             "email": {
               "type": "string",
-              "example": "test@test.com"
+              "example": "isabelchele26@gmail.com"
             },
             "password": {
               "type": "string",
-              "example": "Aabb@1"
+              "example": "Shena@2017"
             }
           }
         },
@@ -911,13 +923,13 @@
           "properties": {
             "dateBirth": {
               "type": "string",
-              "example": "1997-01-30",
+              "example": "14/10/1997",
               "format": "date",
-              "pattern": "YYYY-MM-DD"
+              "pattern": "DD/MM/YYYY"
             },
             "email": {
               "type": "string",
-              "example": "user@email.com"
+              "example": "isabelchele26@gmail.com"
             }
           }
         },
@@ -931,10 +943,6 @@
             "repeatPassword": {
               "type": "string",
               "example": "12345@Aa"
-            },
-            "operation_id": {
-              "type": "string",
-              "example": "000414000"
             }
           }
         },
@@ -951,9 +959,9 @@
             },
             "date": {
               "type": "string",
-              "example": "2023-01-30",
+              "example": "30/01/2023",
               "format": "date",
-              "pattern": "YYYY-MM-DD"
+              "pattern": "DD/MM/YYYY"
             },
             "note": {
               "type": "string",
@@ -974,9 +982,9 @@
             },
             "date": {
               "type": "string",
-              "example": "2023-01-30",
+              "example": "30/01/2023",
               "format": "date",
-              "pattern": "YYYY-MM-DD"
+              "pattern": "DD/MM/YYYY"
             },
             "note": {
               "type": "string",
@@ -1017,9 +1025,9 @@
               "properties": {
                 "month_highest_expenditure": {
                   "type": "string",
-                  "example": "2023-04",
+                  "example": "04/2023",
                   "format": "date",
-                  "pattern": "YYYY-MM"
+                  "pattern": "MM/YYYY"
                 }
               }
             },
@@ -1115,8 +1123,8 @@
               "date": {
                 "type": "string",
                 "format": "date",
-                "pattern": "YYYY-MM-DD",
-                "example": "2023-01-30"
+                "pattern": "DD/MM/YYYY",
+                "example": "30/01/2023"
               },
               "amount": {
                 "type": "number",
@@ -1137,8 +1145,8 @@
               "date": {
                 "type": "string",
                 "format": "date",
-                "pattern": "YYYY-MM-DD",
-                "example": "2023-01-15"
+                "pattern": "DD/MM/YYYY",
+                "example": "15/01/2023"
               },
               "amount": {
                 "type": "number",
@@ -1182,7 +1190,7 @@
             },
             "email": {
               "type": "string",
-              "example": "user@email.com"
+              "example": "isabelchele26@gmail.com"
             },
             "subject": {
               "type": "string",

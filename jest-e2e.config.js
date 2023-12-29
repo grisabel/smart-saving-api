@@ -1,5 +1,8 @@
 /* eslint-disable */
-export default {
+
+require('dotenv').config({ path: '.env.e2e' });
+
+module.exports = {
   displayName: 'smart-savings-api-e2e',
   preset: './jest.preset.js',
   globalSetup: '<rootDir>/e2e/scripts/global-setup.ts',

@@ -1,8 +1,5 @@
 import { CustomValidator } from 'express-validator';
 
-/**
- * Only use in body() express-validator
- */
 export const equalFields = (
   propertyName: string,
   errorMessage?: string

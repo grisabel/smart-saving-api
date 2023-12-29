@@ -11,6 +11,8 @@ import { UserRepositoryError } from '@application/repository/UserRepository/User
 import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorResponseMapper';
 import { UserInfoResponseDto } from '../dtos/response/UserInfoResponseDto';
 import { UserUseCaseFactory } from '../../domain/useCases/UserUseCase';
+import { ResetPasswordRequestDto } from '../dtos/request/ResetPasswordRequestDto';
+import { EmailError } from '@domain/models/Email/EmailError';
 
 const onboardingUseCase = OnboardingUseCaseFactory.getIntance();
 const userUseCase = UserUseCaseFactory.getIntance();
@@ -54,6 +56,30 @@ const createUser = async (
   }
 };
 
+const resetPassword = async (
+  req: Request<ResetPasswordRequestDto>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const email = Email.createFromText(req.body.email);
+
+    const [errorDto, responseDto] = await userUseCase.resetPassword(
+      email,
+      req.body.dateBirth
+    );
+
+    if (errorDto) {
+      res.status(200).json(errorDto);
+      return;
+    }
+
+    res.status(200).json(responseDto);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ ok: 'ok' });
 };
@@ -61,5 +87,6 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
 export default {
   obtainUserInfo,
   createUser,
+  resetPassword,
   deleteUser,
 };

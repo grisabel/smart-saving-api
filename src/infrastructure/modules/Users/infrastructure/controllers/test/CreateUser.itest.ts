@@ -5,7 +5,7 @@ describe('POST /user/register', () => {
     const body = {
       firstName: 'User Name',
       lastName: 'User Surname',
-      dateBirth: '1997-01-30',
+      dateBirth: '30/01/1997',
       objetive: 'Personal Objetive',
       email: 'user@email.com',
       repeatEmail: 'user@email.com',
@@ -62,7 +62,7 @@ describe('POST /user/register', () => {
     const body = {
       firstName: 'User Name',
       lastName: 'User Surname',
-      dateBirth: '1997-01-30',
+      dateBirth: '30/01/1997',
       objetive: 'Personal Objetive',
       email: 'user@email.com',
       repeatEmail: 'user1@email.com',
@@ -94,7 +94,7 @@ describe('POST /user/register', () => {
     const body = {
       firstName: 'User Name',
       lastName: 'User Surname',
-      dateBirth: '1997-01-30',
+      dateBirth: '30/01/1997',
       objetive: 'Personal Objetive',
       email: 'user@email.com',
       repeatEmail: 'user@email.com',
@@ -126,7 +126,7 @@ describe('POST /user/register', () => {
     const body = {
       firstName: 'User Name',
       lastName: 'User Surname',
-      dateBirth: '1997-01-30',
+      dateBirth: '30/01/1997',
       objetive: 'Personal Objetive',
       email: 'useremail.com',
       repeatEmail: 'useremail.com',
@@ -164,7 +164,7 @@ describe('POST /user/register', () => {
     const body = {
       firstName: 'User Name',
       lastName: 'User Surname',
-      dateBirth: '1997-01-30',
+      dateBirth: '30/01/1997',
       objetive: 'Personal Objetive',
       email: 'user@email.com',
       repeatEmail: 'user@email.com',

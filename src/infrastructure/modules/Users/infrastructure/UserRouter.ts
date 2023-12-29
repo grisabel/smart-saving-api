@@ -13,7 +13,16 @@ router.post(
   validate,
   UserController.createUser
 );
+
+router.post(
+  '/reset-password',
+  UserValidator.resetPassword,
+  validate,
+  UserController.resetPassword
+);
+
 router.get('/info', isLoggedIn, UserController.obtainUserInfo);
+
 router.post('/delete-account', isLoggedIn, UserController.deleteUser);
 
 export default router;
