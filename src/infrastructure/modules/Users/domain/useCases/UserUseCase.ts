@@ -10,6 +10,7 @@ import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorRespo
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 import { EmailError } from '@domain/models/Email/EmailError';
 import { ResetPasswordResponseDto } from '@Users/infrastructure/dtos/response/ResetPasswordResponseDto';
+import EmailService from '@application/services/EmailService/EmailService';
 
 export class UserUseCase {
   constructor(private userRepository: UserInterfaceRepository) {}
@@ -49,7 +50,7 @@ export class UserUseCase {
         const user = await this.userRepository.findByEmail(email);
 
         if (user.getDateBirth() === dateBirth) {
-          // todo send email
+          await EmailService.send();
         }
 
         const responseDto: ResetPasswordResponseDto = {
@@ -63,7 +64,9 @@ export class UserUseCase {
             message:
               'Si el usuario existe se habrá enviado un email para cambiar la contraseña',
           });
+          resolve([errorDto, null]);
         }
+        reject(error);
       }
     });
   }
