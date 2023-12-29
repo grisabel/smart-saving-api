@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import { AuthenticateUseCaseFactory } from '@Session/domain/useCases/AuthenticateUseCase';
 
@@ -14,69 +14,90 @@ const authenticateUseCase = AuthenticateUseCaseFactory.getIntance();
 
 const loginUser = async (
   req: Request<LoginUserRequestDto>,
-  res: Response<ErrorResponseDto | LoginResponseDto>
+  res: Response<ErrorResponseDto | LoginResponseDto>,
+  next: NextFunction
 ) => {
-  const body = req.body;
+  try {
+    const body = req.body;
 
-  const [error, responseDto] = await authenticateUseCase.authenticate(
-    body.email,
-    body.password
-  );
+    const [errorDto, responseDto] = await authenticateUseCase.authenticate(
+      body.email,
+      body.password
+    );
 
-  if (error) {
-    res.status(401).json(error);
-    return;
+    if (errorDto) {
+      res.status(401).json(errorDto);
+      return;
+    }
+    res.status(200).json(responseDto);
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json(responseDto);
 };
 
 const refreshToken = async (
   req: Request<RefreshTokenRequestDto>,
-  res: Response<ErrorResponseDto | RefreshTokenResponseDto>
+  res: Response<ErrorResponseDto | RefreshTokenResponseDto>,
+  next: NextFunction
 ) => {
-  const body = req.body;
+  try {
+    const body = req.body;
 
-  const [error, responseDto] = await authenticateUseCase.verifyRefreshToken(
-    body.refreshToken
-  );
+    const [errorDto, responseDto] =
+      await authenticateUseCase.verifyRefreshToken(body.refreshToken);
 
-  if (error) {
-    res.status(401).json(error); //todo
-    return;
+    if (errorDto) {
+      res.status(401).json(errorDto); //todo
+      return;
+    }
+    res.status(200).json(responseDto);
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json(responseDto);
 };
 
 const deleteRefreshToken = async (
   req: Request<RefreshTokenRequestDto>,
-  res: Response<ErrorResponseDto>
+  res: Response<ErrorResponseDto>,
+  next: NextFunction
 ) => {
-  const body = req.body;
+  try {
+    const body = req.body;
 
-  const [error] = await authenticateUseCase.deleteRefreshToken(
-    body.refreshToken
-  );
+    const [error] = await authenticateUseCase.deleteRefreshToken(
+      body.refreshToken
+    );
 
-  if (error) {
-    res.status(404).json(error); //todo
-    return;
+    if (error) {
+      res.status(404).json(error); //todo
+      return;
+    }
+    res.status(201).send();
+  } catch (error) {
+    next(error);
   }
-  res.status(201).send();
 };
 
 const revokeAccessToken = async (
   req: Request<RevokeAccessTokenRequestDto>,
-  res: Response<ErrorResponseDto>
+  res: Response<ErrorResponseDto>,
+  next: NextFunction
 ) => {
-  const body = req.body;
+  try {
+    const body = req.body;
 
-  const [error] = await authenticateUseCase.revokeAccessToken(body.accessToken);
+    const [error] = await authenticateUseCase.revokeAccessToken(
+      body.accessToken
+    );
 
-  if (error) {
-    res.status(404).json(error); //todo
-    return;
+    if (error) {
+      res.status(404).json(error); //todo
+      return;
+    }
+    res.status(201).send();
+  } catch (error) {
+    next(error);
   }
-  res.status(201).send();
 };
 
 export default {

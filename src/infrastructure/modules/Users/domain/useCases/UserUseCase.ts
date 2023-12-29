@@ -16,7 +16,7 @@ export class UserUseCase {
   obtainUserInfo(
     emailDto: string
   ): Promise<[ErrorResponseDto | Error, UserInfoResponseDto]> {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       try {
         const email = Email.createFromText(emailDto);
         const userInfo = await this.userRepository.findByEmail(email);
@@ -30,7 +30,7 @@ export class UserUseCase {
           });
           resolve([errorDto, null]);
         }
-        throw error;
+        reject(error);
       }
     });
   }
