@@ -1,37 +1,42 @@
 import axios from 'axios';
 
 describe('POST /user/reset-password', () => {
-  //   it('debe retornar un status 200 y la información del usuario', async () => {
-  //     const body = {
-  //       firstName: 'User Name',
-  //       lastName: 'User Surname',
-  //       dateBirth: '30/01/1997',
-  //       objetive: 'Personal Objetive',
-  //       email: 'user@email.com',
-  //       repeatEmail: 'user@email.com',
-  //       password: '12345@Aa',
-  //       repeatPassword: '12345@Aa',
-  //     };
-  //     await axios.post(`/user/register`, body);
+  it('debe retornar un status 200 indicando que se ha enviado un email si los datos son válidos (email y dateBirth)', async () => {
+    const bodyRegister = {
+      firstName: 'User Name',
+      lastName: 'User Surname',
+      dateBirth: '30/01/1997',
+      objetive: 'Personal Objetive',
+      email: 'user@email.com',
+      repeatEmail: 'user@email.com',
+      password: '12345@Aa',
+      repeatPassword: '12345@Aa',
+    };
+    await axios.post(`/user/register`, bodyRegister);
 
-  //     const resLogin = await axios.post(`/session/login`, {
-  //       email: 'user@email.com',
-  //       password: '12345@Aa',
-  //     });
+    const body = {
+      dateBirth: bodyRegister.dateBirth,
+      email: bodyRegister.email,
+    };
+    const res = await axios.post(`/user/reset-password`, body);
 
-  //     const res = await axios.get(`/user/info`, {
-  //       headers: {
-  //         Authorization: `Bearer ${resLogin.data.accessToken}`,
-  //       },
-  //     });
+    expect(res.status).toEqual(200);
+    expect(res.data.message).toEqual(
+      'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
+    );
+  });
+  it('debe retornar un status 200 indicando que se ha enviado un email aunque los datos sean inválidos (email o dateBirth)', async () => {
+    const body = {
+      dateBirth: '30/01/1997',
+      email: 'user@email.com',
+    };
+    const res = await axios.post(`/user/reset-password`, body);
 
-  //     expect(res.status).toEqual(200);
-  //     expect(res.data.firstName).toEqual(body.firstName);
-  //     expect(res.data.lastName).toEqual(body.lastName);
-  //     expect(res.data.dateBirth).toEqual(body.dateBirth);
-  //     expect(res.data.objective).toEqual(body.objetive);
-  //     expect(res.data.email).toEqual(body.email);
-  //   });
+    expect(res.status).toEqual(200);
+    expect(res.data.message).toEqual(
+      'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
+    );
+  });
   it('debe retornar un 422 si el campo dateBirth del body no sigue el formato correcto', async () => {
     //arrange
     const body = {

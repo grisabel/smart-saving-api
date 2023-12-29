@@ -19,28 +19,38 @@ export class EmailServiceError extends Error {
   }
 }
 
-const resend = new Resend(config.EMAIL.API_KEY);
+export class EmailService {
+  constructor(private resend: Resend) {}
 
-const send = (): Promise<void> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: 'cheleprueba97@gmail.com',
-        subject: 'Hello World',
-        html: '<p>Congrats on sending your <strong>first email</strong>!</p>',
-      });
-      resolve();
-    } catch (error) {
-      const domainError = new EmailServiceError({
-        emailSendError: EMAIL_SERVICE_ERROR.emailSendError,
-      });
+  send(): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.resend.emails.send({
+          from: 'onboarding@resend.dev',
+          to: 'cheleprueba97@gmail.com',
+          subject: 'Hello World',
+          html: '<p>Congrats on sending your <strong>first email</strong>!</p>',
+        });
+        resolve();
+      } catch (error) {
+        const domainError = new EmailServiceError({
+          emailSendError: EMAIL_SERVICE_ERROR.emailSendError,
+        });
 
-      reject(domainError);
+        reject(domainError);
+      }
+    });
+  }
+}
+
+export class EmailServiceFactory {
+  static instance: EmailService | null = null;
+
+  static getInstance(): EmailService {
+    if (!EmailServiceFactory.instance) {
+      const resend = new Resend(config.EMAIL.API_KEY);
+      EmailServiceFactory.instance = new EmailService(resend);
     }
-  });
-};
-
-export default {
-  send,
-};
+    return EmailServiceFactory.instance;
+  }
+}

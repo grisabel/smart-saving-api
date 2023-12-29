@@ -10,10 +10,16 @@ import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorRespo
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 import { EmailError } from '@domain/models/Email/EmailError';
 import { ResetPasswordResponseDto } from '@Users/infrastructure/dtos/response/ResetPasswordResponseDto';
-import EmailService from '@application/services/EmailService/EmailService';
+import {
+  EmailService,
+  EmailServiceFactory,
+} from '@application/services/EmailService/EmailService';
 
 export class UserUseCase {
-  constructor(private userRepository: UserInterfaceRepository) {}
+  constructor(
+    private userRepository: UserInterfaceRepository,
+    private emailService: EmailService
+  ) {}
 
   obtainUserInfo(
     emailDto: string
@@ -50,12 +56,12 @@ export class UserUseCase {
         const user = await this.userRepository.findByEmail(email);
 
         if (user.getDateBirth() === dateBirth) {
-          await EmailService.send();
+          await this.emailService.send();
         }
 
         const responseDto: ResetPasswordResponseDto = {
-          menssage:
-            'Si el usuario existe se habrá enviado un email para cambiar la contraseña',
+          message:
+            'Si el usuario existe se habrá enviado un email para cambiar la contraseña', //todo
         };
         resolve([null, responseDto]);
       } catch (error) {
@@ -65,6 +71,7 @@ export class UserUseCase {
               'Si el usuario existe se habrá enviado un email para cambiar la contraseña',
           });
           resolve([errorDto, null]);
+          return;
         }
         reject(error);
       }
@@ -78,7 +85,12 @@ export class UserUseCaseFactory {
   static getIntance(): UserUseCase {
     if (!UserUseCaseFactory.instance) {
       const userRepository = UserFactoryRepository.getInstance();
-      UserUseCaseFactory.instance = new UserUseCase(userRepository);
+      const emailService = EmailServiceFactory.getInstance();
+
+      UserUseCaseFactory.instance = new UserUseCase(
+        userRepository,
+        emailService
+      );
     }
     return UserUseCaseFactory.instance;
   }
