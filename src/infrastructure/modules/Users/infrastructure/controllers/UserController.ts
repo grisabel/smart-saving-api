@@ -102,7 +102,7 @@ const resetPasswordConfirm = async (
       return;
     }
 
-    res.status(200).json(responseDto);
+    res.status(errorDto.status).json(responseDto);
   } catch (error) {
     next(error);
   }

@@ -1,8 +1,11 @@
 import { OperationsIdInterfaceRepository } from '@application/repository/OperationsId/OperationIdInterfaceRepository';
 import { OperationsIdLocalRepository } from '@application/repository/OperationsId/OperationsIdLocalRepository';
+import { OperationExample } from '@application/repository/OperationsId/test/OperationExample';
 import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
 import { UserLocalRepository } from '@application/repository/UserRepository/UserLocalRepository';
 import { EmailService } from '@application/services/EmailService/EmailService';
+import { Id } from '@domain/models/Id/Id';
+import { Password } from '@domain/models/Password';
 import { UserExample } from '@domain/models/User/test/User.example';
 import { UserUseCase } from '@Users/domain/useCases/UserUseCase';
 
@@ -109,7 +112,7 @@ describe('La clase UserUseCase', () => {
         from: 'notify@smartsavings.dev',
         to: user1.getEmail().getValue(),
         subject: 'Hello World',
-        html: `<p>OperationId <strong>${operation.id}l</strong>!</p>`,
+        html: `<p>OperationId <strong>${operation.id}</strong></p>`,
       });
       expect(responseDto.message).toEqual(
         'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
@@ -143,6 +146,68 @@ describe('La clase UserUseCase', () => {
       expect(responseDto.message).toEqual(
         'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
       ); // todo
+    });
+  });
+  describe('el método resetPasswordConfirm', () => {
+    it('debe confirmar el cambio de contraseña', async () => {
+      //arange
+      jest.spyOn(operationRepository, 'save');
+      const user1 = UserExample.user1_text();
+      //act
+      await userRepository.save(user1);
+      await userUseCase.resetPassword(user1.getEmail(), user1.getDateBirth());
+      const operation = (operationRepository.save as any).mock.calls[0][0];
+
+      const [, responseDto] = await userUseCase.resetPasswordConfirm(
+        Id.createFrom(operation.id),
+        Password.createFromText('Pwd@12345S')
+      );
+      //assert
+      expect(responseDto.status).toEqual(200);
+      expect(responseDto.message).toEqual(
+        'Contraseña actualizada satisfactoriamente'
+      );
+    });
+    it('debe lanzar una excepcion dado un operationId no existente', async () => {
+      //act
+      const [errorDto] = await userUseCase.resetPasswordConfirm(
+        Id.createId(),
+        Password.createFromText('Pwd@12345S')
+      );
+      //assert
+      expect(errorDto.status).toEqual(403);
+      expect(errorDto.message).toEqual('OperationId invalido');
+    });
+    it('debe lanzar una excepcion dado un operationId expirado', async () => {
+      //arange
+      const operationExpired = OperationExample.operationResetPasswordExpired();
+
+      //act
+      await operationRepository.save(operationExpired);
+
+      const [errorDto] = await userUseCase.resetPasswordConfirm(
+        Id.createFrom(operationExpired.id),
+        Password.createFromText('Pwd@12345S')
+      );
+      //assert
+      expect(errorDto.status).toEqual(410);
+      expect(errorDto.message).toEqual('OperationId expirado');
+    });
+    it('debe lanzar una excepcion dado un operationId asociado a un usario no válido', async () => {
+      //arange
+      const operationNoUser =
+        OperationExample.operationResetPasswordWithoutUser();
+
+      //act
+      await operationRepository.save(operationNoUser);
+
+      const [errorDto] = await userUseCase.resetPasswordConfirm(
+        Id.createFrom(operationNoUser.id),
+        Password.createFromText('Pwd@12345S')
+      );
+      //assert
+      expect(errorDto.status).toEqual(403);
+      expect(errorDto.message).toEqual('OperationId invalido');
     });
   });
 });

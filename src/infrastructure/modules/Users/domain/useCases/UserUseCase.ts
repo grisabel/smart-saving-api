@@ -27,6 +27,7 @@ import {
 } from '@application/repository/OperationsId/models/OperationId';
 import { Password } from '@domain/models/Password';
 import { ResetPasswordConfirmResponseDto } from '@Users/infrastructure/dtos/response/ResetPasswordConfirmResponseDto';
+import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 
 export class UserUseCase {
   constructor(
@@ -73,7 +74,7 @@ export class UserUseCase {
             email: email.getValue(),
             id: Id.createId().getValue(),
             type: OperationType.RESET_PASSWORD,
-            expiresIn: new Date().getMilliseconds() + 60 * 60 * 1000,
+            expiresIn: DateTimeService.now() + 60 * 60 * 1000,
           };
 
           await this.operationIdRepository.save(operation);
@@ -110,8 +111,9 @@ export class UserUseCase {
       try {
         const operation = await this.operationIdRepository.find(id);
 
-        if (operation.expiresIn <= new Date().getMilliseconds()) {
+        if (operation.expiresIn <= DateTimeService.now()) {
           const errorDto = ErrorResponseMapper.toResponseDto({
+            status: 410,
             message: 'OperationId expirado',
           });
           resolve([errorDto, null]);
@@ -127,7 +129,7 @@ export class UserUseCase {
         await this.operationIdRepository.delete(id);
 
         const responseDto: ResetPasswordConfirmResponseDto = {
-          status: 410,
+          status: 200,
           message: 'Contraseña actualizada satisfactoriamente', //todo
         };
         resolve([null, responseDto]);

@@ -94,30 +94,6 @@ describe('Reset Password', () => {
   });
   // TODO añadir error generico
   describe('POST /user/reset-password/:operationId/confirm', () => {
-    // it('debe retornar un status 200 indicando que se ha enviado un email si los datos son válidos (email y dateBirth)', async () => {
-    //   const bodyRegister = {
-    //     firstName: 'User Name',
-    //     lastName: 'User Surname',
-    //     dateBirth: '30/01/1997',
-    //     objetive: 'Personal Objetive',
-    //     email: 'user@email.com',
-    //     repeatEmail: 'user@email.com',
-    //     password: '12345@Aa',
-    //     repeatPassword: '12345@Aa',
-    //   };
-    //   await axios.post(`/user/register`, bodyRegister);
-
-    //   const body = {
-    //     dateBirth: bodyRegister.dateBirth,
-    //     email: bodyRegister.email,
-    //   };
-    //   const res = await axios.post(`/user/reset-password`, body);
-
-    //   expect(res.status).toEqual(200);
-    //   expect(res.data.message).toEqual(
-    //     'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
-    //   );
-    // });
     it('debe retornar un 422 si el campo operationId de la url no sigue el formato correcto', async () => {
       //arrange
       const operationId = '1111';
