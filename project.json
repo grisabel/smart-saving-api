@@ -32,7 +32,7 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "smart-savings-api:build",
-        "runtimeArgs": ["--require=./module-alias-bootstrap.js"]
+        "runtimeArgs": ["--require=./module-alias-bootstrap.js", "--require=dotenv/config"]
       },
       "configurations": {
         "development": {
