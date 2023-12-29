@@ -10,29 +10,23 @@ import { UserInfoResponseMapper } from '../mappers/response/UserInfoResponseMapp
 import { UserRepositoryError } from '@application/repository/UserRepository/UserInterfaceRepository';
 import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorResponseMapper';
 import { UserInfoResponseDto } from '../dtos/response/UserInfoResponseDto';
+import { UserUseCaseFactory } from '../../domain/useCases/UserUseCase';
 
 const onboardingUseCase = OnboardingUseCaseFactory.getIntance();
-const userRepository = UserFactoryRepository.getInstance();
+const userUseCase = UserUseCaseFactory.getIntance();
 
 const obtainUserInfo = async (
   req: Request,
   res: Response<UserInfoResponseDto | ErrorResponseDto>
 ) => {
-  try {
-    const email = Email.createFromText(req.user.email);
-    const userInfo = await userRepository.findByEmail(email);
+  const [error, userInfo] = await userUseCase.obtainUserInfo(req.user.email);
 
-    const responseDto = UserInfoResponseMapper.toResponseDto(userInfo);
-    res.status(200).json(responseDto);
-  } catch (error) {
-    if (error instanceof UserRepositoryError) {
-      const errorDto = ErrorResponseMapper.toResponseDto({
-        message: 'Usuario no encontrado', // todo y create userUseCase
-      });
-      res.status(404).json(errorDto);
-    }
-    throw error;
+  if (error) {
+    res.status(404).json(error);
+    return;
   }
+
+  res.status(200).json(userInfo);
 };
 
 const createUser = async (
