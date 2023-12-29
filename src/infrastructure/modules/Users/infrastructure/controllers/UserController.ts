@@ -62,8 +62,17 @@ const resetPassword = async (
   next: NextFunction
 ) => {
   try {
-    const email = Email.createFromText(req.body.email);
-    res.status(200).json({ ok: 'ok' });
+    const [errorDto, responseDto] = await userUseCase.resetPassword(
+      req.body.email,
+      req.body.dateBirth
+    );
+
+    if (errorDto) {
+      res.status(200).json(responseDto);
+      return;
+    }
+
+    res.status(200).json(responseDto);
   } catch (error) {
     next(error);
   }
