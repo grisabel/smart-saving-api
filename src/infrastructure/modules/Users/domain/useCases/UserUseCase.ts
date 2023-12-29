@@ -76,7 +76,7 @@ export class UserUseCase {
             expiresIn: new Date().getMilliseconds() + 60 * 60 * 1000,
           };
 
-          this.operationIdRepository.save(operation);
+          await this.operationIdRepository.save(operation);
 
           if (config.ENV !== 'E2E') {
             await this.emailService.send(email, operation);
@@ -124,8 +124,10 @@ export class UserUseCase {
         user.changePassword(newPassword);
 
         await this.userRepository.update(user);
+        await this.operationIdRepository.delete(id);
 
-        const responseDto: ResetPasswordResponseDto = {
+        const responseDto: ResetPasswordConfirmResponseDto = {
+          status: 410,
           message: 'Contraseña actualizada satisfactoriamente', //todo
         };
         resolve([null, responseDto]);
@@ -135,6 +137,7 @@ export class UserUseCase {
           error instanceof UserRepositoryError
         ) {
           const errorDto = ErrorResponseMapper.toResponseDto({
+            status: 403,
             message: 'OperationId invalido',
           });
           resolve([errorDto, null]);

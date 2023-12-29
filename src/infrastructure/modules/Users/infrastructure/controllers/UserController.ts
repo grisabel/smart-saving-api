@@ -98,7 +98,7 @@ const resetPasswordConfirm = async (
     );
 
     if (errorDto) {
-      res.status(410).json(errorDto);
+      res.status(errorDto.status).json(errorDto);
       return;
     }
 

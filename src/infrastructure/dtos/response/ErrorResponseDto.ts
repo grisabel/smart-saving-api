@@ -1,5 +1,6 @@
 export interface ErrorResponseDto {
   message: string;
+  status?: number; //todo
   errors?: ErrorFieldResponseDto[];
 }
 

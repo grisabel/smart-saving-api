@@ -7,20 +7,26 @@ import {
 interface ErrorResponseMapperParams<T> {
   message: string;
   error?: DomainError<T>;
+  status?: number; //todo
 }
 
 export class ErrorResponseMapper {
   static toResponseDto<T>({
     message,
     error,
+    status,
   }: ErrorResponseMapperParams<T>): ErrorResponseDto {
     if (!error) {
-      return { message };
+      return {
+        ...(status ? { status } : {}),
+        message,
+      };
     }
 
     const errorMessages = !error?.data ? [] : Object.values(error.data);
 
     return {
+      ...(status ? { status } : {}),
       message,
       errors: errorMessages.map((errorMsg) => {
         return ErrorFieldValidationMapper.toResponse(error.message, errorMsg);

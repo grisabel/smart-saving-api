@@ -31,7 +31,7 @@ export class EmailService {
           from: 'notify@smartsavings.dev',
           to: email.getValue(),
           subject: 'Hello World',
-          html: `<p>OperationId <strong>${operation.id}l</strong>!</p>`,
+          html: `<p>OperationId <strong>${operation.id}</strong></p>`,
         });
 
         if (error) {
