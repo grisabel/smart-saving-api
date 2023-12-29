@@ -10,4 +10,5 @@ export interface DateTimeModel {
 export interface DateTimeInterfaceService {
   parse: (dateTime: DateTimeModel, format: DateFormat) => DateString;
   isValid(dateTime: DateTimeModel): boolean;
+  now(): TimestampMs;
 }

@@ -4,6 +4,7 @@ import {
   DateString,
   DateTimeInterfaceService,
   DateTimeModel,
+  TimestampMs,
 } from './DateTimeInterfaceService';
 import { DATE_FORMATS } from './constants';
 
@@ -55,6 +56,10 @@ const DateTimeService: DateTimeInterfaceService = {
   isValid(dateTime: DateTimeModel): boolean {
     const luxonDate = _fromFormat(dateTime);
     return luxonDate.isValid;
+  },
+
+  now(): TimestampMs {
+    return LuxonDateTime.now().toMillis();
   },
 };
 

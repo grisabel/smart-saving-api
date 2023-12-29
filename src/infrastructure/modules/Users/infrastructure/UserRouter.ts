@@ -21,6 +21,13 @@ router.post(
   UserController.resetPassword
 );
 
+router.post(
+  '/reset-password/:operationId/confirm',
+  UserValidator.resetPasswordConfirm,
+  validate,
+  UserController.resetPasswordConfirm
+);
+
 router.get('/info', isLoggedIn, UserController.obtainUserInfo);
 
 router.post('/delete-account', isLoggedIn, UserController.deleteUser);

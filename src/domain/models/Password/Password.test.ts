@@ -143,7 +143,7 @@ describe('La clase Password', () => {
     const hash =
       '82597e3c864f7fb8abe635d8033ef021339e4005ba82a13b83d1ab6fdde37f9a';
     //act
-    const passwordHashed = Password.createFromHash(hash);
+    const passwordHashed = Password.createHash(hash);
     //assert
     expect(passwordHashed).toBeInstanceOf(Password);
     expect(passwordHashed.isHashed).toBe(true);

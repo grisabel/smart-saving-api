@@ -19,7 +19,7 @@ const createUser = [
   Body('repeatEmail')
     .required()
     .equalFields('email', 'El email y la repetición del email no coinciden'),
-  Body('password')
+  Body('password') //todo
     .required(),
   Body('repeatPassword')
     .required()
@@ -36,7 +36,19 @@ const resetPassword = [
     .required(),
 ]
 
+const resetPasswordConfirm = [
+  Param('operationId').id().required(),
+  Body('password').password().required(),
+  Body('repeatPassword')
+    .required()
+    .equalFields(
+      'password',
+      'La contraseña y la repetición de la contraseña no coinciden'
+    ),
+];
+
 export default {
   createUser,
   resetPassword,
+  resetPasswordConfirm,
 };

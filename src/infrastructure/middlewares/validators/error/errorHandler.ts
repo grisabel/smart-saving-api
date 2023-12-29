@@ -7,6 +7,7 @@ function errorHandler(
   res: Response<ErrorResponseDto>,
   next: NextFunction
 ) {
+  console.log(err);
   return res.status(500).json({ message: 'Server Internal Error' });
 }
 

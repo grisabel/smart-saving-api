@@ -13,6 +13,9 @@ import { UserInfoResponseDto } from '../dtos/response/UserInfoResponseDto';
 import { UserUseCaseFactory } from '../../domain/useCases/UserUseCase';
 import { ResetPasswordRequestDto } from '../dtos/request/ResetPasswordRequestDto';
 import { EmailError } from '@domain/models/Email/EmailError';
+import { ResetPasswordConfirmRequestDto } from '../dtos/request/ResetPasswordConfirmRequestDto';
+import { Id } from '@domain/models/Id/Id';
+import { Password } from '@domain/models/Password';
 
 const onboardingUseCase = OnboardingUseCaseFactory.getIntance();
 const userUseCase = UserUseCaseFactory.getIntance();
@@ -80,6 +83,31 @@ const resetPassword = async (
   }
 };
 
+const resetPasswordConfirm = async (
+  req: Request<ResetPasswordConfirmRequestDto>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const operationId = Id.createFrom(req.params.operationId);
+    const newPassword = Password.createFromText(req.body.password);
+
+    const [errorDto, responseDto] = await userUseCase.resetPasswordConfirm(
+      operationId,
+      newPassword
+    );
+
+    if (errorDto) {
+      res.status(errorDto.status).json(errorDto);
+      return;
+    }
+
+    res.status(errorDto.status).json(responseDto);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ ok: 'ok' });
 };
@@ -88,5 +116,6 @@ export default {
   obtainUserInfo,
   createUser,
   resetPassword,
+  resetPasswordConfirm,
   deleteUser,
 };

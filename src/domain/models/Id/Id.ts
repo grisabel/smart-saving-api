@@ -1,4 +1,5 @@
-import IdService from '../../../application/services/IdService';
+import IdService from '@application/services/IdService';
+import { IDError, ID_ERRORS } from './IdError';
 
 export class Id {
   static createId(): Id {
@@ -7,6 +8,9 @@ export class Id {
   }
 
   static createFrom(id: string): Id {
+    if (!IdService.isValid(id)) {
+      throw new IDError({ format: ID_ERRORS.format });
+    }
     return new Id(id);
   }
 

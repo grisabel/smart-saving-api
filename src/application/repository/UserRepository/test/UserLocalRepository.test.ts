@@ -1,8 +1,8 @@
-import { UserLocalRepository } from './UserLocalRepository';
+import { UserLocalRepository } from '../UserLocalRepository';
 import {
   USER_REPOSITORY_ERROR,
   UserInterfaceRepository,
-} from './UserInterfaceRepository';
+} from '../UserInterfaceRepository';
 import { UserExample } from '@domain/models/User/test/User.example';
 import { Password } from '@domain/models/Password';
 import HashService from '@application/services/HashService';
