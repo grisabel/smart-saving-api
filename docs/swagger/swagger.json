@@ -65,59 +65,6 @@
           }
         }
       },
-      "/user/register": {
-        "post": {
-          "tags": [
-            "user"
-          ],
-          "summary": "Create user",
-          "description": "Create a user account",
-          "operationId": "createUser",
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/user": {
-        "get": {
-          "tags": [
-            "user"
-          ],
-          "summary": "Get user by user id",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "getUserById",
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "/session/login": {
         "post": {
           "tags": [
@@ -243,6 +190,59 @@
                 "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/register": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Create user",
+          "description": "Create a user account",
+          "operationId": "createUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/info": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Get user by user id",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "getUserById",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
                   }
                 }
               }

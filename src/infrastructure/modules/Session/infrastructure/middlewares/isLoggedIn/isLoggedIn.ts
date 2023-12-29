@@ -10,7 +10,8 @@ export const isLoggedIn = async (
   res: Response,
   next: NextFunction
 ) => {
-  const accessToken = req.headers?.authorization.split('Bearer ')[1];
+  const authorizationArray = req.headers?.authorization?.split('Bearer ') ?? [];
+  const accessToken = authorizationArray[1];
 
   if (accessToken) {
     const [error, user] = await authenticateUseCase.verifyAccessToken(
