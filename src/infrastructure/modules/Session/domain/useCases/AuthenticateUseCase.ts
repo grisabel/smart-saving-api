@@ -38,7 +38,7 @@ export class AuthenticateUseCase {
     return new Promise(async (resolve, reject) => {
       try {
         const email = Email.createFromText(emailDto);
-        const passwordHash = Password.createFromHash(passwordDto);
+        const passwordHash = Password.createHash(passwordDto);
         const user = await this.userRepository.findByEmail(email);
 
         const match = passwordHash.isEqual(user.getPassword());

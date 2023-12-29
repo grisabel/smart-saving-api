@@ -61,7 +61,7 @@ export class UserExample {
     const _lastSession = '1701959641000';
 
     const email = Email.createFromText(_textEmail);
-    const password = Password.createFromHash(_textPassword);
+    const password = Password.createHash(_textPassword);
     const user1 = new User(
       email,
       _firstName,
@@ -85,7 +85,7 @@ export class UserExample {
     const lastSession = '1701959641000';
 
     const email = Email.createFromText(textEmail);
-    const password = Password.createFromHash(textPassword);
+    const password = Password.createHash(textPassword);
     const user1 = new User(
       email,
       firstName,

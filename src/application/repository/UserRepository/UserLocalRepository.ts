@@ -12,7 +12,7 @@ export class UserLocalRepository implements UserInterfaceRepository {
 
   async save(user: User): Promise<void> {
     const _email = user.getEmail();
-    const _password = Password.createFromHash(user.getPassword().getValue());
+    const _password = Password.createHash(user.getPassword().getValue());
     const _user = new User(
       _email,
       user.getFirtname(),
@@ -71,7 +71,7 @@ export class UserLocalRepository implements UserInterfaceRepository {
 
   async update(user: User): Promise<void> {
     const _email = user.getEmail();
-    const _password = Password.createFromHash(user.getPassword().getValue());
+    const _password = Password.createHash(user.getPassword().getValue());
     const _user = new User(
       _email,
       user.getFirtname(),

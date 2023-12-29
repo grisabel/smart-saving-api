@@ -15,13 +15,18 @@ import {
   EmailServiceFactory,
 } from '@application/services/EmailService/EmailService';
 import config from '@infrastructure/config';
-import { OperationsIdInterfaceRepository } from '@application/repository/OperationsId/OperationIdInterfaceRepository';
+import {
+  OperationsIdInterfaceRepository,
+  OperationsIdRepositoryError,
+} from '@application/repository/OperationsId/OperationIdInterfaceRepository';
 import { OperationsIdFactoryRepository } from '@application/repository/OperationsId/OperationsIdFactoryRepository';
 import { Id } from '@domain/models/Id/Id';
 import {
   Operation,
   OperationType,
 } from '@application/repository/OperationsId/models/OperationId';
+import { Password } from '@domain/models/Password';
+import { ResetPasswordConfirmResponseDto } from '@Users/infrastructure/dtos/response/ResetPasswordConfirmResponseDto';
 
 export class UserUseCase {
   constructor(
@@ -64,10 +69,6 @@ export class UserUseCase {
         const user = await this.userRepository.findByEmail(email);
 
         if (user.getDateBirth() === dateBirth) {
-          if (config.ENV !== 'E2E') {
-            await this.emailService.send(email);
-          }
-
           const operation: Operation = {
             email: email.getValue(),
             id: Id.createId().getValue(),
@@ -76,6 +77,10 @@ export class UserUseCase {
           };
 
           this.operationIdRepository.save(operation);
+
+          if (config.ENV !== 'E2E') {
+            await this.emailService.send(email, operation);
+          }
         }
 
         const responseDto: ResetPasswordResponseDto = {
@@ -88,6 +93,49 @@ export class UserUseCase {
           const errorDto = ErrorResponseMapper.toResponseDto({
             message:
               'Si el usuario existe se habrá enviado un email para cambiar la contraseña',
+          });
+          resolve([errorDto, null]);
+          return;
+        }
+        reject(error);
+      }
+    });
+  }
+
+  resetPasswordConfirm(
+    id: Id,
+    newPassword: Password
+  ): Promise<[ErrorResponseDto, ResetPasswordConfirmResponseDto]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const operation = await this.operationIdRepository.find(id);
+
+        if (operation.expiresIn <= new Date().getMilliseconds()) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            message: 'OperationId expirado',
+          });
+          resolve([errorDto, null]);
+          return;
+        }
+
+        const user = await this.userRepository.findByEmail(
+          Email.createFromText(operation.email)
+        );
+        user.changePassword(newPassword);
+
+        await this.userRepository.update(user);
+
+        const responseDto: ResetPasswordResponseDto = {
+          message: 'Contraseña actualizada satisfactoriamente', //todo
+        };
+        resolve([null, responseDto]);
+      } catch (error) {
+        if (
+          error instanceof OperationsIdRepositoryError ||
+          error instanceof UserRepositoryError
+        ) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            message: 'OperationId invalido',
           });
           resolve([errorDto, null]);
           return;

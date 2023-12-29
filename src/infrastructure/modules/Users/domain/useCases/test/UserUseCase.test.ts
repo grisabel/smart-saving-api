@@ -103,13 +103,14 @@ describe('La clase UserUseCase', () => {
       );
 
       //assert
+      expect(operationRepository.save).toHaveBeenCalled();
+      const operation = (operationRepository.save as any).mock.calls[0][0];
       expect(resend.emails.send).toHaveBeenCalledWith({
         from: 'notify@smartsavings.dev',
         to: user1.getEmail().getValue(),
         subject: 'Hello World',
-        html: '<p>Congrats on sending your <strong>first email</strong>!</p>',
+        html: `<p>OperationId <strong>${operation.id}l</strong>!</p>`,
       });
-      expect(operationRepository.save).toHaveBeenCalled();
       expect(responseDto.message).toEqual(
         'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
       );

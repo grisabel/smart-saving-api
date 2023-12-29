@@ -1,3 +1,4 @@
+import { Operation } from '@application/repository/OperationsId/models/OperationId';
 import { Email } from '@domain/models/Email';
 import config from '@infrastructure/config';
 import { Resend } from 'resend';
@@ -23,14 +24,14 @@ export class EmailServiceError extends Error {
 export class EmailService {
   constructor(private resend: Resend) {}
 
-  send(email: Email): Promise<void> {
+  send(email: Email, operation: Operation): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
         const { error } = await this.resend.emails.send({
           from: 'notify@smartsavings.dev',
           to: email.getValue(),
           subject: 'Hello World',
-          html: '<p>Congrats on sending your <strong>first email</strong>!</p>',
+          html: `<p>OperationId <strong>${operation.id}l</strong>!</p>`,
         });
 
         if (error) {
