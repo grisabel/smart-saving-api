@@ -15,11 +15,19 @@ import {
   EmailServiceFactory,
 } from '@application/services/EmailService/EmailService';
 import config from '@infrastructure/config';
+import { OperationsIdInterfaceRepository } from '@application/repository/OperationsId/OperationIdInterfaceRepository';
+import { OperationsIdFactoryRepository } from '@application/repository/OperationsId/OperationsIdFactoryRepository';
+import { Id } from '@domain/models/Id/Id';
+import {
+  Operation,
+  OperationType,
+} from '@application/repository/OperationsId/models/OperationId';
 
 export class UserUseCase {
   constructor(
     private userRepository: UserInterfaceRepository,
-    private emailService: EmailService
+    private emailService: EmailService,
+    private operationIdRepository: OperationsIdInterfaceRepository
   ) {}
 
   obtainUserInfo(
@@ -59,6 +67,15 @@ export class UserUseCase {
           if (config.ENV !== 'E2E') {
             await this.emailService.send(email);
           }
+
+          const operation: Operation = {
+            email: email.getValue(),
+            id: Id.createId().getValue(),
+            type: OperationType.RESET_PASSWORD,
+            expiresIn: new Date().getMilliseconds() + 60 * 60 * 1000,
+          };
+
+          this.operationIdRepository.save(operation);
         }
 
         const responseDto: ResetPasswordResponseDto = {
@@ -88,10 +105,12 @@ export class UserUseCaseFactory {
     if (!UserUseCaseFactory.instance) {
       const userRepository = UserFactoryRepository.getInstance();
       const emailService = EmailServiceFactory.getInstance();
+      const operationIdRepository = OperationsIdFactoryRepository.getInstance();
 
       UserUseCaseFactory.instance = new UserUseCase(
         userRepository,
-        emailService
+        emailService,
+        operationIdRepository
       );
     }
     return UserUseCaseFactory.instance;

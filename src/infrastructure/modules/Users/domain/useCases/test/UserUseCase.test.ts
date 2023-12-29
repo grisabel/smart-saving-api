@@ -1,3 +1,5 @@
+import { OperationsIdInterfaceRepository } from '@application/repository/OperationsId/OperationIdInterfaceRepository';
+import { OperationsIdLocalRepository } from '@application/repository/OperationsId/OperationsIdLocalRepository';
 import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
 import { UserLocalRepository } from '@application/repository/UserRepository/UserLocalRepository';
 import { EmailService } from '@application/services/EmailService/EmailService';
@@ -30,13 +32,21 @@ describe('La clase UserUseCase', () => {
   let userUseCase: UserUseCase;
   let resend: Resend;
   let emailService: EmailService;
+  let operationRepository: OperationsIdInterfaceRepository;
 
   beforeEach(() => {
     userRepository = new UserLocalRepository();
-    resend = new Resend('api key');
 
+    resend = new Resend('api key');
     emailService = new EmailService(resend);
-    userUseCase = new UserUseCase(userRepository, emailService);
+
+    operationRepository = new OperationsIdLocalRepository();
+
+    userUseCase = new UserUseCase(
+      userRepository,
+      emailService,
+      operationRepository
+    );
   });
   describe('el método obtainUser', () => {
     it('debe devolver un UserInfoResponseDto dado un usuario registrado', async () => {
@@ -83,6 +93,7 @@ describe('La clase UserUseCase', () => {
     it('debe devolver un message de correo enviado si los datos son válidos (email y dateBirth)', async () => {
       //arange
       jest.spyOn(resend.emails, 'send');
+      jest.spyOn(operationRepository, 'save');
       const user1 = UserExample.user1_text();
       //act
       await userRepository.save(user1);
@@ -98,6 +109,7 @@ describe('La clase UserUseCase', () => {
         subject: 'Hello World',
         html: '<p>Congrats on sending your <strong>first email</strong>!</p>',
       });
+      expect(operationRepository.save).toHaveBeenCalled();
       expect(responseDto.message).toEqual(
         'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
       );
