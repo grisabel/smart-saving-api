@@ -28,6 +28,7 @@ import {
 import { Password } from '@domain/models/Password';
 import { ResetPasswordConfirmResponseDto } from '@Users/infrastructure/dtos/response/ResetPasswordConfirmResponseDto';
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
+import { DeleteAccountResponseDto } from '../../infrastructure/dtos/response/DeleteAccountResponseDto';
 
 export class UserUseCase {
   constructor(
@@ -145,6 +146,31 @@ export class UserUseCase {
           resolve([errorDto, null]);
           return;
         }
+        reject(error);
+      }
+    });
+  }
+
+  deleteAccount(
+    email: Email
+  ): Promise<[ErrorResponseDto, DeleteAccountResponseDto]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const operation: Operation = {
+          email: email.getValue(),
+          id: Id.createId().getValue(),
+          type: OperationType.DELETE_ACCOUNT,
+          expiresIn: DateTimeService.now() + 15 * 24 * 60 * 60 * 1000,
+        };
+
+        await this.operationIdRepository.save(operation);
+
+        const responseDto: DeleteAccountResponseDto = {
+          status: 200,
+          operationId: operation.id,
+        };
+        resolve([null, responseDto]);
+      } catch (error) {
         reject(error);
       }
     });

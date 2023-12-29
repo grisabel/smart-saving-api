@@ -324,23 +324,57 @@
           }
         }
       },
-      "/user/delete-account": {
-        "post": {
+      "/user/account": {
+        "delete": {
           "tags": [
             "user"
           ],
           "summary": "Delete user",
           "description": "This can only be done by the logged in user.",
           "operationId": "deleteUser",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DeleteUserReponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/account/{operationId}/confirm": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Delete user",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "deleteUserConfirm",
           "requestBody": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeleteUserBody"
+                  "$ref": "#/components/schemas/DeleteUserConfirmBody"
                 }
               }
             }
           },
+          "parameters": [
+            {
+              "in": "path",
+              "name": "operationId",
+              "schema": {
+                "type": "string",
+                "example": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+              },
+              "required": true,
+              "description": "Numeric ID of the user to get"
+            }
+          ],
           "responses": {
             "200": {
               "description": "successful operation",
@@ -909,7 +943,7 @@
             }
           }
         },
-        "DeleteUserBody": {
+        "DeleteUserConfirmBody": {
           "type": "object",
           "properties": {
             "password": {
@@ -989,6 +1023,15 @@
             "note": {
               "type": "string",
               "example": "holiday supermarket"
+            }
+          }
+        },
+        "DeleteUserReponse": {
+          "type": "object",
+          "properties": {
+            "operationId": {
+              "type": "string",
+              "example": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
             }
           }
         },

@@ -16,6 +16,8 @@ import { EmailError } from '@domain/models/Email/EmailError';
 import { ResetPasswordConfirmRequestDto } from '../dtos/request/ResetPasswordConfirmRequestDto';
 import { Id } from '@domain/models/Id/Id';
 import { Password } from '@domain/models/Password';
+import { ResetPasswordConfirmResponseDto } from '../dtos/response/ResetPasswordConfirmResponseDto';
+import { DeleteAccountResponseDto } from '../dtos/response/DeleteAccountResponseDto';
 
 const onboardingUseCase = OnboardingUseCaseFactory.getIntance();
 const userUseCase = UserUseCaseFactory.getIntance();
@@ -85,7 +87,7 @@ const resetPassword = async (
 
 const resetPasswordConfirm = async (
   req: Request<ResetPasswordConfirmRequestDto>,
-  res: Response,
+  res: Response<ResetPasswordConfirmResponseDto | ErrorResponseDto>,
   next: NextFunction
 ) => {
   try {
@@ -102,14 +104,26 @@ const resetPasswordConfirm = async (
       return;
     }
 
-    res.status(errorDto.status).json(responseDto);
+    res.status(responseDto.status).json(responseDto);
   } catch (error) {
     next(error);
   }
 };
 
-const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
-  res.status(200).json({ ok: 'ok' });
+const deleteUser = async (
+  req: Request,
+  res: Response<DeleteAccountResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    const [, responseDto] = await userUseCase.deleteAccount(
+      Email.createFromText(req.user.email)
+    );
+
+    res.status(responseDto.status).json(responseDto);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export default {
