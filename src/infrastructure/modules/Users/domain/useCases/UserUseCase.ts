@@ -48,17 +48,16 @@ export class UserUseCase {
   }
 
   resetPassword(
-    emailDto: string,
+    email: Email,
     dateBirth: string
   ): Promise<[ErrorResponseDto, ResetPasswordResponseDto]> {
     return new Promise(async (resolve, reject) => {
       try {
-        const email = Email.createFromText(emailDto);
         const user = await this.userRepository.findByEmail(email);
 
         if (user.getDateBirth() === dateBirth) {
           if (config.ENV !== 'E2E') {
-            await this.emailService.send();
+            await this.emailService.send(email);
           }
         }
 

@@ -82,20 +82,49 @@ describe('La clase UserUseCase', () => {
       //act
       await userRepository.save(user1);
       const [, responseDto] = await userUseCase.resetPassword(
-        user1.getEmail().getValue(),
+        user1.getEmail(),
         user1.getDateBirth()
       );
 
       //assert
       expect(resend.emails.send).toHaveBeenCalledWith({
         from: 'onboarding@resend.dev',
-        to: 'cheleprueba97@gmail.com',
+        to: user1.getEmail().getValue(),
         subject: 'Hello World',
         html: '<p>Congrats on sending your <strong>first email</strong>!</p>',
       });
       expect(responseDto.message).toEqual(
         'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
       );
+    });
+    it('debe lanzar un error dado un email no registrado aunque el mesaje no dará información adicional', async () => {
+      // Arange
+      const user1 = UserExample.user1_text();
+      // Act
+      const [errorDto] = await userUseCase.resetPassword(
+        user1.getEmail(),
+        user1.getDateBirth()
+      );
+
+      // Arrange
+      expect(errorDto.message).toEqual(
+        'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
+      ); // todo
+    });
+    it('debe lanzar un error dado una dateBirth inválido aunque el mesaje no dará información adicional', async () => {
+      // Arange
+      const user1 = UserExample.user1_text();
+      //act
+      await userRepository.save(user1);
+      const [, responseDto] = await userUseCase.resetPassword(
+        user1.getEmail(),
+        '29/12/2023'
+      );
+
+      // Arrange
+      expect(responseDto.message).toEqual(
+        'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
+      ); // todo
     });
   });
 });

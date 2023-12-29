@@ -62,8 +62,10 @@ const resetPassword = async (
   next: NextFunction
 ) => {
   try {
+    const email = Email.createFromText(req.body.email);
+
     const [errorDto, responseDto] = await userUseCase.resetPassword(
-      req.body.email,
+      email,
       req.body.dateBirth
     );
 

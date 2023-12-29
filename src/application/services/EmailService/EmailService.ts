@@ -1,3 +1,4 @@
+import { Email } from '@domain/models/Email';
 import config from '@infrastructure/config';
 import { Resend } from 'resend';
 
@@ -22,12 +23,12 @@ export class EmailServiceError extends Error {
 export class EmailService {
   constructor(private resend: Resend) {}
 
-  send(): Promise<void> {
+  send(email: Email): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
         await this.resend.emails.send({
           from: 'onboarding@resend.dev',
-          to: 'cheleprueba97@gmail.com',
+          to: email.getValue(),
           subject: 'Hello World',
           html: '<p>Congrats on sending your <strong>first email</strong>!</p>',
         });
