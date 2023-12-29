@@ -26,19 +26,25 @@ export class EmailService {
   send(email: Email): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
-        await this.resend.emails.send({
+        const { error } = await this.resend.emails.send({
           from: 'onboarding@resend.dev',
           to: email.getValue(),
           subject: 'Hello World',
           html: '<p>Congrats on sending your <strong>first email</strong>!</p>',
         });
-        resolve();
-      } catch (error) {
-        const domainError = new EmailServiceError({
-          emailSendError: EMAIL_SERVICE_ERROR.emailSendError,
-        });
 
-        reject(domainError);
+        if (error) {
+          const domainError = new EmailServiceError({
+            emailSendError: EMAIL_SERVICE_ERROR.emailSendError,
+          });
+          reject(domainError);
+          return;
+        }
+
+        resolve();
+        return;
+      } catch (error) {
+        reject(error);
       }
     });
   }

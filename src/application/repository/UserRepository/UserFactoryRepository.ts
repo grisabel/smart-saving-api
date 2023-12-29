@@ -11,9 +11,10 @@ export class UserFactoryRepository {
       UserFactoryRepository.instance = userRepository;
 
       const user1 = UserExample.user1_text();
+      const realUser = UserExample.real_user_text();
 
-      //act
       userRepository.save(user1);
+      userRepository.save(realUser);
     }
     return UserFactoryRepository.instance;
   }

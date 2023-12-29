@@ -26,11 +26,11 @@
       "configurations": {
         "development": {
           "buildTarget": "smart-savings-api:build:development",
-          "runtimeArgs": ["--require=./module-alias-bootstrap.js", "--require=dotenv/config"],
+          "runtimeArgs": ["--require=./module-alias-bootstrap.js", "--require=dotenv/config"]
         },
         "production": {
           "buildTarget": "smart-savings-api:build:production",
-          "runtimeArgs": ["--require=./module-alias-bootstrap.js", "--require=dotenv/config"],
+          "runtimeArgs": ["--require=./module-alias-bootstrap.js", "--require=dotenv/config"]
         }
       }
     },

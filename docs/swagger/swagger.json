@@ -545,9 +545,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-01-31",
+                "example": "31/01/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             },
             {
@@ -557,9 +557,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-02-28",
+                "example": "28/02/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             }
           ],
@@ -603,9 +603,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-01-31",
+                "example": "31/01/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             },
             {
@@ -615,9 +615,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-02-28",
+                "example": "28/02/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             }
           ],
@@ -651,9 +651,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-01-30",
+                "example": "30/01/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             },
             {
@@ -663,9 +663,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-02-28",
+                "example": "28/02/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             }
           ],
@@ -709,9 +709,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-01-30",
+                "example": "30/01/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             },
             {
@@ -721,9 +721,9 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "2023-02-28",
+                "example": "28/02/2023",
                 "format": "date",
-                "pattern": "YYYY-MM-DD"
+                "pattern": "DD/MM/YYYY"
               }
             }
           ],
@@ -852,9 +852,9 @@
             },
             "dateBirth": {
               "type": "string",
-              "example": "1997-01-30",
+              "example": "30/01/1997",
               "format": "date",
-              "pattern": "YYYY-MM-DD"
+              "pattern": "DD/MM/YYYY"
             },
             "objetive": {
               "type": "string",
@@ -862,11 +862,11 @@
             },
             "email": {
               "type": "string",
-              "example": "user@email.com"
+              "example": "isabelchele26@gmail.com"
             },
             "repeatEmail": {
               "type": "string",
-              "example": "user@email.com"
+              "example": "isabelchele26@gmail.com"
             },
             "password": {
               "type": "string",
@@ -883,11 +883,11 @@
           "properties": {
             "email": {
               "type": "string",
-              "example": "test@test.com"
+              "example": "isabelchele26@gmail.com"
             },
             "password": {
               "type": "string",
-              "example": "Aabb@1"
+              "example": "Shena@2017"
             }
           }
         },
@@ -923,13 +923,13 @@
           "properties": {
             "dateBirth": {
               "type": "string",
-              "example": "1997-01-30",
+              "example": "14/10/1997",
               "format": "date",
-              "pattern": "YYYY-MM-DD"
+              "pattern": "DD/MM/YYYY"
             },
             "email": {
               "type": "string",
-              "example": "user@email.com"
+              "example": "isabelchele26@gmail.com"
             }
           }
         },
@@ -959,9 +959,9 @@
             },
             "date": {
               "type": "string",
-              "example": "2023-01-30",
+              "example": "30/01/2023",
               "format": "date",
-              "pattern": "YYYY-MM-DD"
+              "pattern": "DD/MM/YYYY"
             },
             "note": {
               "type": "string",
@@ -982,9 +982,9 @@
             },
             "date": {
               "type": "string",
-              "example": "2023-01-30",
+              "example": "30/01/2023",
               "format": "date",
-              "pattern": "YYYY-MM-DD"
+              "pattern": "DD/MM/YYYY"
             },
             "note": {
               "type": "string",
@@ -1025,9 +1025,9 @@
               "properties": {
                 "month_highest_expenditure": {
                   "type": "string",
-                  "example": "2023-04",
+                  "example": "04/2023",
                   "format": "date",
-                  "pattern": "YYYY-MM"
+                  "pattern": "MM/YYYY"
                 }
               }
             },
@@ -1123,8 +1123,8 @@
               "date": {
                 "type": "string",
                 "format": "date",
-                "pattern": "YYYY-MM-DD",
-                "example": "2023-01-30"
+                "pattern": "DD/MM/YYYY",
+                "example": "30/01/2023"
               },
               "amount": {
                 "type": "number",
@@ -1145,8 +1145,8 @@
               "date": {
                 "type": "string",
                 "format": "date",
-                "pattern": "YYYY-MM-DD",
-                "example": "2023-01-15"
+                "pattern": "DD/MM/YYYY",
+                "example": "15/01/2023"
               },
               "amount": {
                 "type": "number",
@@ -1190,7 +1190,7 @@
             },
             "email": {
               "type": "string",
-              "example": "user@email.com"
+              "example": "isabelchele26@gmail.com"
             },
             "subject": {
               "type": "string",

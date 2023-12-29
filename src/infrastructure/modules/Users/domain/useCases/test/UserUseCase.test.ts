@@ -6,7 +6,12 @@ import { UserUseCase } from '@Users/domain/useCases/UserUseCase';
 
 jest.mock('resend', () => {
   class MockEmails {
-    send = jest.fn();
+    send = (...args) => {
+      return {
+        error: null,
+        data: {},
+      };
+    };
   }
   class Resend {
     constructor(private apiKey) {}
