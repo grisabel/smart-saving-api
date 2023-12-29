@@ -1,16 +1,37 @@
 import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
 import { UserLocalRepository } from '@application/repository/UserRepository/UserLocalRepository';
-import { EmailError } from '@domain/models/Email/EmailError';
+import { EmailService } from '@application/services/EmailService/EmailService';
 import { UserExample } from '@domain/models/User/test/User.example';
-import { AuthenticateUseCase } from '@infrastructure/modules/Session/domain/useCases/AuthenticateUseCase';
 import { UserUseCase } from '@Users/domain/useCases/UserUseCase';
+
+jest.mock('resend', () => {
+  class MockEmails {
+    send = jest.fn();
+  }
+  class Resend {
+    constructor(private apiKey) {}
+
+    emails = new MockEmails();
+  }
+
+  return {
+    Resend,
+  };
+});
+import { Resend } from 'resend';
+
 describe('La clase UserUseCase', () => {
   let userRepository: UserInterfaceRepository;
   let userUseCase: UserUseCase;
+  let resend: Resend;
+  let emailService: EmailService;
 
   beforeEach(() => {
     userRepository = new UserLocalRepository();
-    userUseCase = new UserUseCase(userRepository);
+    resend = new Resend('api key');
+
+    emailService = new EmailService(resend);
+    userUseCase = new UserUseCase(userRepository, emailService);
   });
   describe('el método obtainUser', () => {
     it('debe devolver un UserInfoResponseDto dado un usuario registrado', async () => {
@@ -51,6 +72,30 @@ describe('La clase UserUseCase', () => {
 
       // Arrange
       expect(errorDto.message).toEqual('Usuario no encontrado'); // todo
+    });
+  });
+  describe('el metodo resetPassword', () => {
+    it('debe devolver un message de correo enviado si los datos son válidos (email y dateBirth)', async () => {
+      //arange
+      jest.spyOn(resend.emails, 'send');
+      const user1 = UserExample.user1_text();
+      //act
+      await userRepository.save(user1);
+      const [, responseDto] = await userUseCase.resetPassword(
+        user1.getEmail().getValue(),
+        user1.getDateBirth()
+      );
+
+      //assert
+      expect(resend.emails.send).toHaveBeenCalledWith({
+        from: 'onboarding@resend.dev',
+        to: 'cheleprueba97@gmail.com',
+        subject: 'Hello World',
+        html: '<p>Congrats on sending your <strong>first email</strong>!</p>',
+      });
+      expect(responseDto.message).toEqual(
+        'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
+      );
     });
   });
 });

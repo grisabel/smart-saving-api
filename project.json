@@ -16,30 +16,21 @@
       },
       "configurations": {
         "development": {},
-        "production": {
-          "generateLockfile": true,
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
-        }
+        "production": {}
       }
     },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
-      "options": {
-        "buildTarget": "smart-savings-api:build",
-        "runtimeArgs": ["--require=./module-alias-bootstrap.js", "--require=dotenv/config"]
-      },
+      "options": {},
       "configurations": {
         "development": {
-          "buildTarget": "smart-savings-api:build:development"
+          "buildTarget": "smart-savings-api:build:development",
+          "runtimeArgs": ["--require=./module-alias-bootstrap.js", "--require=dotenv/config"],
         },
         "production": {
-          "buildTarget": "smart-savings-api:build:production"
+          "buildTarget": "smart-savings-api:build:production",
+          "runtimeArgs": ["--require=./module-alias-bootstrap.js", "--require=dotenv/config"],
         }
       }
     },
@@ -54,7 +45,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectName}"],
       "options": {
-        "jestConfig": "jest.config.ts"
+        "jestConfig": "jest.config.js"
       }
     },
     "docker-build": {

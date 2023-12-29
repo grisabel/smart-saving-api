@@ -1,5 +1,7 @@
 /* eslint-disable */
-export default {
+require('dotenv').config({ path: '.env.test' });
+
+module.exports = {
   displayName: 'smart-savings-api',
   preset: './jest.preset.js',
   testEnvironment: 'node',

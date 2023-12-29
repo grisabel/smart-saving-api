@@ -57,7 +57,7 @@ export class UserUseCase {
         const user = await this.userRepository.findByEmail(email);
 
         if (user.getDateBirth() === dateBirth) {
-          if (config.ENV === 'PROD') {
+          if (config.ENV !== 'E2E') {
             await this.emailService.send();
           }
         }
