@@ -259,6 +259,59 @@ describe('La clase UserUseCase', () => {
         userNotExist: USER_REPOSITORY_ERROR.userNotExist,
       });
     });
+    it('debe lanzar una excepcion si el operationId no es válido', async () => {
+      // Arange
+      const user1 = UserExample.real_user_text();
+      const user1Hash = UserExample.real_user_hash();
+      const operationDeleteAccount = OperationExample.operationDeleteAccount();
+      await userRepository.save(user1);
+
+      const id = Id.createFrom(operationDeleteAccount.id);
+      const email = user1.getEmail();
+      const pwd = user1Hash.getPassword();
+      // Act
+      const [errorDto] = await userUseCase.deleteAccountConfirm(id, email, pwd);
+
+      // Arrange
+      expect(errorDto.status).toEqual(404);
+      expect(errorDto.message).toEqual('OperationId invalido');
+    });
+    it('debe lanzar una excepcion si el operationId ha expirado', async () => {
+      // Arange
+      const user1 = UserExample.real_user_text();
+      const user1Hash = UserExample.real_user_hash();
+      const operationDeleteAccountExpired =
+        OperationExample.operationDeleteAccountExpired();
+      await userRepository.save(user1);
+      await operationRepository.save(operationDeleteAccountExpired);
+
+      const id = Id.createFrom(operationDeleteAccountExpired.id);
+      const email = user1.getEmail();
+      const pwd = user1Hash.getPassword();
+      // Act
+      const [errorDto] = await userUseCase.deleteAccountConfirm(id, email, pwd);
+
+      // Arrange
+      expect(errorDto.status).toEqual(410);
+      expect(errorDto.message).toEqual('OperationId expirado');
+    });
+    it('debe lanzar una excepcion si la contraseña no coincide', async () => {
+      // Arange
+      const user1 = UserExample.real_user_text();
+      const operationDeleteAccount = OperationExample.operationDeleteAccount();
+      await userRepository.save(user1);
+      await operationRepository.save(operationDeleteAccount);
+
+      const id = Id.createFrom(operationDeleteAccount.id);
+      const email = user1.getEmail();
+      const pwd = Password.createHash('12345@aA');
+      // Act
+      const [errorDto] = await userUseCase.deleteAccountConfirm(id, email, pwd);
+
+      // Arrange
+      expect(errorDto.status).toEqual(403);
+      expect(errorDto.message).toEqual('Contraseña incorrecta');
+    });
   });
 });
 // TODO AÑADIR ERROR GENERICO
