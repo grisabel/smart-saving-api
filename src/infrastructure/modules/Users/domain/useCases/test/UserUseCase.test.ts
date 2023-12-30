@@ -1,7 +1,13 @@
-import { OperationsIdInterfaceRepository } from '@application/repository/OperationsId/OperationIdInterfaceRepository';
+import {
+  OPERATIONSID_REPOSITORY_ERROR,
+  OperationsIdInterfaceRepository,
+} from '@application/repository/OperationsId/OperationIdInterfaceRepository';
 import { OperationsIdLocalRepository } from '@application/repository/OperationsId/OperationsIdLocalRepository';
 import { OperationExample } from '@application/repository/OperationsId/test/OperationExample';
-import { UserInterfaceRepository } from '@application/repository/UserRepository/UserInterfaceRepository';
+import {
+  USER_REPOSITORY_ERROR,
+  UserInterfaceRepository,
+} from '@application/repository/UserRepository/UserInterfaceRepository';
 import { UserLocalRepository } from '@application/repository/UserRepository/UserLocalRepository';
 import { EmailService } from '@application/services/EmailService/EmailService';
 import { Id } from '@domain/models/Id/Id';
@@ -175,7 +181,7 @@ describe('La clase UserUseCase', () => {
         Password.createFromText('Pwd@12345S')
       );
       //assert
-      expect(errorDto.status).toEqual(403);
+      expect(errorDto.status).toEqual(404);
       expect(errorDto.message).toEqual('OperationId invalido');
     });
     it('debe lanzar una excepcion dado un operationId expirado', async () => {
@@ -206,8 +212,105 @@ describe('La clase UserUseCase', () => {
         Password.createFromText('Pwd@12345S')
       );
       //assert
-      expect(errorDto.status).toEqual(403);
+      expect(errorDto.status).toEqual(404);
       expect(errorDto.message).toEqual('OperationId invalido');
+    });
+  });
+  describe('el metodo deleteAccountConfirm', () => {
+    it('debe eliminar una cuenta dado un operationId válido', async () => {
+      // Arange
+      const user1 = UserExample.real_user_text();
+      const user1Hash = UserExample.real_user_hash();
+      const operationDeleteAccount = OperationExample.operationDeleteAccount();
+      await userRepository.save(user1);
+      await operationRepository.save(operationDeleteAccount);
+
+      const id = Id.createFrom(operationDeleteAccount.id);
+      const email = user1.getEmail();
+      const pwd = user1Hash.getPassword();
+      // Act
+      const [errorDto, responseDto] = await userUseCase.deleteAccountConfirm(
+        id,
+        email,
+        pwd
+      );
+
+      // Arrange
+      expect(responseDto.status).toEqual(200);
+      expect(responseDto.message).toEqual('Cuenta eliminada con éxito');
+
+      let throwErrorOp;
+      try {
+        await operationRepository.find(id);
+      } catch (error) {
+        throwErrorOp = error;
+      }
+      expect(throwErrorOp.data).toEqual({
+        idNotExist: OPERATIONSID_REPOSITORY_ERROR.idNotExist,
+      });
+
+      let throwErrorUser;
+      try {
+        await userRepository.findByEmail(email);
+      } catch (error) {
+        throwErrorUser = error;
+      }
+      expect(throwErrorUser.data).toEqual({
+        userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+      });
+    });
+    it('debe lanzar una excepcion si el operationId no es válido', async () => {
+      // Arange
+      const user1 = UserExample.real_user_text();
+      const user1Hash = UserExample.real_user_hash();
+      const operationDeleteAccount = OperationExample.operationDeleteAccount();
+      await userRepository.save(user1);
+
+      const id = Id.createFrom(operationDeleteAccount.id);
+      const email = user1.getEmail();
+      const pwd = user1Hash.getPassword();
+      // Act
+      const [errorDto] = await userUseCase.deleteAccountConfirm(id, email, pwd);
+
+      // Arrange
+      expect(errorDto.status).toEqual(404);
+      expect(errorDto.message).toEqual('OperationId invalido');
+    });
+    it('debe lanzar una excepcion si el operationId ha expirado', async () => {
+      // Arange
+      const user1 = UserExample.real_user_text();
+      const user1Hash = UserExample.real_user_hash();
+      const operationDeleteAccountExpired =
+        OperationExample.operationDeleteAccountExpired();
+      await userRepository.save(user1);
+      await operationRepository.save(operationDeleteAccountExpired);
+
+      const id = Id.createFrom(operationDeleteAccountExpired.id);
+      const email = user1.getEmail();
+      const pwd = user1Hash.getPassword();
+      // Act
+      const [errorDto] = await userUseCase.deleteAccountConfirm(id, email, pwd);
+
+      // Arrange
+      expect(errorDto.status).toEqual(410);
+      expect(errorDto.message).toEqual('OperationId expirado');
+    });
+    it('debe lanzar una excepcion si la contraseña no coincide', async () => {
+      // Arange
+      const user1 = UserExample.real_user_text();
+      const operationDeleteAccount = OperationExample.operationDeleteAccount();
+      await userRepository.save(user1);
+      await operationRepository.save(operationDeleteAccount);
+
+      const id = Id.createFrom(operationDeleteAccount.id);
+      const email = user1.getEmail();
+      const pwd = Password.createHash('12345@aA');
+      // Act
+      const [errorDto] = await userUseCase.deleteAccountConfirm(id, email, pwd);
+
+      // Arrange
+      expect(errorDto.status).toEqual(403);
+      expect(errorDto.message).toEqual('Contraseña incorrecta');
     });
   });
 });

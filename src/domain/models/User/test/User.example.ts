@@ -122,4 +122,28 @@ export class UserExample {
 
     return user1;
   }
+
+  static real_user_hash(): User {
+    const textEmail = 'isabelchele26@gmail.com';
+    const textPassword = 'Shena@2017';
+    const firstName = 'Jose Manuel';
+    const lastname = 'Delgado Trueba';
+    const dateBirth = '14/10/1997';
+    const objective = 'Jubilación';
+    const lastSession = '1701959641000';
+
+    const email = Email.createFromText(textEmail);
+    const password = Password.createHash(textPassword);
+    const user1 = new User(
+      email,
+      firstName,
+      lastname,
+      dateBirth,
+      objective,
+      lastSession,
+      password
+    );
+
+    return user1;
+  }
 }

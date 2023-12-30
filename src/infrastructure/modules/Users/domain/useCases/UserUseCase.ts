@@ -28,6 +28,7 @@ import {
 import { Password } from '@domain/models/Password';
 import { ResetPasswordConfirmResponseDto } from '@Users/infrastructure/dtos/response/ResetPasswordConfirmResponseDto';
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
+import { DeleteAccountResponseDto } from '../../infrastructure/dtos/response/DeleteAccountResponseDto';
 
 export class UserUseCase {
   constructor(
@@ -139,7 +140,82 @@ export class UserUseCase {
           error instanceof UserRepositoryError
         ) {
           const errorDto = ErrorResponseMapper.toResponseDto({
+            status: 404,
+            message: 'OperationId invalido',
+          });
+          resolve([errorDto, null]);
+          return;
+        }
+        reject(error);
+      }
+    });
+  }
+
+  deleteAccount(
+    email: Email
+  ): Promise<[ErrorResponseDto, DeleteAccountResponseDto]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const operation: Operation = {
+          email: email.getValue(),
+          id: Id.createId().getValue(),
+          type: OperationType.DELETE_ACCOUNT,
+          expiresIn: DateTimeService.now() + 15 * 24 * 60 * 60 * 1000,
+        };
+
+        await this.operationIdRepository.save(operation);
+
+        const responseDto: DeleteAccountResponseDto = {
+          status: 200,
+          operationId: operation.id,
+        };
+        resolve([null, responseDto]);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  deleteAccountConfirm(
+    id: Id,
+    email: Email,
+    password: Password
+  ): Promise<[ErrorResponseDto, ResetPasswordConfirmResponseDto]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const operation = await this.operationIdRepository.find(id);
+
+        if (operation.expiresIn <= DateTimeService.now()) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            status: 410,
+            message: 'OperationId expirado',
+          });
+          resolve([errorDto, null]);
+          return;
+        }
+
+        const user = await this.userRepository.findByEmail(email);
+        const match = password.isEqual(user.getPassword());
+        if (!match) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
             status: 403,
+            message: 'Contraseña incorrecta',
+          });
+          resolve([errorDto, null]);
+        }
+
+        await this.userRepository.delete(email);
+        await this.operationIdRepository.delete(id);
+
+        const responseDto: ResetPasswordConfirmResponseDto = {
+          status: 200,
+          message: 'Cuenta eliminada con éxito', //todo
+        };
+        resolve([null, responseDto]);
+      } catch (error) {
+        if (error instanceof OperationsIdRepositoryError) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            status: 404,
             message: 'OperationId invalido',
           });
           resolve([errorDto, null]);

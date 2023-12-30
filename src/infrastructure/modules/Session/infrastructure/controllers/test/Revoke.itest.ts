@@ -12,7 +12,6 @@ describe('POST /session/revoke', () => {
 
     expect(res.status).toBe(201);
 
-    const bodyAuthenticateCall = {};
     let throwError;
     const response401 = {
       message: 'Access token is invalid. Please verify your credentials.',
@@ -20,7 +19,7 @@ describe('POST /session/revoke', () => {
 
     //act
     try {
-      await axios.post(`/user/delete-account`, bodyAuthenticateCall, {
+      await axios.delete(`/user/account`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

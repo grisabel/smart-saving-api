@@ -34,4 +34,27 @@ export class OperationExample {
       expiresIn: DateTimeService.now() + 60 * 60 * 1000,
     };
   }
+
+  static operationDeleteAccount(): Operation {
+    return {
+      email: 'isabelchele26@gmail.com',
+      id: Id.createId().getValue(),
+      type: OperationType.DELETE_ACCOUNT,
+      expiresIn: DateTimeService.now() + 15 * 24 * 60 * 60 * 1000,
+    };
+  }
+  static operationDeleteAccountExpired(): Operation {
+    return {
+      email: 'isabelchele26@gmail.com',
+      id: Id.createId().getValue(),
+      type: OperationType.DELETE_ACCOUNT,
+      expiresIn: parseInt(
+        DateTimeService.parse(
+          { date: '29/12/2023', format: DATE_FORMATS.Date },
+          DATE_FORMATS.TimestampMs
+        ),
+        10
+      ),
+    };
+  }
 }
