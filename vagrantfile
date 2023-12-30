@@ -1,0 +1,48 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+  config.disksize.size = '50GB'
+  config.vm.network "forwarded_port", guest: 3000, host: 3000
+config.vm.network "forwarded_port", guest: 3002, host: 3002
+  config.vm.provider "virtualbox" do |vb|
+
+    vb.memory = "8192"
+  end
+  config.vm.provision "shell", inline: <<-SHELL
+    set -e
+    set -x
+    apt-get update
+    apt-get install -y build-essential git make curl unzip g++ libtool python wget
+    apt-get update -qq
+    apt-get install -y apt-transport-https ca-certificates
+    # #Install docker
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+    add-apt-repository \
+      "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) \
+      stable"
+    apt-get update -qq
+    apt-get install -y docker-ce
+    curl -L https://github.com/docker/compose/releases/download/1.27.4/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+    usermod -a -G docker vagrant
+    docker run --rm busybox echo All good
+    ## Install nodejs ##
+    export NVM_VERSION=0.39.7
+    export NODE_VERSION=18.19.0	  
+    export NVM_DIR=/usr/local/nvm
+    apt-get update
+    apt-get -y upgrade
+    sudo apt install -y curl
+    mkdir $NVM_DIR 	  
+    cd $NVM_DIR
+    [ -s "$NVM_DIR/nvm.sh" ] || curl --silent --show-error -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh | bash
+    chmod -R 777 $NVM_DIR
+    cd $HOME
+    source "$NVM_DIR/nvm.sh"
+    nvm which ${NODE_VERSION} >/dev/null 2>&1 || nvm install ${NODE_VERSION}
+    nvm use ${NODE_VERSION}
+    nvm alias default ${NODE_VERSION}
+    touch /home/vagrant/.bashrc
+    echo -e "export NVM_DIR=$NVM_DIR\nsource $NVM_DIR/nvm.sh" > /home/vagrant/.bashrc
+  SHELL
+end
