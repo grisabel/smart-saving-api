@@ -204,6 +204,9 @@ export class UserUseCase {
           resolve([errorDto, null]);
         }
 
+        await this.userRepository.delete(email);
+        await this.operationIdRepository.delete(id);
+
         const responseDto: ResetPasswordConfirmResponseDto = {
           status: 200,
           message: 'Cuenta eliminada con éxito', //todo

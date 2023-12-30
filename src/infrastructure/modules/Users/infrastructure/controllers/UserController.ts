@@ -136,7 +136,7 @@ const deleteAccountConfirm = async (
   try {
     const email = Email.createFromText(req.user.email);
     const id = Id.createFrom(req.params.operationId);
-    const password = Password.createFromText(req.body.password);
+    const password = Password.createHash(req.body.password);
 
     const [errorDto, responseDto] = await userUseCase.deleteAccountConfirm(
       id,
