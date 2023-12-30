@@ -32,4 +32,12 @@ router.get('/info', isLoggedIn, UserController.obtainUserInfo);
 
 router.delete('/account', isLoggedIn, UserController.deleteUser);
 
+router.post(
+  '/account/:operationId/confirm',
+  UserValidator.deleteAccountConfirm,
+  validate,
+  isLoggedIn,
+  UserController.deleteAccountConfirm
+);
+
 export default router;

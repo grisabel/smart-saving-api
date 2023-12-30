@@ -18,6 +18,8 @@ import { Id } from '@domain/models/Id/Id';
 import { Password } from '@domain/models/Password';
 import { ResetPasswordConfirmResponseDto } from '../dtos/response/ResetPasswordConfirmResponseDto';
 import { DeleteAccountResponseDto } from '../dtos/response/DeleteAccountResponseDto';
+import { DeleteAccountConfirmRequestDto } from '../dtos/request/DeleteAccountConfirmRequestDto';
+import { DeleteAccountConfirmResponseDto } from '../dtos/response/DeleteAccountConfirmResponseDto';
 
 const onboardingUseCase = OnboardingUseCaseFactory.getIntance();
 const userUseCase = UserUseCaseFactory.getIntance();
@@ -126,10 +128,38 @@ const deleteUser = async (
   }
 };
 
+const deleteAccountConfirm = async (
+  req: Request<DeleteAccountConfirmRequestDto>,
+  res: Response<DeleteAccountConfirmResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    const email = Email.createFromText(req.user.email);
+    const id = Id.createFrom(req.params.operationId);
+    const password = Password.createFromText(req.body.password);
+
+    const [errorDto, responseDto] = await userUseCase.deleteAccountConfirm(
+      id,
+      email,
+      password
+    );
+
+    if (errorDto) {
+      res.status(errorDto.status).json(errorDto);
+      return;
+    }
+
+    res.status(responseDto.status).json(responseDto);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   obtainUserInfo,
   createUser,
   resetPassword,
   resetPasswordConfirm,
   deleteUser,
+  deleteAccountConfirm,
 };

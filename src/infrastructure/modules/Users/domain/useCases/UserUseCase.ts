@@ -140,7 +140,7 @@ export class UserUseCase {
           error instanceof UserRepositoryError
         ) {
           const errorDto = ErrorResponseMapper.toResponseDto({
-            status: 403,
+            status: 404,
             message: 'OperationId invalido',
           });
           resolve([errorDto, null]);
@@ -171,6 +171,53 @@ export class UserUseCase {
         };
         resolve([null, responseDto]);
       } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  deleteAccountConfirm(
+    id: Id,
+    email: Email,
+    password: Password
+  ): Promise<[ErrorResponseDto, ResetPasswordConfirmResponseDto]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const operation = await this.operationIdRepository.find(id);
+
+        if (operation.expiresIn <= DateTimeService.now()) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            status: 410,
+            message: 'OperationId expirado',
+          });
+          resolve([errorDto, null]);
+          return;
+        }
+
+        const user = await this.userRepository.findByEmail(email);
+        const match = password.isEqual(user.getPassword());
+        if (!match) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            status: 403,
+            message: 'Contraseña incorrecta',
+          });
+          resolve([errorDto, null]);
+        }
+
+        const responseDto: ResetPasswordConfirmResponseDto = {
+          status: 200,
+          message: 'Cuenta eliminada con éxito', //todo
+        };
+        resolve([null, responseDto]);
+      } catch (error) {
+        if (error instanceof OperationsIdRepositoryError) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            status: 404,
+            message: 'OperationId invalido',
+          });
+          resolve([errorDto, null]);
+          return;
+        }
         reject(error);
       }
     });

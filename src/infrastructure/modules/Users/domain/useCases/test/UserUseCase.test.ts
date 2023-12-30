@@ -175,7 +175,7 @@ describe('La clase UserUseCase', () => {
         Password.createFromText('Pwd@12345S')
       );
       //assert
-      expect(errorDto.status).toEqual(403);
+      expect(errorDto.status).toEqual(404);
       expect(errorDto.message).toEqual('OperationId invalido');
     });
     it('debe lanzar una excepcion dado un operationId expirado', async () => {
@@ -206,7 +206,7 @@ describe('La clase UserUseCase', () => {
         Password.createFromText('Pwd@12345S')
       );
       //assert
-      expect(errorDto.status).toEqual(403);
+      expect(errorDto.status).toEqual(404);
       expect(errorDto.message).toEqual('OperationId invalido');
     });
   });

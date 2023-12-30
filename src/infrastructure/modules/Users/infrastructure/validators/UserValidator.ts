@@ -47,8 +47,14 @@ const resetPasswordConfirm = [
     ),
 ];
 
+const deleteAccountConfirm = [
+  Param('operationId').id().required(),
+  Body('password').password().required(),
+];
+
 export default {
   createUser,
   resetPassword,
   resetPasswordConfirm,
+  deleteAccountConfirm,
 };
