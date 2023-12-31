@@ -6,7 +6,7 @@ describe('POST /session/logout', () => {
   beforeEach(async () => {
     await prisma.user.deleteMany();
   });
-  it('debe retornar un status 201 y al eliminar un refreshToken', async () => {
+  it('debe retornar un status 201', async () => {
     const body = {
       firstName: 'User Name',
       lastName: 'User Surname',
@@ -51,27 +51,5 @@ describe('POST /session/logout', () => {
     expect(throwError.response.data.errors).toEqual(
       expect.arrayContaining([expect.objectContaining(response422.errors[0])])
     );
-  });
-  it('debe retornar un status 404 si el refresh token no existe', async () => {
-    const refreshToken = TokenExample.invalidToken();
-    const bodyLogout = {
-      refreshToken,
-    };
-
-    let throwError;
-    const response404 = {
-      message: 'Invalid Refresh Token',
-    };
-
-    //act
-    try {
-      await axios.post(`/session/logout`, bodyLogout);
-    } catch (error) {
-      throwError = error;
-    }
-
-    //assert
-    expect(throwError.response.status).toBe(404);
-    expect(throwError.response.data.message).toEqual(response404.message);
   });
 });

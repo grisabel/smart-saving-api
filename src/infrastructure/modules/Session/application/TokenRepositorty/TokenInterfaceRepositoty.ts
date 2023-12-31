@@ -16,7 +16,7 @@ export class TokenRepositoryError extends Error {
   }
 }
 
-export interface TokenInterfaceRepository {
+export interface RevokeAccessTokenInterfaceRepository {
   save(token: string): Promise<void>;
   find(token: string): Promise<string>;
   delete(token: string): Promise<void>;

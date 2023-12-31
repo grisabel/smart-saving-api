@@ -3,7 +3,7 @@ import { UserLocalRepository } from '@application/repository/UserRepository/User
 import { UserExample } from '@domain/models/User/test/User.example';
 
 import { TokenLocalRepository } from '@Session/application/TokenRepositorty/TokenLocalRepository';
-import { TokenInterfaceRepository } from '@Session/application/TokenRepositorty/TokenInterfaceRepositoty';
+import { RevokeAccessTokenInterfaceRepository } from '@Session/application/TokenRepositorty/TokenInterfaceRepositoty';
 import { TokenExample } from '@application/services/JWTService/test/Token.example';
 
 import JWTService from '@application/services/JWTService';
@@ -12,7 +12,7 @@ import { AuthenticateUseCase } from './AuthenticateUseCase';
 
 describe('La clase AuthenticationUseCase', () => {
   let userRepository: UserInterfaceRepository;
-  let tokenRepository: TokenInterfaceRepository;
+  let tokenRepository: RevokeAccessTokenInterfaceRepository;
   let jwtTokenService: typeof JWTService;
   let authenticationUseCase: AuthenticateUseCase;
 
@@ -122,33 +122,6 @@ describe('La clase AuthenticationUseCase', () => {
       //act
       await tokenRepository.save(refreshToken);
       const [error] = await authenticationUseCase.verifyRefreshToken(
-        refreshToken
-      );
-
-      //asert
-      expect(error.message).toEqual('Invalid Refresh Token');
-    });
-  });
-
-  describe('el método deleteRefreshToken', () => {
-    it('debe eliminar un refreshToken', async () => {
-      //arrange
-      const refreshToken = TokenExample.refreshToken();
-
-      //act
-      await tokenRepository.save(refreshToken);
-      const [, deleteRTokenDto] =
-        await authenticationUseCase.deleteRefreshToken(refreshToken);
-
-      //asert
-      expect(deleteRTokenDto).toEqual(null);
-    });
-    it('debe lanzar un error si el refreshToken no existe', async () => {
-      //arrange
-      const refreshToken = TokenExample.refreshToken();
-
-      //act
-      const [error] = await authenticationUseCase.deleteRefreshToken(
         refreshToken
       );
 

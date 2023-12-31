@@ -1,10 +1,10 @@
-import { TokenInterfaceRepository } from './TokenInterfaceRepositoty';
+import { RevokeAccessTokenInterfaceRepository } from './TokenInterfaceRepositoty';
 import { TokenLocalRepository } from './TokenLocalRepository';
 
 export class TokenFactoryRepository {
-  static instance: TokenInterfaceRepository | null = null;
+  static instance: RevokeAccessTokenInterfaceRepository | null = null;
 
-  static getInstance(): TokenInterfaceRepository {
+  static getInstance(): RevokeAccessTokenInterfaceRepository {
     if (!TokenFactoryRepository.instance) {
       TokenFactoryRepository.instance = new TokenLocalRepository();
     }

@@ -1,10 +1,12 @@
 import {
   TOKEN_REPOSITORY_ERROR,
-  TokenInterfaceRepository,
+  RevokeAccessTokenInterfaceRepository,
   TokenRepositoryError,
 } from './TokenInterfaceRepositoty';
 
-export class TokenLocalRepository implements TokenInterfaceRepository {
+export class TokenLocalRepository
+  implements RevokeAccessTokenInterfaceRepository
+{
   private localTokens: string[] = [];
 
   async save(token: string): Promise<void> {
