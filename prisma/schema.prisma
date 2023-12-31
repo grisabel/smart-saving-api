@@ -63,3 +63,8 @@ enum SessionType {
     Session_Refresh
     Session_Revoke
 }
+
+model RevokeAccessToken {
+    id    Int    @id @default(autoincrement())
+    token String @db.Text
+}

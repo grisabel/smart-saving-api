@@ -1,12 +1,18 @@
-import { TokenInterfaceRepository } from './TokenInterfaceRepositoty';
+import config from '@infrastructure/config';
+import { RevokeAccessTokenInterfaceRepository } from './TokenInterfaceRepositoty';
 import { TokenLocalRepository } from './TokenLocalRepository';
+import { TokenSqlRepository } from './TokenSqlRepository';
 
 export class TokenFactoryRepository {
-  static instance: TokenInterfaceRepository | null = null;
+  static instance: RevokeAccessTokenInterfaceRepository | null = null;
 
-  static getInstance(): TokenInterfaceRepository {
+  static getInstance(): RevokeAccessTokenInterfaceRepository {
     if (!TokenFactoryRepository.instance) {
-      TokenFactoryRepository.instance = new TokenLocalRepository();
+      if (config.ENV === 'TEST') {
+        TokenFactoryRepository.instance = new TokenLocalRepository();
+      } else {
+        TokenFactoryRepository.instance = new TokenSqlRepository();
+      }
     }
     return TokenFactoryRepository.instance;
   }

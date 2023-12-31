@@ -23,7 +23,7 @@ router.post(
   '/logout',
   SessionValidator.refreshTokenBody,
   validate,
-  UserController.deleteRefreshToken
+  UserController.logout
 );
 
 router.post(

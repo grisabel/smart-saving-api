@@ -1,12 +1,12 @@
 import { TokenExample } from '@application/services/JWTService/test/Token.example';
 import {
   TOKEN_REPOSITORY_ERROR,
-  TokenInterfaceRepository,
-} from './TokenInterfaceRepositoty';
-import { TokenLocalRepository } from './TokenLocalRepository';
+  RevokeAccessTokenInterfaceRepository,
+} from '../TokenInterfaceRepositoty';
+import { TokenLocalRepository } from '../TokenLocalRepository';
 
 describe('La clase TokenLocalRepository', () => {
-  let tokenRepository: TokenInterfaceRepository;
+  let tokenRepository: RevokeAccessTokenInterfaceRepository;
 
   beforeEach(() => {
     tokenRepository = new TokenLocalRepository();

@@ -5,7 +5,7 @@ import {
 import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
 
 import {
-  TokenInterfaceRepository,
+  RevokeAccessTokenInterfaceRepository,
   TokenRepositoryError,
 } from '@Session/application/TokenRepositorty/TokenInterfaceRepositoty';
 import { TokenFactoryRepository } from '@Session/application/TokenRepositorty/TokenFactoryRepository';
@@ -28,7 +28,7 @@ export class AuthenticateUseCase {
   constructor(
     private jwtService: typeof JWTService,
     private userRepository: UserInterfaceRepository,
-    private tokenRepository: TokenInterfaceRepository
+    private tokenRepository: RevokeAccessTokenInterfaceRepository
   ) {}
 
   authenticate(
@@ -60,7 +60,6 @@ export class AuthenticateUseCase {
             expires: expiredIn,
           };
 
-          await this.tokenRepository.save(refreshToken);
           resolve([null, responseDto]);
         } else {
           const errorDto = ErrorResponseMapper.toResponseDto({
@@ -89,7 +88,6 @@ export class AuthenticateUseCase {
   ): Promise<[ErrorResponseDto | null, RefreshTokenResponseDto | null]> {
     return new Promise(async (resolve, reject) => {
       try {
-        await this.tokenRepository.find(refreshToken);
         const tokenDetails = await this.jwtService.verifyRefreshToken(
           refreshToken
         );
@@ -150,36 +148,12 @@ export class AuthenticateUseCase {
     });
   }
 
-  async deleteRefreshToken(
-    refreshToken: string
-  ): Promise<[ErrorResponseDto | null, null]> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        await this.tokenRepository.delete(refreshToken);
-
-        resolve([null, null]);
-      } catch (error) {
-        if (
-          error instanceof TokenRepositoryError ||
-          error instanceof JWTServiceError
-        ) {
-          const dto = ErrorResponseMapper.toResponseDto({
-            message: 'Invalid Refresh Token', //todo
-          });
-          resolve([dto, null]);
-        }
-
-        reject(error);
-      }
-    });
-  }
-
   async revokeAccessToken(
     accessToken: string
   ): Promise<[ErrorResponseDto | null, null]> {
     return new Promise(async (resolve, reject) => {
       try {
-        await this.tokenRepository.save(accessToken); // TODO
+        await this.tokenRepository.save(accessToken);
 
         resolve([null, null]);
       } catch (error) {

@@ -56,22 +56,12 @@ const refreshToken = async (
   }
 };
 
-const deleteRefreshToken = async (
+const logout = async (
   req: Request<RefreshTokenRequestDto>,
   res: Response<ErrorResponseDto>,
   next: NextFunction
 ) => {
   try {
-    const body = req.body;
-
-    const [error] = await authenticateUseCase.deleteRefreshToken(
-      body.refreshToken
-    );
-
-    if (error) {
-      res.status(404).json(error); //todo
-      return;
-    }
     res.status(201).send();
   } catch (error) {
     next(error);
@@ -103,6 +93,6 @@ const revokeAccessToken = async (
 export default {
   loginUser,
   refreshToken,
-  deleteRefreshToken,
+  logout,
   revokeAccessToken,
 };
