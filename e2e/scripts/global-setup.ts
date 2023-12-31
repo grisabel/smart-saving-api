@@ -7,8 +7,9 @@ function startServer() {
   const host = process.env.HOST ?? 'localhost';
   const port = process.env.PORT ? Number(process.env.PORT) : 3001;
 
-  return new Promise((resolve, reject) => {
-    prisma.user.deleteMany();
+  return new Promise(async (resolve, reject) => {
+    await prisma.user.deleteMany();
+    await prisma.operation.deleteMany();
 
     const server = app.listen(port, host, () => {
       console.log(`[ ready ] http://${host}:${port}`);

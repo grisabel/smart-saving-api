@@ -1,6 +1,6 @@
 export enum OperationType {
-  RESET_PASSWORD = 'reset-password',
-  DELETE_ACCOUNT = 'delete-account',
+  RESET_PASSWORD = 'RESET_PASSWORD',
+  DELETE_ACCOUNT = 'DELETE_ACCOUNT',
 }
 export interface Operation {
   email: string;
