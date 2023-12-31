@@ -23,13 +23,13 @@ model User {
 model Password {
     id     String @id @default(uuid())
     hash   String
-    user   User   @relation(fields: [userId], references: [id])
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String @unique
 }
 
 model Operation {
     id        String        @id // uuid
-    user      User          @relation(fields: [userId], references: [id])
+    user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    String
     type      OperationType
     expiresIn DateTime
@@ -51,7 +51,7 @@ model Session {
     sessionType    SessionType
     reason         String?
     failuresNumber Int?
-    user           User        @relation(fields: [userId], references: [id])
+    user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId         String
 
     @@index([userId, createdAt])
