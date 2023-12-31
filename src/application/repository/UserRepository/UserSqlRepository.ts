@@ -11,8 +11,6 @@ import { Email } from '@domain/models/Email';
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 
-prisma;
-
 export class UserSqlRepository implements UserInterfaceRepository {
   async save(user: User): Promise<void> {
     return new Promise((resolve, reject) => {

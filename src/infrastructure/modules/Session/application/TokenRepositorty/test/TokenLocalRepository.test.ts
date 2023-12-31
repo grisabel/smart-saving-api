@@ -2,8 +2,8 @@ import { TokenExample } from '@application/services/JWTService/test/Token.exampl
 import {
   TOKEN_REPOSITORY_ERROR,
   RevokeAccessTokenInterfaceRepository,
-} from './TokenInterfaceRepositoty';
-import { TokenLocalRepository } from './TokenLocalRepository';
+} from '../TokenInterfaceRepositoty';
+import { TokenLocalRepository } from '../TokenLocalRepository';
 
 describe('La clase TokenLocalRepository', () => {
   let tokenRepository: RevokeAccessTokenInterfaceRepository;

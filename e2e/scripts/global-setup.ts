@@ -10,6 +10,7 @@ function startServer() {
   return new Promise(async (resolve, reject) => {
     await prisma.user.deleteMany();
     await prisma.operation.deleteMany();
+    await prisma.revokeAccessToken.deleteMany();
 
     const server = app.listen(port, host, () => {
       console.log(`[ ready ] http://${host}:${port}`);
