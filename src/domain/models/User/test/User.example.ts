@@ -10,7 +10,6 @@ export class UserExample {
     const _lastname = 'TestLastName';
     const _dateBirth = '01/01/2000';
     const _objective = 'Jubilación';
-    const _lastSession = '1701959641000';
 
     const email = Email.createFromText(_textEmail);
     const password = Password.createFromText(_textPassword);
@@ -20,7 +19,6 @@ export class UserExample {
       _lastname,
       _dateBirth,
       _objective,
-      _lastSession,
       password
     );
 
@@ -34,7 +32,6 @@ export class UserExample {
     const lastname = 'TestLastName';
     const dateBirth = '01/01/2000';
     const objective = 'Jubilación';
-    const lastSession = '1701959641000';
 
     const email = Email.createFromText(textEmail);
     const password = Password.createFromText(textPassword);
@@ -44,7 +41,6 @@ export class UserExample {
       lastname,
       dateBirth,
       objective,
-      lastSession,
       password
     );
 
@@ -58,7 +54,6 @@ export class UserExample {
     const _lastname = 'TestLastName';
     const _dateBirth = '01/01/2000';
     const _objective = 'Jubilación';
-    const _lastSession = '1701959641000';
 
     const email = Email.createFromText(_textEmail);
     const password = Password.createHash(_textPassword);
@@ -68,7 +63,6 @@ export class UserExample {
       _lastname,
       _dateBirth,
       _objective,
-      _lastSession,
       password
     );
 
@@ -82,7 +76,6 @@ export class UserExample {
     const lastname = 'TestLastName';
     const dateBirth = '01/01/2000';
     const objective = 'Jubilación';
-    const lastSession = '1701959641000';
 
     const email = Email.createFromText(textEmail);
     const password = Password.createHash(textPassword);
@@ -92,7 +85,6 @@ export class UserExample {
       lastname,
       dateBirth,
       objective,
-      lastSession,
       password
     );
 
@@ -106,7 +98,6 @@ export class UserExample {
     const lastname = 'Delgado Trueba';
     const dateBirth = '14/10/1997';
     const objective = 'Jubilación';
-    const lastSession = '1701959641000';
 
     const email = Email.createFromText(textEmail);
     const password = Password.createFromText(textPassword);
@@ -116,7 +107,6 @@ export class UserExample {
       lastname,
       dateBirth,
       objective,
-      lastSession,
       password
     );
 
@@ -130,7 +120,6 @@ export class UserExample {
     const lastname = 'Delgado Trueba';
     const dateBirth = '14/10/1997';
     const objective = 'Jubilación';
-    const lastSession = '1701959641000';
 
     const email = Email.createFromText(textEmail);
     const password = Password.createHash(textPassword);
@@ -140,7 +129,6 @@ export class UserExample {
       lastname,
       dateBirth,
       objective,
-      lastSession,
       password
     );
 

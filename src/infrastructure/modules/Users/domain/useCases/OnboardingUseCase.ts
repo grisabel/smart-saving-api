@@ -27,7 +27,6 @@ export class OnboardingUseCase {
           userDTO.lastName,
           userDTO.dateBirth,
           userDTO.objetive,
-          userDTO.lastName,
           password
         );
         this.userRepository.save(user);

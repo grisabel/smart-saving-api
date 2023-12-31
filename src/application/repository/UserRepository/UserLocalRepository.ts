@@ -19,7 +19,6 @@ export class UserLocalRepository implements UserInterfaceRepository {
       user.getLastname(),
       user.getDateBirth(),
       user.getObjective(),
-      user.getLastSession(),
       _password
     );
     return new Promise((resolve) => {
@@ -78,7 +77,6 @@ export class UserLocalRepository implements UserInterfaceRepository {
       user.getLastname(),
       user.getDateBirth(),
       user.getObjective(),
-      user.getLastSession(),
       _password
     );
 

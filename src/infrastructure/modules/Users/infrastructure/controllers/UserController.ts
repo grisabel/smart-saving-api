@@ -4,15 +4,10 @@ import { OnboardingUseCaseFactory } from '@Users/domain/useCases/OnboardingUseCa
 
 import { OnboardingUserRequestDto } from '@Users/infrastructure/dtos/request/OnboardingUserRequestDto';
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
-import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
 import { Email } from '@domain/models/Email';
-import { UserInfoResponseMapper } from '../mappers/response/UserInfoResponseMapper';
-import { UserRepositoryError } from '@application/repository/UserRepository/UserInterfaceRepository';
-import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorResponseMapper';
 import { UserInfoResponseDto } from '../dtos/response/UserInfoResponseDto';
 import { UserUseCaseFactory } from '../../domain/useCases/UserUseCase';
 import { ResetPasswordRequestDto } from '../dtos/request/ResetPasswordRequestDto';
-import { EmailError } from '@domain/models/Email/EmailError';
 import { ResetPasswordConfirmRequestDto } from '../dtos/request/ResetPasswordConfirmRequestDto';
 import { Id } from '@domain/models/Id/Id';
 import { Password } from '@domain/models/Password';
