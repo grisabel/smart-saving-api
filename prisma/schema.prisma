@@ -65,5 +65,6 @@ enum SessionType {
 }
 
 model RevokeAccessToken {
-    id String @id
+    id    Int    @id @default(autoincrement())
+    token String @unique
 }
