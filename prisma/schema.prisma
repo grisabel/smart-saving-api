@@ -64,12 +64,6 @@ enum SessionType {
     Session_Revoke
 }
 
-model TokenList {
-    id   String        @id
-    type TokenListType
-}
-
-enum TokenListType {
-    REVOKE_ACCESS_TOKEN
-    LOGOUT_REFESH_TOKEN
+model RevokeAccessToken {
+    id String @id
 }
