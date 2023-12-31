@@ -886,7 +886,7 @@
             },
             "dateBirth": {
               "type": "string",
-              "example": "30/01/1997",
+              "example": "14/10/1997",
               "format": "date",
               "pattern": "DD/MM/YYYY"
             },
@@ -904,11 +904,11 @@
             },
             "password": {
               "type": "string",
-              "example": "12345@Aa"
+              "example": "Shena@2017"
             },
             "repeatPassword": {
               "type": "string",
-              "example": "12345@Aa"
+              "example": "Shena@2017"
             }
           }
         },

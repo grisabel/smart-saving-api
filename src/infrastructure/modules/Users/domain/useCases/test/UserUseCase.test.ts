@@ -124,7 +124,7 @@ describe('La clase UserUseCase', () => {
         'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
       );
     });
-    it('debe lanzar un error dado un email no registrado aunque el mesaje no dará información adicional', async () => {
+    it('debe lanzar un error dado un email no registrado', async () => {
       // Arange
       const user1 = UserExample.user1_text();
       // Act
@@ -135,22 +135,22 @@ describe('La clase UserUseCase', () => {
 
       // Arrange
       expect(errorDto.message).toEqual(
-        'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
+        'Usuario o fecha de nacimiento invalida'
       ); // todo
     });
-    it('debe lanzar un error dado una dateBirth inválido aunque el mesaje no dará información adicional', async () => {
+    it('debe lanzar un error dado una dateBirth inválido', async () => {
       // Arange
       const user1 = UserExample.user1_text();
       //act
       await userRepository.save(user1);
-      const [, responseDto] = await userUseCase.resetPassword(
+      const [errorDto] = await userUseCase.resetPassword(
         user1.getEmail(),
         '29/12/2023'
       );
 
       // Arrange
-      expect(responseDto.message).toEqual(
-        'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
+      expect(errorDto.message).toEqual(
+        'Usuario o fecha de nacimiento invalida'
       ); // todo
     });
   });

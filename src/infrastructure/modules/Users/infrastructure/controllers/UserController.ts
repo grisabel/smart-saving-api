@@ -82,7 +82,7 @@ const resetPassword = async (
     );
 
     if (errorDto) {
-      res.status(200).json(errorDto);
+      res.status(409).json(errorDto);
       return;
     }
 
