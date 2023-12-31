@@ -1,7 +1,11 @@
+import { prisma } from '@application/repository/db';
 import IdService from '@application/services/IdService';
 import axios from 'axios';
 
 describe('Delete Account', () => {
+  beforeEach(async () => {
+    await prisma.user.deleteMany();
+  });
   describe('DELETE /user/account', () => {
     it('debe retornar un status 200 y un operationId', async () => {
       const body = {
@@ -17,8 +21,8 @@ describe('Delete Account', () => {
       await axios.post(`/user/register`, body);
 
       const resLogin = await axios.post(`/session/login`, {
-        email: 'user@email.com',
-        password: '12345@Aa',
+        email: body.email,
+        password: body.password,
       });
 
       const res = await axios.delete(`/user/account`, {

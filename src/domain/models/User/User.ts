@@ -9,7 +9,6 @@ export class User {
     private lastname: string,
     private dateBirth: string, //'dd-mm-aaaa'
     private objective: string,
-    private lastSession: string, //timestamp
     private password: Password
   ) {}
 
@@ -31,7 +30,6 @@ export class User {
       lastname: this.lastname,
       dateBirth: this.dateBirth,
       objective: this.objective,
-      lastSession: this.lastSession,
       password: this.password.getValue(),
     };
   }
@@ -54,10 +52,6 @@ export class User {
 
   public getObjective(): string {
     return this.objective;
-  }
-
-  public getLastSession(): string {
-    return this.lastSession;
   }
 
   public getPassword(): Password {

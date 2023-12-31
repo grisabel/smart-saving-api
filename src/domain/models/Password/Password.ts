@@ -10,6 +10,10 @@ export class Password {
     return new Password(value, false);
   }
 
+  static createFromHash(value: string): Password {
+    return new Password(value, true);
+  }
+
   static createHash(value: string): Password {
     return new Password(HashService.generateHash(value), true);
   }

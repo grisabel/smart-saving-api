@@ -1,6 +1,10 @@
+import { prisma } from '@application/repository/db';
 import axios from 'axios';
 
 describe('POST /user/register', () => {
+  beforeEach(async () => {
+    await prisma.user.deleteMany();
+  });
   it('debe retornar un status 204 (No Content) al crear un usuario satisfactoriamente', async () => {
     const body = {
       firstName: 'User Name',
@@ -15,6 +19,33 @@ describe('POST /user/register', () => {
     const res = await axios.post(`/user/register`, body);
 
     expect(res.status).toBe(204);
+  });
+  it('debe retornar un status 409 al intentar crear un usuario con un email existente', async () => {
+    const body = {
+      firstName: 'User Name',
+      lastName: 'User Surname',
+      dateBirth: '30/01/1997',
+      objetive: 'Personal Objetive',
+      email: 'user@email.com',
+      repeatEmail: 'user@email.com',
+      password: '12345@Aa',
+      repeatPassword: '12345@Aa',
+    };
+
+    const response409 = {
+      message: 'Usuario ya registrado',
+    };
+
+    let throwError;
+    try {
+      await axios.post(`/user/register`, body);
+      await axios.post(`/user/register`, body);
+    } catch (error) {
+      throwError = error;
+    }
+
+    expect(throwError.response.status).toBe(409);
+    expect(throwError.response.data.message).toEqual(response409.message);
   });
   it('debe retornar un status 422 si el body está incompleto', async () => {
     //arrange
@@ -136,10 +167,10 @@ describe('POST /user/register', () => {
     let throwError;
     // TODO
     const response422 = {
-      message: 'Error al validar el email',
+      message: 'Validación incorrecta',
       errors: [
         {
-          type: 'EmailError',
+          type: 'field',
           msg: 'El email no tiene un formato válido <nombre>@<dominio>.<extensión_de_dominio>',
         },
       ],
@@ -174,10 +205,10 @@ describe('POST /user/register', () => {
     let throwError;
     // TODO
     const response422 = {
-      message: 'Error al validar la contraseña',
+      message: 'Validación incorrecta',
       errors: [
         {
-          type: 'PasswordError',
+          type: 'field',
           msg: 'La contraseña debe contener al menos alguno de los siguientes caracteres: _ @ # !',
         },
       ],

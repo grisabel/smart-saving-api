@@ -1,14 +1,28 @@
+import { prisma } from '@application/repository/db';
 import { TokenExample } from '@application/services/JWTService/test/Token.example';
 import axios from 'axios';
 
 describe('POST /session/token', () => {
+  beforeEach(async () => {
+    await prisma.user.deleteMany();
+  });
   it('debe retornar un status 200 y un accesToken al refrescar la sesión con el refreshToken', async () => {
-    const bodyLogin = {
+    const body = {
+      firstName: 'User Name',
+      lastName: 'User Surname',
+      dateBirth: '30/01/1997',
+      objetive: 'Personal Objetive',
       email: 'test@test.com',
+      repeatEmail: 'test@test.com',
       password: 'Aabb@1',
+      repeatPassword: 'Aabb@1',
     };
+    await axios.post(`/user/register`, body);
 
-    const resLogin = await axios.post(`/session/login`, bodyLogin);
+    const resLogin = await axios.post(`/session/login`, {
+      email: body.email,
+      password: body.password,
+    });
 
     const refreshTokenBody = {
       refreshToken: resLogin.data.refreshToken,

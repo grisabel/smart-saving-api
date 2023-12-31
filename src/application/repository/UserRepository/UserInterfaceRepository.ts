@@ -4,9 +4,11 @@ import { User } from '../../../domain/models/User';
 //TODO review texts
 export const USER_REPOSITORY_ERROR = {
   userNotExist: 'El usuario no existe',
+  userDuplicate: 'El email del usuario ya existe',
 };
 export interface UserRepositoryErrorParams {
   userNotExist?: string;
+  userDuplicate?: string;
 }
 
 export class UserRepositoryError extends Error {
