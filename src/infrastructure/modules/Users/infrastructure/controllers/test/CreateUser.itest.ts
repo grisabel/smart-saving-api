@@ -1,6 +1,10 @@
+import { prisma } from '@application/repository/db';
 import axios from 'axios';
 
 describe('POST /user/register', () => {
+  beforeEach(async () => {
+    await prisma.user.deleteMany();
+  });
   it('debe retornar un status 204 (No Content) al crear un usuario satisfactoriamente', async () => {
     const body = {
       firstName: 'User Name',

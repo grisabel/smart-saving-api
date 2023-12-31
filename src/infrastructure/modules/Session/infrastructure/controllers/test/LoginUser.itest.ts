@@ -1,12 +1,28 @@
+import { prisma } from '@application/repository/db';
 import axios from 'axios';
 
 describe('POST /session/login', () => {
+  beforeEach(async () => {
+    await prisma.user.deleteMany();
+  });
+
   it('debe retornar un status 200 y un accesToken al loguear un usuario satisfactoriamente', async () => {
     const body = {
+      firstName: 'User Name',
+      lastName: 'User Surname',
+      dateBirth: '30/01/1997',
+      objetive: 'Personal Objetive',
       email: 'test@test.com',
+      repeatEmail: 'test@test.com',
       password: 'Aabb@1',
+      repeatPassword: 'Aabb@1',
     };
-    const res = await axios.post(`/session/login`, body);
+    await axios.post(`/user/register`, body);
+
+    const res = await axios.post(`/session/login`, {
+      email: body.email,
+      password: body.password,
+    });
 
     expect(res.status).toBe(200);
     expect(res.data.accessToken.split('.').length).toEqual(3);

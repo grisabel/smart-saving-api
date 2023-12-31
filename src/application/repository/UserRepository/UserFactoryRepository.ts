@@ -9,13 +9,7 @@ export class UserFactoryRepository {
 
   static getInstance(): UserInterfaceRepository {
     if (!UserFactoryRepository.instance) {
-      if (config.ENV === 'PROD') {
-        const userRepository = new UserSqlRepository();
-        UserFactoryRepository.instance = userRepository;
-      } else if (config.ENV === 'E2E') {
-        const userRepository = new UserSqlRepository();
-        UserFactoryRepository.instance = userRepository;
-      } else {
+      if (config.ENV === 'TEST') {
         const userRepository = new UserLocalRepository();
         UserFactoryRepository.instance = userRepository;
 
@@ -24,6 +18,9 @@ export class UserFactoryRepository {
 
         userRepository.save(user1);
         userRepository.save(realUser);
+      } else {
+        const userRepository = new UserSqlRepository();
+        UserFactoryRepository.instance = userRepository;
       }
     }
     return UserFactoryRepository.instance;

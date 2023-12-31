@@ -1,7 +1,11 @@
+import { prisma } from '@application/repository/db';
 import { TokenExample } from '@application/services/JWTService/test/Token.example';
 import axios from 'axios';
 
 describe('POST /user/info', () => {
+  beforeEach(async () => {
+    await prisma.user.deleteMany();
+  });
   it('debe retornar un status 200 y la información del usuario', async () => {
     const body = {
       firstName: 'User Name',
@@ -16,8 +20,8 @@ describe('POST /user/info', () => {
     await axios.post(`/user/register`, body);
 
     const resLogin = await axios.post(`/session/login`, {
-      email: 'user@email.com',
-      password: '12345@Aa',
+      email: body.email,
+      password: body.password,
     });
 
     const res = await axios.get(`/user/info`, {

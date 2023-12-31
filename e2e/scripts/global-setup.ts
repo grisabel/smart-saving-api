@@ -1,12 +1,15 @@
 import 'tsconfig-paths/register';
 
 import app from '../../src/infrastructure/server';
+import { prisma } from '../../src/application/repository/db';
 
 function startServer() {
   const host = process.env.HOST ?? 'localhost';
   const port = process.env.PORT ? Number(process.env.PORT) : 3001;
 
   return new Promise((resolve, reject) => {
+    prisma.user.deleteMany();
+
     const server = app.listen(port, host, () => {
       console.log(`[ ready ] http://${host}:${port}`);
       resolve(server);
