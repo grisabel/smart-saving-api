@@ -1,7 +1,11 @@
+import { prisma } from '@application/repository/db';
 import { Id } from '@domain/models/Id/Id';
 import axios from 'axios';
 
 describe('Reset Password', () => {
+  beforeEach(async () => {
+    await prisma.user.deleteMany();
+  });
   describe('POST /user/reset-password', () => {
     it('debe retornar un status 200 indicando que se ha enviado un email si los datos son válidos (email y dateBirth)', async () => {
       const bodyRegister = {
@@ -32,11 +36,16 @@ describe('Reset Password', () => {
         dateBirth: '30/01/1997',
         email: 'user@email.com',
       };
-      const res = await axios.post(`/user/reset-password`, body);
+      let throwError;
+      try {
+        await axios.post(`/user/reset-password`, body);
+      } catch (error) {
+        throwError = error;
+      }
 
-      expect(res.status).toEqual(200);
-      expect(res.data.message).toEqual(
-        'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
+      expect(throwError.response.status).toEqual(409);
+      expect(throwError.response.data.message).toEqual(
+        'Usuario o fecha de nacimiento invalida'
       );
     });
     it('debe retornar un 422 si el campo dateBirth del body no sigue el formato correcto', async () => {

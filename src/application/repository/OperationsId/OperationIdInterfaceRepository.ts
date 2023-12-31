@@ -6,9 +6,11 @@ import { Operation, OperationType } from './models/OperationId';
 //TODO review texts
 export const OPERATIONSID_REPOSITORY_ERROR = {
   idNotExist: 'El id no existe',
+  idDuplicate: 'El id esta repetido',
 };
 export interface OperationsIdRepositoryErrorParams {
   idNotExist?: string;
+  idDuplicate?: string;
 }
 
 export class OperationsIdRepositoryError extends Error {

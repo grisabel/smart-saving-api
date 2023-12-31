@@ -70,19 +70,25 @@ export class UserUseCase {
       try {
         const user = await this.userRepository.findByEmail(email);
 
-        if (user.getDateBirth() === dateBirth) {
-          const operation: Operation = {
-            email: email.getValue(),
-            id: Id.createId().getValue(),
-            type: OperationType.RESET_PASSWORD,
-            expiresIn: DateTimeService.now() + 60 * 60 * 1000,
-          };
+        if (user.getDateBirth() !== dateBirth) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            message: 'Usuario o fecha de nacimiento invalida',
+          });
+          resolve([errorDto, null]);
+          return;
+        }
 
-          await this.operationIdRepository.save(operation);
+        const operation: Operation = {
+          email: email.getValue(),
+          id: Id.createId().getValue(),
+          type: OperationType.RESET_PASSWORD,
+          expiresIn: DateTimeService.now() + 60 * 60 * 1000,
+        };
 
-          if (config.ENV !== 'E2E') {
-            await this.emailService.send(email, operation);
-          }
+        await this.operationIdRepository.save(operation);
+
+        if (config.ENV !== 'E2E') {
+          await this.emailService.send(email, operation);
         }
 
         const responseDto: ResetPasswordResponseDto = {
@@ -93,8 +99,7 @@ export class UserUseCase {
       } catch (error) {
         if (error instanceof UserRepositoryError) {
           const errorDto = ErrorResponseMapper.toResponseDto({
-            message:
-              'Si el usuario existe se habrá enviado un email para cambiar la contraseña',
+            message: 'Usuario o fecha de nacimiento invalida',
           });
           resolve([errorDto, null]);
           return;
