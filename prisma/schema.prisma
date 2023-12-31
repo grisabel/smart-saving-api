@@ -1,0 +1,65 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        String      @id @default(uuid())
+    email     String      @unique
+    firstname String
+    lastname  String
+    dateBirth DateTime
+    objective String
+    deleteIn  DateTime?
+    Password  Password?
+    Operation Operation[]
+    Session   Session[]
+}
+
+model Password {
+    id     String @id @default(uuid())
+    hash   String
+    user   User   @relation(fields: [userId], references: [id])
+    userId String @unique
+}
+
+model Operation {
+    id        String        @id // uuid
+    user      User          @relation(fields: [userId], references: [id])
+    userId    String
+    type      OperationType
+    expiresIn DateTime
+    createdAt DateTime      @default(now())
+
+    @@index([userId, createdAt])
+}
+
+enum OperationType {
+    RESET_PASSWORD
+    DELETE_ACCOUNT
+}
+
+model Session {
+    id             String      @id @default(uuid())
+    createdAt      DateTime    @default(now())
+    expiresIn      DateTime
+    ip             String
+    sessionType    SessionType
+    reason         String?
+    failuresNumber Int?
+    user           User        @relation(fields: [userId], references: [id])
+    userId         String
+
+    @@index([userId, createdAt])
+}
+
+enum SessionType {
+    Session_Start
+    Session_End
+    Session_Refresh
+    Session_Revoke
+}
