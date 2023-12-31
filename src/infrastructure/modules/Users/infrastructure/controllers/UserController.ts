@@ -15,6 +15,7 @@ import { ResetPasswordConfirmResponseDto } from '../dtos/response/ResetPasswordC
 import { DeleteAccountResponseDto } from '../dtos/response/DeleteAccountResponseDto';
 import { DeleteAccountConfirmRequestDto } from '../dtos/request/DeleteAccountConfirmRequestDto';
 import { DeleteAccountConfirmResponseDto } from '../dtos/response/DeleteAccountConfirmResponseDto';
+import { User } from '@domain/models/User';
 
 const onboardingUseCase = OnboardingUseCaseFactory.getIntance();
 const userUseCase = UserUseCaseFactory.getIntance();
@@ -46,10 +47,19 @@ const createUser = async (
   try {
     const body = req.body;
 
-    const [error] = await onboardingUseCase.saveUser(body);
-
+    const email = Email.createFromText(body.email);
+    const password = Password.createFromText(body.password);
+    const user = new User(
+      email,
+      body.firstName,
+      body.lastName,
+      body.dateBirth,
+      body.objetive,
+      password
+    );
+    const [error] = await onboardingUseCase.saveUser(user);
     if (error) {
-      res.status(422).json(error);
+      res.status(409).json(error);
       return;
     }
     res.status(204).json();

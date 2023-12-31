@@ -14,12 +14,14 @@ const createUser = [
     .required(),
   Body('objetive')
     .required(),
-  Body('email') // todo
+  Body('email')
+    .email()
     .required(),
   Body('repeatEmail')
     .required()
     .equalFields('email', 'El email y la repetición del email no coinciden'),
-  Body('password') //todo
+  Body('password')
+    .password()
     .required(),
   Body('repeatPassword')
     .required()

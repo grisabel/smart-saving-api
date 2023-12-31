@@ -43,6 +43,13 @@ export class UserSqlRepository implements UserInterfaceRepository {
           resolve();
         })
         .catch((error) => {
+          if (error?.code === 'P2002') {
+            reject(
+              new UserRepositoryError({
+                userDuplicate: USER_REPOSITORY_ERROR.userDuplicate,
+              })
+            );
+          }
           reject(error);
         });
     });
