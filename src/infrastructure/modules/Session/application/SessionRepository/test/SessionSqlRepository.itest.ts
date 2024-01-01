@@ -1,7 +1,7 @@
 import { prisma } from '@application/repository/db';
 
 import { SessionFactoryRepository } from '../SessionFactoryRepository';
-import { SessionType } from '../SessionInterfaceRepository';
+import { SessionReasonType, SessionType } from '../SessionInterfaceRepository';
 import { UserExample } from '@domain/models/User/test/User.example';
 import { UserFactoryRepository } from '@application/repository/UserRepository/UserFactoryRepository';
 
@@ -173,35 +173,79 @@ describe('La clase SessionSqlRepository', () => {
     expect(resul[0].expiresIn.getTime()).toEqual(expiresIn);
   });
 
-  //   it('debe almacernar el inicio de una sesíon y el numero de intentos fallidos', async () => {
-  //     //arange
-  //     const user = UserExample.real_user_text();
-  //     const email = user.getEmail();
+  it('debe almacernar una sesión cerrada por el usuario', async () => {
+    //arange
+    const user = UserExample.real_user_text();
+    const email = user.getEmail();
 
-  //     const ip = '69.89.31.226';
+    const ip = '69.89.31.226';
 
-  //     //act
-  //     await userRepository.save(user);
-  //     await sessionRepository.saveSessionStart(
-  //       email,
-  //       ip,
-  //       `${new Date().getTime() + 24 * 60 * 60 * 1000}`
-  //     );
+    const expiresIn = new Date().getTime() + 24 * 60 * 60 * 1000;
 
-  //     //assert
-  //     const resul = await prisma.session.findMany({
-  //       where: { userEmail: email.getValue(), sessionType: SessionType.Session_Start, },
-  //       orderBy: {
-  //         createdAt: 'desc',
-  //       },
-  //       take: 1,
-  //     });
+    //act
+    await userRepository.save(user);
+    await sessionRepository.saveSessionEnd(
+      email,
+      ip,
+      `${expiresIn}`,
+      SessionReasonType.Session_User_Logout
+    );
 
-  //     expect(resul.length).toEqual(1);
-  //     expect(resul[0].sessionType).toEqual(SessionType.Session_Start);
-  //     expect(resul[0].userEmail).toEqual(email.getValue());
-  //     expect(resul[0].ip).toEqual(ip);
-  //     expect(resul[0].expiresIn.getTime()).toEqual(expiresIn);
-  //     expect(resul[0].failuresNumber).toEqual(0);
-  //   });
+    //assert
+    const resul = await prisma.session.findMany({
+      where: {
+        userEmail: email.getValue(),
+        sessionType: SessionType.Session_End,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 1,
+    });
+
+    expect(resul.length).toEqual(1);
+    expect(resul[0].sessionType).toEqual(SessionType.Session_End);
+    expect(resul[0].userEmail).toEqual(email.getValue());
+    expect(resul[0].ip).toEqual(ip);
+    expect(resul[0].expiresIn.getTime()).toEqual(expiresIn);
+    expect(resul[0].reason).toEqual(SessionReasonType.Session_User_Logout);
+  });
+
+  it('debe almacernar una sesión cerrada por expiración de las session', async () => {
+    //arange
+    const user = UserExample.real_user_text();
+    const email = user.getEmail();
+
+    const ip = '69.89.31.226';
+
+    const expiresIn = new Date().getTime();
+
+    //act
+    await userRepository.save(user);
+    await sessionRepository.saveSessionEnd(
+      email,
+      ip,
+      `${expiresIn}`,
+      SessionReasonType.Session_Token_Expired
+    );
+
+    //assert
+    const resul = await prisma.session.findMany({
+      where: {
+        userEmail: email.getValue(),
+        sessionType: SessionType.Session_End,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 1,
+    });
+
+    expect(resul.length).toEqual(1);
+    expect(resul[0].sessionType).toEqual(SessionType.Session_End);
+    expect(resul[0].userEmail).toEqual(email.getValue());
+    expect(resul[0].ip).toEqual(ip);
+    expect(resul[0].expiresIn.getTime()).toEqual(expiresIn);
+    expect(resul[0].reason).toEqual(SessionReasonType.Session_Token_Expired);
+  });
 });

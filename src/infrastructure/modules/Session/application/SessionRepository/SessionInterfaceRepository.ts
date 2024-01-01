@@ -9,7 +9,7 @@ export enum SessionType {
 }
 
 export enum SessionReasonType {
-  Session_Token_Expired = 'Session_Start',
+  Session_Token_Expired = 'Session_Token_Expired',
   Session_User_Logout = 'Session_User_Logout',
 }
 
