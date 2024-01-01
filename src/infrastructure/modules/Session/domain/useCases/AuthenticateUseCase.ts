@@ -23,7 +23,10 @@ import { RefreshTokenResponseDto } from '@Session/infrastructure/dtos/response/R
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorResponseMapper';
 import { EmailError } from '@domain/models/Email/EmailError';
-import { SessionInterfaceRepository } from '@Session/application/SessionRepository/SessionInterfaceRepository';
+import {
+  SessionInterfaceRepository,
+  SessionReasonType,
+} from '@Session/application/SessionRepository/SessionInterfaceRepository';
 import { SessionFactoryRepository } from '../../application/SessionRepository/SessionFactoryRepository';
 import { email } from '@infrastructure/middlewares/validators/body/EmailValidator';
 
@@ -166,6 +169,22 @@ export class AuthenticateUseCase {
           }
           reject(error);
         }
+      }
+    });
+  }
+
+  async logoutAccessToken(
+    email: Email,
+    ip: string,
+    reason: SessionReasonType
+  ): Promise<[ErrorResponseDto | null, null]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.sessionRepository.saveSessionEnd(email, ip, reason);
+
+        resolve([null, null]);
+      } catch (error) {
+        reject(error);
       }
     });
   }

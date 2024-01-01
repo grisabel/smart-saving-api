@@ -10,6 +10,7 @@ import { RefreshTokenResponseDto } from '@Session/infrastructure/dtos/response/R
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 import { RevokeAccessTokenRequestDto } from '../dtos/request/RevokeAccessTokenRequestDto';
 import { Email } from '@domain/models/Email';
+import { SessionReasonType } from '../../application/SessionRepository/SessionInterfaceRepository';
 
 const authenticateUseCase = AuthenticateUseCaseFactory.getIntance();
 
@@ -72,6 +73,16 @@ const logout = async (
   next: NextFunction
 ) => {
   try {
+    // TODO nginx
+    const ip =
+      (req.headers?.['x-forwarded-for'] as string) ||
+      req?.socket?.remoteAddress;
+
+    await authenticateUseCase.logoutAccessToken(
+      Email.createFromText(req.user.email),
+      ip ?? '',
+      SessionReasonType.Session_User_Logout
+    );
     res.status(201).send();
   } catch (error) {
     next(error);

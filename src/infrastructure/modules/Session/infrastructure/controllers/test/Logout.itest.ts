@@ -1,10 +1,15 @@
 import { prisma } from '@application/repository/db';
 import { TokenExample } from '@application/services/JWTService/test/Token.example';
+import {
+  SessionReasonType,
+  SessionType,
+} from '@infrastructure/modules/Session/application/SessionRepository/SessionInterfaceRepository';
 import axios from 'axios';
 
 describe('POST /session/logout', () => {
   beforeEach(async () => {
     await prisma.user.deleteMany();
+    await prisma.session.deleteMany();
   });
   it('debe retornar un status 201', async () => {
     const body = {
@@ -33,6 +38,21 @@ describe('POST /session/logout', () => {
       },
     });
     expect(res.status).toBe(201);
+
+    const resul = await prisma.session.findMany({
+      where: {
+        userEmail: body.email,
+        sessionType: SessionType.Session_End,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 1,
+    });
+    expect(resul.length).toEqual(1);
+    expect(resul[0].sessionType).toEqual(SessionType.Session_End);
+    expect(resul[0].userEmail).toEqual(body.email);
+    expect(resul[0].reason).toEqual(SessionReasonType.Session_User_Logout);
   });
   it('debe retornar un status 422 si el formato de la petición no es válido', async () => {
     const body = {

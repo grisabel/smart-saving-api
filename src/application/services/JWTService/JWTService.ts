@@ -98,9 +98,28 @@ const verifyAcessToken = (accessToken: string): VerifyAcessTokenResponse => {
   }
 };
 
+export interface TokenDecodeResponse {
+  sub: string;
+}
+
+const decodeToken = (token: string): TokenDecodeResponse => {
+  try {
+    const decodedToken = jwt.decode(token, { json: true });
+
+    return {
+      sub: decodedToken.sub,
+    };
+  } catch (error) {
+    throw new JWTServiceError({
+      verifyTokenError: JWR_SERVICE_ERROR.verifyAcessTokenError,
+    });
+  }
+};
+
 export default {
   createAccessToken,
   createRefreshToken,
   verifyRefreshToken,
   verifyAcessToken,
+  decodeToken,
 };
