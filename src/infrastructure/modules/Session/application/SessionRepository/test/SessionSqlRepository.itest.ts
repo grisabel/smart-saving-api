@@ -248,4 +248,36 @@ describe('La clase SessionSqlRepository', () => {
     expect(resul[0].expiresIn.getTime()).toEqual(expiresIn);
     expect(resul[0].reason).toEqual(SessionReasonType.Session_Token_Expired);
   });
+
+  it('debe almacernar la cancelación de una sesión exitosa', async () => {
+    //arange
+    const user = UserExample.real_user_text();
+    const email = user.getEmail();
+
+    const ip = '69.89.31.226';
+
+    const expiresIn = new Date().getTime() + 24 * 60 * 60 * 1000;
+
+    //act
+    await userRepository.save(user);
+    await sessionRepository.saveSessionRevoke(email, ip, `${expiresIn}`);
+
+    //assert
+    const resul = await prisma.session.findMany({
+      where: {
+        userEmail: email.getValue(),
+        sessionType: SessionType.Session_Revoke,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 1,
+    });
+
+    expect(resul.length).toEqual(1);
+    expect(resul[0].sessionType).toEqual(SessionType.Session_Revoke);
+    expect(resul[0].userEmail).toEqual(email.getValue());
+    expect(resul[0].ip).toEqual(ip);
+    expect(resul[0].expiresIn.getTime()).toEqual(expiresIn);
+  });
 });

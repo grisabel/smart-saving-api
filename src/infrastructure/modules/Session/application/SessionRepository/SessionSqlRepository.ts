@@ -119,6 +119,26 @@ export class SessionSqlRepository implements SessionInterfaceRepository {
     ip: string,
     expiresIn: TimestampMs
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    return new Promise(async (resolve, reject) => {
+      try {
+        await prisma.session.create({
+          data: {
+            userEmail: email.getValue(),
+            sessionType: SessionType.Session_Revoke,
+            ip: ip,
+            expiresIn: DateTimeService.parse(
+              {
+                date: expiresIn,
+                format: DATE_FORMATS.TimestampMs,
+              },
+              DATE_FORMATS.ISO_8601
+            ),
+          },
+        });
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 }
