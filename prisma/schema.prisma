@@ -51,10 +51,10 @@ model Session {
     sessionType    SessionType
     reason         String?
     failuresNumber Int?
-    user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId         String
+    user           User        @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+    userEmail      String
 
-    @@index([userId, createdAt])
+    @@index([userEmail, createdAt])
 }
 
 enum SessionType {
