@@ -47,9 +47,13 @@ const refreshToken = async (
 ) => {
   try {
     const body = req.body;
+    // TODO nginx
+    const ip =
+      (req.headers?.['x-forwarded-for'] as string) ||
+      req?.socket?.remoteAddress;
 
     const [errorDto, responseDto] =
-      await authenticateUseCase.verifyRefreshToken(body.refreshToken);
+      await authenticateUseCase.verifyRefreshToken(body.refreshToken, ip);
 
     if (errorDto) {
       res.status(401).json(errorDto); //todo

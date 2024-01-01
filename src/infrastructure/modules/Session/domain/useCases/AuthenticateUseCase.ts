@@ -98,7 +98,8 @@ export class AuthenticateUseCase {
   }
 
   async verifyRefreshToken(
-    refreshToken: string
+    refreshToken: string,
+    ip: string
   ): Promise<[ErrorResponseDto | null, RefreshTokenResponseDto | null]> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -119,6 +120,12 @@ export class AuthenticateUseCase {
           token_type: 'bearer',
           expires: expiredIn,
         };
+
+        await this.sessionRepository.saveSessionRefresh(
+          Email.createFromText(tokenDetails.sub),
+          ip,
+          `${expiredIn}`
+        );
 
         resolve([null, dto]);
       } catch (error) {
