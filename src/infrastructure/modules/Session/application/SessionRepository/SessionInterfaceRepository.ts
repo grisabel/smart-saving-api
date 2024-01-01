@@ -28,12 +28,7 @@ export interface SessionInterfaceRepository {
   saveSessionEnd(
     email: Email,
     ip: string,
-    expiresIn: TimestampMs,
     reason: SessionReasonType
   ): Promise<void>;
-  saveSessionRevoke(
-    email: Email,
-    ip: string,
-    expiresIn: TimestampMs
-  ): Promise<void>;
+  saveSessionRevoke(email: Email, ip: string): Promise<void>;
 }

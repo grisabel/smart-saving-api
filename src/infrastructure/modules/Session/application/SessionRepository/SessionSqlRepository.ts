@@ -90,7 +90,6 @@ export class SessionSqlRepository implements SessionInterfaceRepository {
   saveSessionEnd(
     email: Email,
     ip: string,
-    expiresIn: TimestampMs,
     reason: SessionReasonType
   ): Promise<void> {
     return new Promise(async (resolve, reject) => {
@@ -100,13 +99,7 @@ export class SessionSqlRepository implements SessionInterfaceRepository {
             userEmail: email.getValue(),
             sessionType: SessionType.Session_End,
             ip: ip,
-            expiresIn: DateTimeService.parse(
-              {
-                date: expiresIn,
-                format: DATE_FORMATS.TimestampMs,
-              },
-              DATE_FORMATS.ISO_8601
-            ),
+            expiresIn: null,
             reason: SessionReasonType[reason],
           },
         });
@@ -116,11 +109,7 @@ export class SessionSqlRepository implements SessionInterfaceRepository {
       }
     });
   }
-  saveSessionRevoke(
-    email: Email,
-    ip: string,
-    expiresIn: TimestampMs
-  ): Promise<void> {
+  saveSessionRevoke(email: Email, ip: string): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
         await prisma.session.create({
@@ -128,13 +117,7 @@ export class SessionSqlRepository implements SessionInterfaceRepository {
             userEmail: email.getValue(),
             sessionType: SessionType.Session_Revoke,
             ip: ip,
-            expiresIn: DateTimeService.parse(
-              {
-                date: expiresIn,
-                format: DATE_FORMATS.TimestampMs,
-              },
-              DATE_FORMATS.ISO_8601
-            ),
+            expiresIn: null,
           },
         });
         resolve();

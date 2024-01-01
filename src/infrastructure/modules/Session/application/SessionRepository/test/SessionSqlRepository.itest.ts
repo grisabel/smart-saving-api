@@ -215,14 +215,11 @@ describe('La clase SessionSqlRepository', () => {
 
     const ip = '69.89.31.226';
 
-    const expiresIn = new Date().getTime() + 24 * 60 * 60 * 1000;
-
     //act
     await userRepository.save(user);
     await sessionRepository.saveSessionEnd(
       email,
       ip,
-      `${expiresIn}`,
       SessionReasonType.Session_User_Logout
     );
 
@@ -242,7 +239,6 @@ describe('La clase SessionSqlRepository', () => {
     expect(resul[0].sessionType).toEqual(SessionType.Session_End);
     expect(resul[0].userEmail).toEqual(email.getValue());
     expect(resul[0].ip).toEqual(ip);
-    expect(resul[0].expiresIn.getTime()).toEqual(expiresIn);
     expect(resul[0].reason).toEqual(SessionReasonType.Session_User_Logout);
   });
 
@@ -253,14 +249,11 @@ describe('La clase SessionSqlRepository', () => {
 
     const ip = '69.89.31.226';
 
-    const expiresIn = new Date().getTime();
-
     //act
     await userRepository.save(user);
     await sessionRepository.saveSessionEnd(
       email,
       ip,
-      `${expiresIn}`,
       SessionReasonType.Session_Token_Expired
     );
 
@@ -280,7 +273,6 @@ describe('La clase SessionSqlRepository', () => {
     expect(resul[0].sessionType).toEqual(SessionType.Session_End);
     expect(resul[0].userEmail).toEqual(email.getValue());
     expect(resul[0].ip).toEqual(ip);
-    expect(resul[0].expiresIn.getTime()).toEqual(expiresIn);
     expect(resul[0].reason).toEqual(SessionReasonType.Session_Token_Expired);
   });
 
@@ -291,11 +283,9 @@ describe('La clase SessionSqlRepository', () => {
 
     const ip = '69.89.31.226';
 
-    const expiresIn = new Date().getTime() + 24 * 60 * 60 * 1000;
-
     //act
     await userRepository.save(user);
-    await sessionRepository.saveSessionRevoke(email, ip, `${expiresIn}`);
+    await sessionRepository.saveSessionRevoke(email, ip);
 
     //assert
     const resul = await prisma.session.findMany({
@@ -313,6 +303,5 @@ describe('La clase SessionSqlRepository', () => {
     expect(resul[0].sessionType).toEqual(SessionType.Session_Revoke);
     expect(resul[0].userEmail).toEqual(email.getValue());
     expect(resul[0].ip).toEqual(ip);
-    expect(resul[0].expiresIn.getTime()).toEqual(expiresIn);
   });
 });

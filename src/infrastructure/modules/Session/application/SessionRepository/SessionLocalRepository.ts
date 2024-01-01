@@ -25,16 +25,11 @@ export class SessionLocalRepository implements SessionInterfaceRepository {
   saveSessionEnd(
     email: Email,
     ip: string,
-    expiresIn: TimestampMs,
     reason: SessionReasonType
   ): Promise<void> {
     return Promise.resolve();
   }
-  saveSessionRevoke(
-    email: Email,
-    ip: string,
-    expiresIn: TimestampMs
-  ): Promise<void> {
+  saveSessionRevoke(email: Email, ip: string): Promise<void> {
     return Promise.resolve();
   }
 }
