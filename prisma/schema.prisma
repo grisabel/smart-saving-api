@@ -47,7 +47,7 @@ model Session {
     id             String             @id @default(uuid())
     sessionType    SessionType
     createdAt      DateTime           @default(now())
-    expiresIn      DateTime
+    expiresIn      DateTime?
     ip             String
     reason         SessionReasonType?
     failuresNumber Int?
