@@ -69,7 +69,7 @@ export class OperationsIdSqlRepository
         .then((operation) => {
           resolve({
             email: operation.user.email,
-            expiresIn: operation.expiresIn.getTime(),
+            expiresIn: `${operation.expiresIn.getTime()}`,
             id: operation.id,
             type: OperationType[operation.type],
           });

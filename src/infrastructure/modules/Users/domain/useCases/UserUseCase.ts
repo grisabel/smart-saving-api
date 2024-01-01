@@ -82,7 +82,7 @@ export class UserUseCase {
           email: email.getValue(),
           id: Id.createId().getValue(),
           type: OperationType.RESET_PASSWORD,
-          expiresIn: DateTimeService.now() + 60 * 60 * 1000,
+          expiresIn: `${DateTimeService.now() + 60 * 60 * 1000}`,
         };
 
         await this.operationIdRepository.save(operation);

@@ -1,6 +1,6 @@
 export type DateString = string;
 export type DateFormat = string;
-export type TimestampMs = number;
+export type TimestampMs = string;
 
 export interface DateTimeModel {
   date: DateString;
