@@ -44,14 +44,14 @@ enum OperationType {
 }
 
 model Session {
-    id             String      @id @default(uuid())
-    createdAt      DateTime    @default(now())
+    id             String             @id @default(uuid())
+    sessionType    SessionType
+    createdAt      DateTime           @default(now())
     expiresIn      DateTime
     ip             String
-    sessionType    SessionType
-    reason         String?
+    reason         SessionReasonType?
     failuresNumber Int?
-    user           User        @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+    user           User               @relation(fields: [userEmail], references: [email], onDelete: Cascade)
     userEmail      String
 
     @@index([userEmail, createdAt])
@@ -62,6 +62,11 @@ enum SessionType {
     Session_End
     Session_Refresh
     Session_Revoke
+}
+
+enum SessionReasonType {
+    Session_Token_Expired
+    Session_User_Logout
 }
 
 model RevokeAccessToken {
