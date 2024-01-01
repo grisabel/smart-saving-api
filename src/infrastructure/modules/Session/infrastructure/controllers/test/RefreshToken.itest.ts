@@ -1,5 +1,6 @@
 import { prisma } from '@application/repository/db';
 import { TokenExample } from '@application/services/JWTService/test/Token.example';
+import { SessionType } from '@Session/application/SessionRepository/SessionInterfaceRepository';
 import axios from 'axios';
 
 describe('POST /session/token', () => {
@@ -32,6 +33,20 @@ describe('POST /session/token', () => {
     expect(res.data.accessToken.split('.').length).toEqual(3);
     expect(res.data.token_type).toEqual('bearer');
     expect(typeof res.data.expires).toBe('number');
+
+    const resul = await prisma.session.findMany({
+      where: {
+        userEmail: body.email,
+        sessionType: SessionType.Session_Refresh,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 1,
+    });
+    expect(resul.length).toEqual(1);
+    expect(resul[0].sessionType).toEqual(SessionType.Session_Refresh);
+    expect(resul[0].userEmail).toEqual(body.email);
   });
   it('debe retornar un status 422 si el formato de la petición no es válido', async () => {
     const body = {};

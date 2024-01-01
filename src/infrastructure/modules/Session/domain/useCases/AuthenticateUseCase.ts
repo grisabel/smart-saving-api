@@ -23,17 +23,25 @@ import { RefreshTokenResponseDto } from '@Session/infrastructure/dtos/response/R
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorResponseMapper';
 import { EmailError } from '@domain/models/Email/EmailError';
+import {
+  SessionInterfaceRepository,
+  SessionReasonType,
+} from '@Session/application/SessionRepository/SessionInterfaceRepository';
+import { SessionFactoryRepository } from '../../application/SessionRepository/SessionFactoryRepository';
+import { email } from '@infrastructure/middlewares/validators/body/EmailValidator';
 
 export class AuthenticateUseCase {
   constructor(
     private jwtService: typeof JWTService,
     private userRepository: UserInterfaceRepository,
-    private tokenRepository: RevokeAccessTokenInterfaceRepository
+    private tokenRepository: RevokeAccessTokenInterfaceRepository,
+    private sessionRepository: SessionInterfaceRepository
   ) {}
 
   authenticate(
     emailDto: string,
-    passwordDto: string
+    passwordDto: string,
+    ip: string
   ): Promise<[ErrorResponseDto | null, LoginResponseDto | null]> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -60,11 +68,21 @@ export class AuthenticateUseCase {
             expires: expiredIn,
           };
 
+          await this.sessionRepository.saveSessionStart(
+            email,
+            ip,
+            `${expiredIn}`,
+            true
+          );
+
           resolve([null, responseDto]);
         } else {
           const errorDto = ErrorResponseMapper.toResponseDto({
             message: 'Usuario o contraseña incorrectos',
           });
+
+          await this.sessionRepository.saveSessionStart(email, ip, null, false);
+
           resolve([errorDto, null]);
         }
       } catch (error) {
@@ -84,7 +102,8 @@ export class AuthenticateUseCase {
   }
 
   async verifyRefreshToken(
-    refreshToken: string
+    refreshToken: string,
+    ip: string
   ): Promise<[ErrorResponseDto | null, RefreshTokenResponseDto | null]> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -105,6 +124,12 @@ export class AuthenticateUseCase {
           token_type: 'bearer',
           expires: expiredIn,
         };
+
+        await this.sessionRepository.saveSessionRefresh(
+          Email.createFromText(tokenDetails.sub),
+          ip,
+          `${expiredIn}`
+        );
 
         resolve([null, dto]);
       } catch (error) {
@@ -148,12 +173,31 @@ export class AuthenticateUseCase {
     });
   }
 
+  async logoutAccessToken(
+    email: Email,
+    ip: string,
+    reason: SessionReasonType
+  ): Promise<[ErrorResponseDto | null, null]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.sessionRepository.saveSessionEnd(email, ip, reason);
+
+        resolve([null, null]);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   async revokeAccessToken(
-    accessToken: string
+    accessToken: string,
+    email: Email,
+    ip: string
   ): Promise<[ErrorResponseDto | null, null]> {
     return new Promise(async (resolve, reject) => {
       try {
         await this.tokenRepository.save(accessToken);
+        await this.sessionRepository.saveSessionRevoke(email, ip);
 
         resolve([null, null]);
       } catch (error) {
@@ -170,11 +214,13 @@ export class AuthenticateUseCaseFactory {
     if (!AuthenticateUseCaseFactory.instance) {
       const userRepository = UserFactoryRepository.getInstance();
       const tokenRepository = TokenFactoryRepository.getInstance();
+      const sessionRepository = SessionFactoryRepository.getInstance();
 
       AuthenticateUseCaseFactory.instance = new AuthenticateUseCase(
         JWTService,
         userRepository,
-        tokenRepository
+        tokenRepository,
+        sessionRepository
       );
     }
     return AuthenticateUseCaseFactory.instance;

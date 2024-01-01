@@ -83,10 +83,28 @@ const verifyRefreshToken = (
 export interface VerifyAcessTokenResponse {
   sub: string;
 }
-const verifyAcessToken = (refreshToken: string): VerifyAcessTokenResponse => {
+const verifyAcessToken = (accessToken: string): VerifyAcessTokenResponse => {
   try {
-    jwt.verify(refreshToken, config.JWT.ACCESS_TOKEN.PRIVATE_KEY);
-    const decodedToken = jwt.decode(refreshToken, { json: true });
+    jwt.verify(accessToken, config.JWT.ACCESS_TOKEN.PRIVATE_KEY);
+    const decodedToken = jwt.decode(accessToken, { json: true });
+
+    return {
+      sub: decodedToken.sub,
+    };
+  } catch (error) {
+    throw new JWTServiceError({
+      verifyTokenError: JWR_SERVICE_ERROR.verifyAcessTokenError,
+    });
+  }
+};
+
+export interface TokenDecodeResponse {
+  sub: string;
+}
+
+const decodeToken = (token: string): TokenDecodeResponse => {
+  try {
+    const decodedToken = jwt.decode(token, { json: true });
 
     return {
       sub: decodedToken.sub,
@@ -103,4 +121,5 @@ export default {
   createRefreshToken,
   verifyRefreshToken,
   verifyAcessToken,
+  decodeToken,
 };

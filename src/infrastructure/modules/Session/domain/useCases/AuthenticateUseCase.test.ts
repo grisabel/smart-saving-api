@@ -7,23 +7,31 @@ import { RevokeAccessTokenInterfaceRepository } from '@Session/application/Token
 import { TokenExample } from '@application/services/JWTService/test/Token.example';
 
 import JWTService from '@application/services/JWTService';
+import { SessionInterfaceRepository } from '@Session/application/SessionRepository/SessionInterfaceRepository';
+import { SessionLocalRepository } from '@Session/application/SessionRepository/SessionLocalRepository';
 
 import { AuthenticateUseCase } from './AuthenticateUseCase';
+import { Email } from '@domain/models/Email';
 
 describe('La clase AuthenticationUseCase', () => {
   let userRepository: UserInterfaceRepository;
   let tokenRepository: RevokeAccessTokenInterfaceRepository;
   let jwtTokenService: typeof JWTService;
+  let sessionRepository: SessionInterfaceRepository;
+
   let authenticationUseCase: AuthenticateUseCase;
 
   beforeEach(() => {
     userRepository = new UserLocalRepository();
     tokenRepository = new TokenLocalRepository();
     jwtTokenService = JWTService;
+    sessionRepository = new SessionLocalRepository();
+
     authenticationUseCase = new AuthenticateUseCase(
       jwtTokenService,
       userRepository,
-      tokenRepository
+      tokenRepository,
+      sessionRepository
     );
   });
 
@@ -33,12 +41,13 @@ describe('La clase AuthenticationUseCase', () => {
       const user1 = UserExample.user1_text();
       const emailDTO = user1.getEmail().getValue();
       const passwordDTO = user1.getPassword().getValue();
-
+      const ip = '69.89.31.226';
       //act
       await userRepository.save(user1);
       const [error, resultDto] = await authenticationUseCase.authenticate(
         emailDTO,
-        passwordDTO
+        passwordDTO,
+        ip
       );
 
       //asert
@@ -53,11 +62,13 @@ describe('La clase AuthenticationUseCase', () => {
       const user1 = UserExample.user1_text();
       const emailDTO = user1.getEmail().getValue();
       const passwordDTO = user1.getPassword().getValue();
+      const ip = '69.89.31.226';
 
       //act
       const [error, resultDto] = await authenticationUseCase.authenticate(
         emailDTO,
-        passwordDTO
+        passwordDTO,
+        ip
       );
 
       //asert
@@ -69,12 +80,14 @@ describe('La clase AuthenticationUseCase', () => {
       const user1 = UserExample.user1_text();
       const emailDTO = user1.getEmail().getValue();
       const passwordDTO = user1.getPassword().getValue() + '0';
+      const ip = '69.89.31.226';
 
       //act
       await userRepository.save(user1);
       const [error, resultDto] = await authenticationUseCase.authenticate(
         emailDTO,
-        passwordDTO
+        passwordDTO,
+        ip
       );
 
       //asert
@@ -88,16 +101,21 @@ describe('La clase AuthenticationUseCase', () => {
       const user1 = UserExample.user1_text();
       const emailDTO = user1.getEmail().getValue();
       const passwordDTO = user1.getPassword().getValue();
+      const ip = '69.89.31.226';
 
       //act
       await userRepository.save(user1);
       const [, loginDto] = await authenticationUseCase.authenticate(
         emailDTO,
-        passwordDTO
+        passwordDTO,
+        ip
       );
 
       const [, verifyRTokenDto] =
-        await authenticationUseCase.verifyRefreshToken(loginDto.refreshToken);
+        await authenticationUseCase.verifyRefreshToken(
+          loginDto.refreshToken,
+          ip
+        );
 
       //asert
       expect(verifyRTokenDto.accessToken.split('.').length).toEqual(3);
@@ -107,10 +125,12 @@ describe('La clase AuthenticationUseCase', () => {
     it('debe lanzar un error si el refreshToken no existe', async () => {
       //arrange
       const refreshToken = TokenExample.refreshToken();
+      const ip = '69.89.31.226';
 
       //act
       const [error] = await authenticationUseCase.verifyRefreshToken(
-        refreshToken
+        refreshToken,
+        ip
       );
 
       //asert
@@ -118,11 +138,13 @@ describe('La clase AuthenticationUseCase', () => {
     });
     it('debe lanzar un error si el refreshToken no es válido', async () => {
       const refreshToken = TokenExample.invalidToken();
+      const ip = '69.89.31.226';
 
       //act
       await tokenRepository.save(refreshToken);
       const [error] = await authenticationUseCase.verifyRefreshToken(
-        refreshToken
+        refreshToken,
+        ip
       );
 
       //asert
@@ -133,10 +155,12 @@ describe('La clase AuthenticationUseCase', () => {
   describe('el método revokeAccessToken', () => {
     it('debe añadir un accessToken al repositorio de token', async () => {
       //arrange
+      const email = Email.createFromText('test@test.com');
       const accessToken = TokenExample.accessToken();
+      const ip = '69.89.31.226';
 
       //act
-      await authenticationUseCase.revokeAccessToken(accessToken);
+      await authenticationUseCase.revokeAccessToken(accessToken, email, ip);
       const savedToken = await tokenRepository.find(accessToken);
 
       //asert

@@ -9,7 +9,7 @@ export class OperationExample {
       email: 'isabelchele26@gmail.com',
       id: Id.createId().getValue(),
       type: OperationType.RESET_PASSWORD,
-      expiresIn: DateTimeService.now() + 60 * 60 * 1000,
+      expiresIn: `${DateTimeService.now() + 60 * 60 * 1000}`,
     };
   }
   static operationResetPasswordExpired(): Operation {
@@ -17,12 +17,9 @@ export class OperationExample {
       email: 'isabelchele26@gmail.com',
       id: Id.createId().getValue(),
       type: OperationType.RESET_PASSWORD,
-      expiresIn: parseInt(
-        DateTimeService.parse(
-          { date: '29/12/2023', format: DATE_FORMATS.Date },
-          DATE_FORMATS.TimestampMs
-        ),
-        10
+      expiresIn: DateTimeService.parse(
+        { date: '29/12/2023', format: DATE_FORMATS.Date },
+        DATE_FORMATS.TimestampMs
       ),
     };
   }
@@ -31,7 +28,7 @@ export class OperationExample {
       email: 'operationResetPasswordWithoutUser@gmail.com',
       id: Id.createId().getValue(),
       type: OperationType.RESET_PASSWORD,
-      expiresIn: DateTimeService.now() + 60 * 60 * 1000,
+      expiresIn: `${DateTimeService.now() + 60 * 60 * 1000}`,
     };
   }
 
@@ -40,7 +37,7 @@ export class OperationExample {
       email: 'isabelchele26@gmail.com',
       id: Id.createId().getValue(),
       type: OperationType.DELETE_ACCOUNT,
-      expiresIn: DateTimeService.now() + 15 * 24 * 60 * 60 * 1000,
+      expiresIn: `${DateTimeService.now() + 15 * 24 * 60 * 60 * 1000}`,
     };
   }
   static operationDeleteAccountExpired(): Operation {
@@ -48,12 +45,9 @@ export class OperationExample {
       email: 'isabelchele26@gmail.com',
       id: Id.createId().getValue(),
       type: OperationType.DELETE_ACCOUNT,
-      expiresIn: parseInt(
-        DateTimeService.parse(
-          { date: '29/12/2023', format: DATE_FORMATS.Date },
-          DATE_FORMATS.TimestampMs
-        ),
-        10
+      expiresIn: DateTimeService.parse(
+        { date: '29/12/2023', format: DATE_FORMATS.Date },
+        DATE_FORMATS.TimestampMs
       ),
     };
   }
