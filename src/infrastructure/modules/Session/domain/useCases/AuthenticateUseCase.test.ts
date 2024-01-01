@@ -11,6 +11,7 @@ import { SessionInterfaceRepository } from '@Session/application/SessionReposito
 import { SessionLocalRepository } from '@Session/application/SessionRepository/SessionLocalRepository';
 
 import { AuthenticateUseCase } from './AuthenticateUseCase';
+import { Email } from '@domain/models/Email';
 
 describe('La clase AuthenticationUseCase', () => {
   let userRepository: UserInterfaceRepository;
@@ -154,10 +155,12 @@ describe('La clase AuthenticationUseCase', () => {
   describe('el método revokeAccessToken', () => {
     it('debe añadir un accessToken al repositorio de token', async () => {
       //arrange
+      const email = Email.createFromText('test@test.com');
       const accessToken = TokenExample.accessToken();
+      const ip = '69.89.31.226';
 
       //act
-      await authenticationUseCase.revokeAccessToken(accessToken);
+      await authenticationUseCase.revokeAccessToken(accessToken, email, ip);
       const savedToken = await tokenRepository.find(accessToken);
 
       //asert

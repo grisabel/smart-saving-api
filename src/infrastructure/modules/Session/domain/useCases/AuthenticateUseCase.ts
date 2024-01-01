@@ -25,6 +25,7 @@ import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorRespo
 import { EmailError } from '@domain/models/Email/EmailError';
 import { SessionInterfaceRepository } from '@Session/application/SessionRepository/SessionInterfaceRepository';
 import { SessionFactoryRepository } from '../../application/SessionRepository/SessionFactoryRepository';
+import { email } from '@infrastructure/middlewares/validators/body/EmailValidator';
 
 export class AuthenticateUseCase {
   constructor(
@@ -170,11 +171,14 @@ export class AuthenticateUseCase {
   }
 
   async revokeAccessToken(
-    accessToken: string
+    accessToken: string,
+    email: Email,
+    ip: string
   ): Promise<[ErrorResponseDto | null, null]> {
     return new Promise(async (resolve, reject) => {
       try {
         await this.tokenRepository.save(accessToken);
+        await this.sessionRepository.saveSessionRevoke(email, ip);
 
         resolve([null, null]);
       } catch (error) {

@@ -1,10 +1,12 @@
 import { prisma } from '@application/repository/db';
+import { SessionType } from '@infrastructure/modules/Session/application/SessionRepository/SessionInterfaceRepository';
 import axios from 'axios';
 
 describe('POST /session/revoke', () => {
   beforeEach(async () => {
     await prisma.user.deleteMany();
     await prisma.revokeAccessToken.deleteMany();
+    await prisma.session.deleteMany();
   });
   it('debe retornar un status 201 y revocar accessToken', async () => {
     const body = {
@@ -38,6 +40,19 @@ describe('POST /session/revoke', () => {
     );
 
     expect(res.status).toBe(201);
+    const resul = await prisma.session.findMany({
+      where: {
+        userEmail: body.email,
+        sessionType: SessionType.Session_Revoke,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 1,
+    });
+    expect(resul.length).toEqual(1);
+    expect(resul[0].sessionType).toEqual(SessionType.Session_Revoke);
+    expect(resul[0].userEmail).toEqual(body.email);
 
     let throwError;
     const response401 = {

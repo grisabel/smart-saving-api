@@ -83,10 +83,10 @@ const verifyRefreshToken = (
 export interface VerifyAcessTokenResponse {
   sub: string;
 }
-const verifyAcessToken = (refreshToken: string): VerifyAcessTokenResponse => {
+const verifyAcessToken = (accessToken: string): VerifyAcessTokenResponse => {
   try {
-    jwt.verify(refreshToken, config.JWT.ACCESS_TOKEN.PRIVATE_KEY);
-    const decodedToken = jwt.decode(refreshToken, { json: true });
+    jwt.verify(accessToken, config.JWT.ACCESS_TOKEN.PRIVATE_KEY);
+    const decodedToken = jwt.decode(accessToken, { json: true });
 
     return {
       sub: decodedToken.sub,

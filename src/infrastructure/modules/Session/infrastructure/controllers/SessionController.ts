@@ -9,6 +9,7 @@ import { RefreshTokenRequestDto } from '@Session/infrastructure/dtos/request/Ref
 import { RefreshTokenResponseDto } from '@Session/infrastructure/dtos/response/RefreshTokenResponseDto';
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 import { RevokeAccessTokenRequestDto } from '../dtos/request/RevokeAccessTokenRequestDto';
+import { Email } from '@domain/models/Email';
 
 const authenticateUseCase = AuthenticateUseCaseFactory.getIntance();
 
@@ -85,8 +86,15 @@ const revokeAccessToken = async (
   try {
     const body = req.body;
 
+    // TODO nginx
+    const ip =
+      (req.headers?.['x-forwarded-for'] as string) ||
+      req?.socket?.remoteAddress;
+
     const [error] = await authenticateUseCase.revokeAccessToken(
-      body.accessToken
+      body.accessToken,
+      Email.createFromText(req.user.email),
+      ip ?? ''
     );
 
     if (error) {
