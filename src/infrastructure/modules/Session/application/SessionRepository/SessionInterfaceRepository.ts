@@ -23,13 +23,13 @@ export interface SessionInterfaceRepository {
   saveSessionRefresh(
     email: Email,
     ip: string,
-    expiresIn: TimestampMs,
-    reason: SessionReasonType
+    expiresIn: TimestampMs
   ): Promise<void>;
   saveSessionEnd(
     email: Email,
     ip: string,
-    expiresIn: TimestampMs
+    expiresIn: TimestampMs,
+    reason: SessionReasonType
   ): Promise<void>;
   saveSessionRevoke(
     email: Email,
