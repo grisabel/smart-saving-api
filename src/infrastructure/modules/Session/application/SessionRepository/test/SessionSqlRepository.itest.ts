@@ -141,6 +141,41 @@ describe('La clase SessionSqlRepository', () => {
     expect(resul[0].failuresNumber).toEqual(3);
   });
 
+  it('debe almacernar el inicio de una sesión fallida y resetear el numero de intentos fallidos con una nueva sesión', async () => {
+    //arange
+    const user = UserExample.real_user_text();
+    const email = user.getEmail();
+
+    const ip = '69.89.31.226';
+
+    //act
+    await userRepository.save(user);
+    await sessionRepository.saveSessionStart(email, ip, null, false);
+    await sessionRepository.saveSessionStart(email, ip, null, false);
+    await sessionRepository.saveSessionStart(
+      email,
+      ip,
+      `${new Date().getTime() + 24 * 60 * 60 * 1000}`,
+      true
+    );
+
+    //assert
+    const resul = await prisma.session.findMany({
+      where: {
+        userEmail: email.getValue(),
+        sessionType: SessionType.Session_Start,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 1,
+    });
+
+    expect(resul.length).toEqual(1);
+    expect(resul[0].sessionType).toEqual(SessionType.Session_Start);
+    expect(resul[0].failuresNumber).toEqual(0);
+  });
+
   it('debe almacernar el refresco de una sesión exitosa', async () => {
     //arange
     const user = UserExample.real_user_text();

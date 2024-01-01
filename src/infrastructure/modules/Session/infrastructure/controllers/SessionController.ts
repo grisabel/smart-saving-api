@@ -19,10 +19,15 @@ const loginUser = async (
 ) => {
   try {
     const body = req.body;
+    // TODO nginx
+    const ip =
+      (req.headers?.['x-forwarded-for'] as string) ||
+      req?.socket?.remoteAddress;
 
     const [errorDto, responseDto] = await authenticateUseCase.authenticate(
       body.email,
-      body.password
+      body.password,
+      ip ?? ''
     );
 
     if (errorDto) {
