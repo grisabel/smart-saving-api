@@ -61,7 +61,7 @@ describe('La clase SessionSqlRepository', () => {
 
     const ip = '69.89.31.226';
 
-    const expiresIn = new Date().getTime() + 24 * 60 * 60 * 1000;
+    const expiresIn = null;
 
     const isLoginSuccess = false;
 
@@ -90,7 +90,7 @@ describe('La clase SessionSqlRepository', () => {
     expect(resul[0].sessionType).toEqual(SessionType.Session_Start);
     expect(resul[0].userEmail).toEqual(email.getValue());
     expect(resul[0].ip).toEqual(ip);
-    expect(resul[0].expiresIn.getTime()).toEqual(expiresIn);
+    expect(resul[0].expiresIn).toEqual(expiresIn);
     expect(resul[0].failuresNumber).toEqual(1);
   });
 

@@ -17,7 +17,7 @@ export interface SessionInterfaceRepository {
   saveSessionStart(
     email: Email,
     ip: string,
-    expiresIn: TimestampMs,
+    expiresIn: TimestampMs | null,
     isLoginSuccess: boolean
   ): Promise<void>;
   saveSessionRefresh(

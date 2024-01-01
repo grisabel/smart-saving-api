@@ -13,7 +13,7 @@ export class SessionSqlRepository implements SessionInterfaceRepository {
   saveSessionStart(
     email: Email,
     ip: string,
-    expiresIn: TimestampMs,
+    expiresIn: TimestampMs | null,
     isLoginSuccess: boolean
   ): Promise<void> {
     return new Promise(async (resolve, reject) => {
@@ -42,13 +42,15 @@ export class SessionSqlRepository implements SessionInterfaceRepository {
             userEmail: email.getValue(),
             sessionType: SessionType.Session_Start,
             ip: ip,
-            expiresIn: DateTimeService.parse(
-              {
-                date: expiresIn,
-                format: DATE_FORMATS.TimestampMs,
-              },
-              DATE_FORMATS.ISO_8601
-            ),
+            expiresIn: isLoginSuccess
+              ? DateTimeService.parse(
+                  {
+                    date: expiresIn,
+                    format: DATE_FORMATS.TimestampMs,
+                  },
+                  DATE_FORMATS.ISO_8601
+                )
+              : null,
             failuresNumber: failuresNumber,
           },
         });
