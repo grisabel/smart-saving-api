@@ -1,0 +1,1278 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "SmartSavings API",
+      "description": "Formal specification of endpoints to be used in the SmartSavings Platform",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000"
+      }
+    ],
+    "tags": [
+      {
+        "name": "test",
+        "description": "Test endpoint"
+      },
+      {
+        "name": "session",
+        "description": "Operations about user session"
+      },
+      {
+        "name": "user",
+        "description": "Operations about user"
+      },
+      {
+        "name": "financial control",
+        "description": "Operations about financial control"
+      },
+      {
+        "name": "financial tools",
+        "description": "Tools about financial"
+      },
+      {
+        "name": "contact form",
+        "description": "contact form"
+      }
+    ],
+    "paths": {
+      "/status": {
+        "get": {
+          "tags": [
+            "test"
+          ],
+          "summary": "Check if server is running",
+          "description": "",
+          "operationId": "getStatus",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "OK"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/session/login": {
+        "post": {
+          "tags": [
+            "session"
+          ],
+          "summary": "Logs user into the system",
+          "description": "Allows a user to log in",
+          "operationId": "loginUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginUser"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid username/password supplied"
+            }
+          }
+        }
+      },
+      "/session/token": {
+        "post": {
+          "tags": [
+            "session"
+          ],
+          "summary": "Obtain an accessToken by refreshToken",
+          "description": "Use RefreshToken",
+          "operationId": "refreshToken",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshToken"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid username/password supplied"
+            }
+          }
+        }
+      },
+      "/session/logout": {
+        "post": {
+          "tags": [
+            "session"
+          ],
+          "summary": "Logs out current logged in user session",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "logoutUser",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshToken"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/session/revoke": {
+        "post": {
+          "tags": [
+            "session"
+          ],
+          "summary": "Revoke accessToken",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "revokeToken",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessToken"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/register": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Create user",
+          "description": "Create a user account",
+          "operationId": "createUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/info": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Get user by user id",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "getUserById",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/reset-password": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Reset Password",
+          "description": "Reset a user's password.",
+          "operationId": "resetPassword",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordBody"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/reset-password/{operationId}/confirm": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Confirm Password Reset",
+          "description": "Confirm a user's password reset.",
+          "operationId": "resetPasswordConfirm",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordConfirmBody"
+                }
+              }
+            }
+          },
+          "parameters": [
+            {
+              "in": "path",
+              "name": "operationId",
+              "schema": {
+                "type": "string",
+                "example": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+              },
+              "required": true,
+              "description": "Numeric ID of the user to get"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/account": {
+        "delete": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Delete user",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "deleteUser",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DeleteUserReponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/account/{operationId}/confirm": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Delete user",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "deleteUserConfirm",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteUserConfirmBody"
+                }
+              }
+            }
+          },
+          "parameters": [
+            {
+              "in": "path",
+              "name": "operationId",
+              "schema": {
+                "type": "string",
+                "example": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+              },
+              "required": true,
+              "description": "Numeric ID of the user to get"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/income": {
+        "post": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Add Income",
+          "description": "Add an income.",
+          "operationId": "financialControlIncome",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlIncomeBody"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/expense": {
+        "post": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Add Expense",
+          "description": "Add an expense.",
+          "operationId": "financialControlExpense",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlExpenseBody"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/global-summary": {
+        "get": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Get user by user id",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlGlobalSummary",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlGlobalSummaryResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/habits": {
+        "get": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Get a user's habits",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlHabits",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/custom-concept": {
+        "post": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Add custom concept",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlCustomConcept",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlCustomConcept"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/custom-concept/{type}": {
+        "get": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Get custom concept",
+          "description": "Get the list of concepts that can be customised.",
+          "operationId": "financialControlListCustomConcept",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "type",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "income",
+                  "expense"
+                ]
+              },
+              "required": true,
+              "description": "Numeric ID of the user to get"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlCustomConceptList"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/reports/income": {
+        "get": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Get income report",
+          "description": "Get an income report",
+          "operationId": "financialControlReportIncome",
+          "parameters": [
+            {
+              "name": "dateFrom",
+              "in": "query",
+              "description": "Initial date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "31/01/2023",
+                "format": "date",
+                "pattern": "DD/MM/YYYY"
+              }
+            },
+            {
+              "name": "dateTo",
+              "in": "query",
+              "description": "Final date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "28/02/2023",
+                "format": "date",
+                "pattern": "DD/MM/YYYY"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlReportIncomeResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/reports/income/{concept}": {
+        "get": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Get income report",
+          "description": "Get a detailed income report.",
+          "operationId": "financialControlReportIncomeDetails",
+          "parameters": [
+            {
+              "name": "concept",
+              "in": "path",
+              "description": "Concept to which to obtain details",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Salario"
+              }
+            },
+            {
+              "name": "dateFrom",
+              "in": "query",
+              "description": "Initial date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "31/01/2023",
+                "format": "date",
+                "pattern": "DD/MM/YYYY"
+              }
+            },
+            {
+              "name": "dateTo",
+              "in": "query",
+              "description": "Final date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "28/02/2023",
+                "format": "date",
+                "pattern": "DD/MM/YYYY"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlReportIncomeDetailsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/reports/expense": {
+        "get": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Get expense report",
+          "description": "Get an expense report",
+          "operationId": "financialControlReportExpense",
+          "parameters": [
+            {
+              "name": "dateFrom",
+              "in": "query",
+              "description": "Initial date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "30/01/2023",
+                "format": "date",
+                "pattern": "DD/MM/YYYY"
+              }
+            },
+            {
+              "name": "dateTo",
+              "in": "query",
+              "description": "Final date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "28/02/2023",
+                "format": "date",
+                "pattern": "DD/MM/YYYY"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlReportExpenseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/reports/expense/{concept}": {
+        "get": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Get expense report",
+          "description": "Get a detailed expense report",
+          "operationId": "financialControlReportExpenseDetails",
+          "parameters": [
+            {
+              "name": "concept",
+              "in": "path",
+              "description": "Concepto al cual obtener los detalles",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Salary"
+              }
+            },
+            {
+              "name": "dateFrom",
+              "in": "query",
+              "description": "Initial date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "30/01/2023",
+                "format": "date",
+                "pattern": "DD/MM/YYYY"
+              }
+            },
+            {
+              "name": "dateTo",
+              "in": "query",
+              "description": "Final date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "28/02/2023",
+                "format": "date",
+                "pattern": "DD/MM/YYYY"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlReportExpenseDetailsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-tools/compound-interest": {
+        "get": {
+          "tags": [
+            "financial tools"
+          ],
+          "summary": "Get compound interest",
+          "description": "Get compound interest",
+          "operationId": "financialToolsCompoundInterest",
+          "parameters": [
+            {
+              "name": "seed_capital",
+              "in": "query",
+              "description": "Seed Capital",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 10000
+              }
+            },
+            {
+              "name": "periodic_contribution",
+              "in": "query",
+              "description": "Periodic annual contribution",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 1000
+              }
+            },
+            {
+              "name": "annual_interest_rate",
+              "in": "query",
+              "description": "Annual interest rate",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 2.5
+              }
+            },
+            {
+              "name": "investment_period",
+              "in": "query",
+              "description": "Investment period in years",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 10
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialToolsCompoundInterestResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/marketing/contact-form": {
+        "post": {
+          "tags": [
+            "contact form"
+          ],
+          "summary": "Add Contact Form",
+          "description": "Add Contact Form.",
+          "operationId": "MarketingContactForm",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketingContactFormRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "User": {
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "type": "string",
+              "example": "User Name"
+            },
+            "lastName": {
+              "type": "string",
+              "example": "User Surname"
+            },
+            "dateBirth": {
+              "type": "string",
+              "example": "14/10/1997",
+              "format": "date",
+              "pattern": "DD/MM/YYYY"
+            },
+            "objetive": {
+              "type": "string",
+              "example": "Personal Objetive"
+            },
+            "email": {
+              "type": "string",
+              "example": "isabelchele26@gmail.com"
+            },
+            "repeatEmail": {
+              "type": "string",
+              "example": "isabelchele26@gmail.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "Shena@2017"
+            },
+            "repeatPassword": {
+              "type": "string",
+              "example": "Shena@2017"
+            }
+          }
+        },
+        "LoginUser": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "example": "isabelchele26@gmail.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "Shena@2017"
+            }
+          }
+        },
+        "RefreshToken": {
+          "type": "object",
+          "properties": {
+            "refreshToken": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDM1MjczNzcsImV4cCI6MTcwMzYxMzc3Nywic3ViIjoidGVzdEB0ZXN0LmNvbSJ9.s9rDV-zVSLllLje7GjtAy6Sl2nV8SJ9DP4IYnEvDEbc"
+            }
+          }
+        },
+        "AccessToken": {
+          "type": "object",
+          "properties": {
+            "accessToken": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InNtYXJ0LXNhdmluZy1hcGkiLCJpYXQiOjE3MDM3ODQyNTgsImV4cCI6MTcwMzc4NTE1OCwic3ViIjoidGVzdEB0ZXN0LmNvbSJ9.rJL4l6Ka56eWyvpWhBDe7ZmjjykiQZEQAUE0c0CQrBE"
+            }
+          }
+        },
+        "DeleteUserConfirmBody": {
+          "type": "object",
+          "properties": {
+            "password": {
+              "type": "string",
+              "example": "12345@Aa"
+            }
+          }
+        },
+        "ResetPasswordBody": {
+          "type": "object",
+          "properties": {
+            "dateBirth": {
+              "type": "string",
+              "example": "14/10/1997",
+              "format": "date",
+              "pattern": "DD/MM/YYYY"
+            },
+            "email": {
+              "type": "string",
+              "example": "isabelchele26@gmail.com"
+            }
+          }
+        },
+        "ResetPasswordConfirmBody": {
+          "type": "object",
+          "properties": {
+            "password": {
+              "type": "string",
+              "example": "12345@Aa"
+            },
+            "repeatPassword": {
+              "type": "string",
+              "example": "12345@Aa"
+            }
+          }
+        },
+        "FinancialControlIncomeBody": {
+          "type": "object",
+          "properties": {
+            "concept": {
+              "type": "string",
+              "example": "Salario"
+            },
+            "amount": {
+              "type": "number",
+              "example": "1500.25"
+            },
+            "date": {
+              "type": "string",
+              "example": "30/01/2023",
+              "format": "date",
+              "pattern": "DD/MM/YYYY"
+            },
+            "note": {
+              "type": "string",
+              "example": "Extra pay"
+            }
+          }
+        },
+        "FinancialControlExpenseBody": {
+          "type": "object",
+          "properties": {
+            "concept": {
+              "type": "string",
+              "example": "Feed"
+            },
+            "amount": {
+              "type": "number",
+              "example": "176.25"
+            },
+            "date": {
+              "type": "string",
+              "example": "30/01/2023",
+              "format": "date",
+              "pattern": "DD/MM/YYYY"
+            },
+            "note": {
+              "type": "string",
+              "example": "holiday supermarket"
+            }
+          }
+        },
+        "DeleteUserReponse": {
+          "type": "object",
+          "properties": {
+            "operationId": {
+              "type": "string",
+              "example": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+            }
+          }
+        },
+        "FinancialControlGlobalSummaryResponse": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "incomes": {
+                "type": "number",
+                "example": "3076.25"
+              },
+              "expenses": {
+                "type": "number",
+                "example": "987.25"
+              }
+            }
+          }
+        },
+        "FinancialControlHabitsResponse": {
+          "type": "object",
+          "properties": {
+            "alimentation": {
+              "type": "object",
+              "properties": {
+                "avegare_monthly": {
+                  "type": "number",
+                  "example": "448.25"
+                }
+              }
+            },
+            "vehicle": {
+              "type": "object",
+              "properties": {
+                "month_highest_expenditure": {
+                  "type": "string",
+                  "example": "04/2023",
+                  "format": "date",
+                  "pattern": "MM/YYYY"
+                }
+              }
+            },
+            "restaurant": {
+              "type": "object",
+              "properties": {
+                "total_record": {
+                  "type": "number",
+                  "example": 10
+                }
+              }
+            },
+            "ant_expenses": {
+              "type": "object",
+              "properties": {
+                "total_amount": {
+                  "type": "number",
+                  "example": 125.1
+                }
+              }
+            }
+          }
+        },
+        "FinancialControlCustomConcept": {
+          "type": "object",
+          "properties": {
+            "concept": {
+              "type": "string",
+              "example": "Expenses Pets"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "income",
+                "expense"
+              ],
+              "example": "income"
+            }
+          }
+        },
+        "FinancialControlCustomConceptList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 1
+              },
+              "concept": {
+                "type": "string",
+                "example": "Feed"
+              }
+            }
+          }
+        },
+        "FinancialControlReportIncomeResponse": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "concept": {
+                "type": "string",
+                "example": "Salary"
+              },
+              "amount": {
+                "type": "number",
+                "example": 1754.5
+              }
+            }
+          }
+        },
+        "FinancialControlReportExpenseResponse": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "concept": {
+                "type": "string",
+                "example": "Feed"
+              },
+              "amount": {
+                "type": "number",
+                "example": 675.5
+              }
+            }
+          }
+        },
+        "FinancialControlReportIncomeDetailsResponse": {
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date",
+                "pattern": "DD/MM/YYYY",
+                "example": "30/01/2023"
+              },
+              "amount": {
+                "type": "number",
+                "example": 500.5
+              },
+              "note": {
+                "type": "string",
+                "example": "Dividends"
+              }
+            }
+          }
+        },
+        "FinancialControlReportExpenseDetailsResponse": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date",
+                "pattern": "DD/MM/YYYY",
+                "example": "15/01/2023"
+              },
+              "amount": {
+                "type": "number",
+                "example": 500.5
+              },
+              "note": {
+                "type": "string",
+                "example": "Purchase first fortnight"
+              }
+            }
+          }
+        },
+        "FinancialToolsCompoundInterestResponse": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date",
+                "pattern": "YYYY",
+                "example": "2023"
+              },
+              "amount": {
+                "type": "number",
+                "example": 10000
+              }
+            }
+          }
+        },
+        "MarketingContactFormRequest": {
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "type": "string",
+              "example": "User Name"
+            },
+            "lastName": {
+              "type": "string",
+              "example": "User Surname"
+            },
+            "email": {
+              "type": "string",
+              "example": "isabelchele26@gmail.com"
+            },
+            "subject": {
+              "type": "string",
+              "example": "Subject"
+            },
+            "message": {
+              "type": "string",
+              "example": "Message"
+            }
+          }
+        },
+        "ApiResponse": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "type": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "xml": {
+            "name": "##default"
+          }
+        }
+      },
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    },
+    "security": [
+      {"bearerAuth": []}
+    ]
+  }

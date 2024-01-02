@@ -1,0 +1,57 @@
+{
+  "name": "smart-savings-api",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/smart-savings-api",
+        "main": "src/main.ts",
+        "tsConfig": "tsconfig.app.json",
+        "assets": ["src/assets"]
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {},
+      "configurations": {
+        "development": {
+          "buildTarget": "smart-savings-api:build:development",
+          "runtimeArgs": ["--require=./module-alias-bootstrap.js", "--require=dotenv/config"]
+        },
+        "production": {
+          "buildTarget": "smart-savings-api:build:production",
+          "runtimeArgs": ["--require=./module-alias-bootstrap.js", "--require=dotenv/config"]
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["./src/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
+      "options": {
+        "jestConfig": "jest.config.js"
+      }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f Dockerfile . -t smart-savings-api"
+    }
+  },
+  "tags": []
+}
