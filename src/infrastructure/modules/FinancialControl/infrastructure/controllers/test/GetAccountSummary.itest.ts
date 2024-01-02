@@ -55,7 +55,7 @@ describe('El endpoint GET /financial-control/accounts/0/summary', () => {
       password: 'Aabb@1',
       repeatPassword: 'Aabb@1',
     };
-    const accountNumber = 0;
+    const accountNumber = 1;
 
     let throwError;
     const response401 = {

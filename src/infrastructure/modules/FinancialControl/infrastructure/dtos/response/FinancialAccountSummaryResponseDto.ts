@@ -1,4 +1,4 @@
 export interface FinancialAccountSummaryResponseDto {
-    incomes: number,
-    expenses: number
+    incomes: number[],
+    expenses: number[]
 }

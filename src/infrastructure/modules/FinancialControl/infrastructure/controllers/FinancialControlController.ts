@@ -6,7 +6,8 @@ import { FinancialAccountSummaryRequestDto } from '../dtos/request/FinancialAcco
 import { FinancialAccountSummaryResponseDto } from '../dtos/response/FinancialAccountSummaryResponseDto';
 import { Email } from '@domain/models/Email';
 
-const financialAccountUseCaseFactory = FinancialAccountUseCaseFactory.getIntance();
+const financialAccountUseCaseFactory =
+  FinancialAccountUseCaseFactory.getIntance();
 
 const obtainAccountSummary = async (
   req: Request<FinancialAccountSummaryRequestDto>,
@@ -14,14 +15,15 @@ const obtainAccountSummary = async (
   next: NextFunction
 ) => {
   try {
-    const email = Email.createFromText(req.user.email)
-    const accountNumber = req.params.accountNumber;
+    const email = Email.createFromText(req.user.email);
+    const accountNumber = parseInt(req.params.accountNumber, 10);
 
-    const [errorDto, resulDto] = await financialAccountUseCaseFactory.obtainSummary(email, accountNumber);
+    const [errorDto, resulDto] =
+      await financialAccountUseCaseFactory.obtainSummary(email, accountNumber);
 
-    if(errorDto){
-        res.status(404).json(errorDto);
-        return;
+    if (errorDto) {
+      res.status(404).json(errorDto);
+      return;
     }
     res.status(200).json(resulDto);
   } catch (error) {

@@ -21,5 +21,5 @@ export class FinancialAccountRepositoryError extends Error {
 
 export interface FinancialAccountInterfaceRepository {
   create(email: Email): Promise<void>;
-  summary(email: Email, accountId: number): Promise<FinancialAccountSummary>;
+  summary(email: Email, accountNumber: number): Promise<FinancialAccountSummary>;
 }
