@@ -1,5 +1,5 @@
 import { prisma } from '@application/repository/db';
-import { FinancialAccountInterfaceRepository } from './FinancialAccountInterfaceRepository';
+import { FINANCIAL_ACCOUNT_REPOSITORY_ERROR, FinancialAccountInterfaceRepository, FinancialAccountRepositoryError } from './FinancialAccountInterfaceRepository';
 import { FinancialAccountSummary } from './models/FinancialAccountSummary';
 import { Email } from '@domain/models/Email';
 
@@ -15,6 +15,9 @@ export class FinancialAccountSqlRepository
     });
   }
   summary(email: Email, accountId: number): Promise<FinancialAccountSummary> {
-    return Promise.resolve({expenses: 10.59, incomes: 5.25})
+    return new Promise((resolve, reject) => {
+      const error = new FinancialAccountRepositoryError({accountNotExist: FINANCIAL_ACCOUNT_REPOSITORY_ERROR.accountNotExist})
+      reject(error)
+    })
   }
 }

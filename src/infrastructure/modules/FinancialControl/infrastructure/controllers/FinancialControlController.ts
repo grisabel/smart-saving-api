@@ -21,6 +21,7 @@ const obtainAccountSummary = async (
 
     if(errorDto){
         res.status(404).json(errorDto);
+        return;
     }
     res.status(200).json(resulDto);
   } catch (error) {
