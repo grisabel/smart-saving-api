@@ -1,6 +1,17 @@
+import { prisma } from '@application/repository/db';
 import axios from 'axios';
 
 describe('El endpoint GET /financial-control/accounts/0/summary', () => {
+  beforeEach(async () => {
+    await prisma.user.deleteMany();
+    await prisma.operation.deleteMany();
+    await prisma.revokeAccessToken.deleteMany();
+    await prisma.session.deleteMany();
+    await prisma.financialAccount.deleteMany();
+    await prisma.income.deleteMany();
+    await prisma.expense.deleteMany();
+  });
+  
   it('debe retornar un status 401 si la petición no esta autenticada', async () => {
     const accountNumber = 0;
 
@@ -84,5 +95,39 @@ describe('El endpoint GET /financial-control/accounts/0/summary', () => {
     expect(throwError.response.data.message).toEqual(response401.message);
   });
 
-  it('debe retornar un status 200 y un objeto con las propiedades incomes y expenses', async () => {});
+  it('debe retornar un status 200 y un objeto con las propiedades incomes y expenses', async () => {
+    const body = {
+      firstName: 'User Name',
+      lastName: 'User Surname',
+      dateBirth: '30/01/1997',
+      objetive: 'Personal Objetive',
+      email: 'test@test.com',
+      repeatEmail: 'test@test.com',
+      password: 'Aabb@1',
+      repeatPassword: 'Aabb@1',
+    };
+    const accountNumber = 0;
+
+    //act
+
+    await axios.post(`/user/register`, body);
+
+    const resLogin = await axios.post(`/session/login`, {
+      email: body.email,
+      password: body.password,
+    });
+    const sumaryResponse = await axios.get(`financial-control/accounts/${accountNumber}/summary`, {
+      headers: {
+        Authorization: `Bearer ${resLogin.data.accessToken}`,
+      },
+    });
+
+    //assert
+    expect(sumaryResponse.status).toBe(200);
+    expect(sumaryResponse.data.incomes.length).toEqual(0);
+    expect(sumaryResponse.data.expenses.length).toEqual(0);
+
+  });
+  // todo añadir el test por meses 1
+  // todo añadir el test por meses 2 array años
 });
