@@ -18,8 +18,6 @@ model User {
   Operation        Operation[]
   Session          Session[]
   FinancialAccount FinancialAccount[]
-  Income           Income[]
-  Expense          Expense[]
 }
 
 model Password {
@@ -89,8 +87,6 @@ model FinancialAccount {
 
 model Income {
   id        String           @id @default(uuid())
-  user      User             @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-  userEmail String
   amount    Float
   account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId String
@@ -98,8 +94,6 @@ model Income {
 
 model Expense {
   id        String           @id @default(uuid())
-  user      User             @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-  userEmail String
   amount    Float
   account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId String
