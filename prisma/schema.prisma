@@ -18,6 +18,8 @@ model User {
   Operation        Operation[]
   Session          Session[]
   FinancialAccount FinancialAccount[]
+  Income           Income[]
+  Expense          Expense[]
 }
 
 model Password {
@@ -76,9 +78,23 @@ model RevokeAccessToken {
 
 model FinancialAccount {
   id            String @id @default(uuid())
-  accountNumber Int @default(0)
+  accountNumber Int    @default(0)
   user          User   @relation(fields: [userEmail], references: [email], onDelete: Cascade)
   userEmail     String
 
   @@index([userEmail, accountNumber])
+}
+
+model Income {
+  id        String @id @default(uuid())
+  user      User   @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail String
+  amount Float
+}
+
+model Expense {
+  id        String @id @default(uuid())
+  user      User   @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail String
+  amount Float
 }
