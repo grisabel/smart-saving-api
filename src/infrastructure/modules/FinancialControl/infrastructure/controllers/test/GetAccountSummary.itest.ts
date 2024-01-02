@@ -2,7 +2,7 @@ import axios from 'axios';
 
 describe('El endpoint GET /financial-control/accounts/0/summary', () => {
   it('debe retornar un status 401 si la petición no esta autenticada', async () => {
-    const accountId = 0;
+    const accountNumber = 0;
 
     let throwError;
     const response401 = {
@@ -12,7 +12,7 @@ describe('El endpoint GET /financial-control/accounts/0/summary', () => {
 
     //act
     try {
-      await axios.get(`financial-control/accounts/${accountId}/summary`);
+      await axios.get(`financial-control/accounts/${accountNumber}/summary`);
     } catch (error) {
       throwError = error;
     }
@@ -21,18 +21,18 @@ describe('El endpoint GET /financial-control/accounts/0/summary', () => {
     expect(throwError.response.status).toBe(401);
     expect(throwError.response.data.message).toEqual(response401.message);
   });
-  it('debe retornar un status 422 si parametro accountId de la url no sigue el formato correcto', async () => {
-    const accountId = 'testAccount';
+  it('debe retornar un status 422 si parametro accountNumber de la url no sigue el formato correcto', async () => {
+    const accountNumber = 'testAccount';
 
     let throwError;
     const response422 = {
       message: 'Validación incorrecta',
-      errors: [{ path: 'accountId' }],
+      errors: [{ path: 'accountNumber' }],
     };
 
     //act
     try {
-      await axios.get(`financial-control/accounts/${accountId}/summary`);
+      await axios.get(`financial-control/accounts/${accountNumber}/summary`);
     } catch (error) {
       throwError = error;
     }
@@ -44,7 +44,7 @@ describe('El endpoint GET /financial-control/accounts/0/summary', () => {
       expect.arrayContaining([expect.objectContaining(response422.errors[0])])
     );
   });
-  it('debe retornar un status 404 si el accountId no existe', async () => {
+  it('debe retornar un status 404 si el accountNumber no existe', async () => {
     const body = {
       firstName: 'User Name',
       lastName: 'User Surname',
@@ -55,7 +55,7 @@ describe('El endpoint GET /financial-control/accounts/0/summary', () => {
       password: 'Aabb@1',
       repeatPassword: 'Aabb@1',
     };
-    const accountId = 0;
+    const accountNumber = 0;
 
     let throwError;
     const response401 = {
@@ -70,7 +70,7 @@ describe('El endpoint GET /financial-control/accounts/0/summary', () => {
         email: body.email,
         password: body.password,
       });
-      await axios.get(`financial-control/accounts/${accountId}/summary`, {
+      await axios.get(`financial-control/accounts/${accountNumber}/summary`, {
         headers: {
           Authorization: `Bearer ${resLogin.data.accessToken}`,
         },

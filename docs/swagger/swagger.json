@@ -389,7 +389,7 @@
           }
         }
       },
-      "/financial-control/accounts/{accountId}/summary": {
+      "/financial-control/accounts/{accountNumber}/summary": {
         "get": {
           "tags": [
             "financial control"
@@ -400,7 +400,7 @@
           "parameters": [
             {
               "in": "path",
-              "name": "accountId",
+              "name": "accountNumber",
               "schema": {
                 "type": "string",
                 "example": "0"

@@ -12,11 +12,11 @@ export class FinancialAccountUseCase {
     private financialAccount: FinancialAccountInterfaceRepository
   ) {}
 
-  obtainSummary(email: Email, accountId: number): Promise<[ErrorResponseDto | Error, FinancialAccountSummaryResponseDto]> {
+  obtainSummary(email: Email, accountNumber: number): Promise<[ErrorResponseDto | Error, FinancialAccountSummaryResponseDto]> {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await this.financialAccount.summary(email, accountId);
-        
+        const result = await this.financialAccount.summary(email, accountNumber);
+
         const resultDto: FinancialAccountSummaryResponseDto = {
             expenses: result.expenses,
             incomes: result.incomes

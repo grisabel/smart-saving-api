@@ -8,7 +8,7 @@ import FinancialControlController from './controllers/FinancialControlController
 const router = express.Router();
 
 router.get(
-  '/:accountId/summary',
+  '/:accountNumber/summary',
   FinancialControlValidator.getAccountSummary,
   validate,
   isLoggedIn,

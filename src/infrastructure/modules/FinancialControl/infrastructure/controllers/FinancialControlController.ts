@@ -15,9 +15,9 @@ const obtainAccountSummary = async (
 ) => {
   try {
     const email = Email.createFromText(req.user.email)
-    const accountId = req.params.accountId;
+    const accountNumber = req.params.accountNumber;
 
-    const [errorDto, resulDto] = await financialAccountUseCaseFactory.obtainSummary(email, accountId);
+    const [errorDto, resulDto] = await financialAccountUseCaseFactory.obtainSummary(email, accountNumber);
 
     if(errorDto){
         res.status(404).json(errorDto);

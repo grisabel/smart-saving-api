@@ -1,7 +1,7 @@
 import { Param } from "@infrastructure/middlewares/validators/body";
 
 const getAccountSummary = [
-  Param('accountId').financialAccount().required(),
+  Param('accountNumber').financialAccount().required(),
 ];
 
 

@@ -1,3 +1,3 @@
 export interface FinancialAccountSummaryRequestDto {
-    accountId: number
+    accountNumber: number
 }
