@@ -16,17 +16,14 @@ import {
 export class OperationsIdSqlRepository
   implements OperationsIdInterfaceRepository
 {
-  private localOperations: Operation[] = [];
-
   async save(operation: Operation): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
         const user = await prisma.user.findUnique({
           where: { email: operation.email },
-          select: { id: true },
         });
 
-        if (!user?.id) {
+        if (!user) {
           reject(
             new UserRepositoryError({
               userNotExist: USER_REPOSITORY_ERROR.userNotExist,
@@ -36,7 +33,7 @@ export class OperationsIdSqlRepository
 
         await prisma.operation.create({
           data: {
-            userId: user.id,
+            userEmail: operation.email,
             expiresIn: DateTimeService.parse(
               {
                 date: `${operation.expiresIn}`,

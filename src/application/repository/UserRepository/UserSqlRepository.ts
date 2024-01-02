@@ -166,7 +166,7 @@ export class UserSqlRepository implements UserInterfaceRepository {
 
         await prisma.password.update({
           where: {
-            userId: userResult.id,
+            userEmail: user.getEmail().getValue(),
           },
           data: {
             hash: Password.createHash(user.getPassword().getValue()).getValue(),
