@@ -77,24 +77,29 @@ model RevokeAccessToken {
 }
 
 model FinancialAccount {
-  id            String @id @default(uuid())
-  accountNumber Int    @default(0)
-  user          User   @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-  userEmail     String
+  accountId Int       @id @default(0)
+  user      User      @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail String
+  Income    Income[]
+  Expense   Expense[]
 
-  @@index([userEmail, accountNumber])
+  @@index([userEmail, accountId])
 }
 
 model Income {
-  id        String @id @default(uuid())
-  user      User   @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-  userEmail String
-  amount Float
+  id            String           @id @default(uuid())
+  user          User             @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail     String
+  amount        Float
+  account       FinancialAccount @relation(fields: [accountNumber], references: [accountId], onDelete: Cascade)
+  accountNumber Int
 }
 
 model Expense {
-  id        String @id @default(uuid())
-  user      User   @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-  userEmail String
-  amount Float
+  id            String           @id @default(uuid())
+  user          User             @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail     String
+  amount        Float
+  account       FinancialAccount @relation(fields: [accountNumber], references: [accountId], onDelete: Cascade)
+  accountNumber Int
 }
