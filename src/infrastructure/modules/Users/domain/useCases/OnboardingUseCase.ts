@@ -12,13 +12,20 @@ import {
 
 import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorResponseMapper';
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
+import { FinancialAccountInterfaceRepository } from '@infrastructure/modules/FinancialControl/application/repository/FinancialAccountRepository/FinancialAccountInterfaceRepository';
+import { FinancialAccountFactoryRepository } from '@infrastructure/modules/FinancialControl/application/repository/FinancialAccountRepository/FinancialAccountFactoryRepository';
 
 export class OnboardingUseCase {
-  constructor(private userRepository: UserInterfaceRepository) {}
+  constructor(
+    private userRepository: UserInterfaceRepository,
+    private financialAccount: FinancialAccountInterfaceRepository
+  ) {}
   saveUser(user: User): Promise<[ErrorResponseDto | Error, null]> {
     return new Promise(async (resolve, reject) => {
       try {
         await this.userRepository.save(user);
+        await this.financialAccount.create(user.getEmail());
+
         resolve([null, null]);
       } catch (error) {
         if (error instanceof UserRepositoryError) {
@@ -42,7 +49,13 @@ export class OnboardingUseCaseFactory {
   static getIntance(): OnboardingUseCase {
     if (!OnboardingUseCaseFactory.instance) {
       const userRepository = UserFactoryRepository.getInstance();
-      OnboardingUseCaseFactory.instance = new OnboardingUseCase(userRepository);
+      const financialAccountRepository =
+        FinancialAccountFactoryRepository.getInstance();
+        
+      OnboardingUseCaseFactory.instance = new OnboardingUseCase(
+        userRepository,
+        financialAccountRepository
+      );
     }
     return OnboardingUseCaseFactory.instance;
   }

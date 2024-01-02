@@ -77,7 +77,7 @@ describe('POST /session/login', () => {
       email: 'test@test2.com',
       password: 'Aabb@12',
     };
-    ('');
+    
     let throwError;
     const response401 = {
       message: 'Usuario o contraseña incorrectos',

@@ -389,6 +389,40 @@
           }
         }
       },
+      "/financial-control/accounts/{accountNumber}/summary": {
+        "get": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Get user by user id",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlGlobalSummary",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlGlobalSummaryResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/financial-control/income": {
         "post": {
           "tags": [
@@ -444,28 +478,6 @@
                 "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/ApiResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/global-summary": {
-        "get": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Get user by user id",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlGlobalSummary",
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/FinancialControlGlobalSummaryResponse"
                   }
                 }
               }

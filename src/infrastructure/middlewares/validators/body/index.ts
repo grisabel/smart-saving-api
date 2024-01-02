@@ -5,6 +5,7 @@ import { date } from './DateValidator';
 import { email } from './EmailValidator';
 import { password } from './PasswordValidator';
 import { id } from './IdValidator';
+import { financialAccount } from './FinancialAccount';
 
 const bindAll = <T>(object: T): { [K in keyof T]: T[K] } => {
   const protoKeys = Object.getOwnPropertyNames(
@@ -25,6 +26,7 @@ type CustomValidationChain = ValidationChain & {
   date: () => CustomValidationChain;
   email: () => CustomValidationChain;
   password: () => CustomValidationChain;
+  financialAccount: () => CustomValidationChain;
   id: () => CustomValidationChain;
   equalFields: (
     otherFieldName: string,
@@ -50,6 +52,9 @@ export function Body(fieldname: string): CustomValidationChain {
     },
     id: () => {
       return chain.custom(id());
+    },
+    financialAccount: () => {
+      return chain.custom(financialAccount());
     },
     equalFields: (otherFieldName, errorMsg) => {
       return chain.custom(equalFields(otherFieldName, errorMsg));
@@ -94,6 +99,9 @@ export function Param(fieldname: string): CustomValidationChain {
     },
     password: () => {
       return chain.custom(password());
+    },
+    financialAccount: () => {
+      return chain.custom(financialAccount());
     },
   };
 

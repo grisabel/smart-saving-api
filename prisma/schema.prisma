@@ -1,74 +1,100 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    email     String      @id
-    firstname String
-    lastname  String
-    dateBirth DateTime
-    objective String
-    deleteIn  DateTime?
-    Password  Password?
-    Operation Operation[]
-    Session   Session[]
+  email            String             @id
+  firstname        String
+  lastname         String
+  dateBirth        DateTime
+  objective        String
+  deleteIn         DateTime?
+  Password         Password?
+  Operation        Operation[]
+  Session          Session[]
+  FinancialAccount FinancialAccount[]
 }
 
 model Password {
-    id        String @id @default(uuid())
-    hash      String
-    user      User   @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-    userEmail String @unique
+  id        String @id @default(uuid())
+  hash      String
+  user      User   @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail String @unique
 }
 
 model Operation {
-    id        String        @id // uuid
-    user      User          @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-    userEmail String
-    type      OperationType
-    expiresIn DateTime
-    createdAt DateTime      @default(now())
+  id        String        @id // uuid
+  user      User          @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail String
+  type      OperationType
+  expiresIn DateTime
+  createdAt DateTime      @default(now())
 
-    @@index([userEmail, createdAt])
+  @@index([userEmail, createdAt])
 }
 
 enum OperationType {
-    RESET_PASSWORD
-    DELETE_ACCOUNT
+  RESET_PASSWORD
+  DELETE_ACCOUNT
 }
 
 model Session {
-    id             String             @id @default(uuid())
-    sessionType    SessionType
-    createdAt      DateTime           @default(now())
-    expiresIn      DateTime?
-    ip             String
-    reason         SessionReasonType?
-    failuresNumber Int?
-    user           User               @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-    userEmail      String
+  id             String             @id @default(uuid())
+  sessionType    SessionType
+  createdAt      DateTime           @default(now())
+  expiresIn      DateTime?
+  ip             String
+  reason         SessionReasonType?
+  failuresNumber Int?
+  user           User               @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail      String
 
-    @@index([userEmail, createdAt])
+  @@index([userEmail, createdAt])
 }
 
 enum SessionType {
-    Session_Start
-    Session_End
-    Session_Refresh
-    Session_Revoke
+  Session_Start
+  Session_End
+  Session_Refresh
+  Session_Revoke
 }
 
 enum SessionReasonType {
-    Session_Token_Expired
-    Session_User_Logout
+  Session_Token_Expired
+  Session_User_Logout
 }
 
 model RevokeAccessToken {
-    id    Int    @id @default(autoincrement())
-    token String @db.Text
+  id    Int    @id @default(autoincrement())
+  token String @db.Text
+}
+
+model FinancialAccount {
+  id            String    @id @default(uuid())
+  accountNumber Int       @default(0)
+  user          User      @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail     String
+  Income        Income[]
+  Expense       Expense[]
+
+  @@index([userEmail, accountNumber])
+}
+
+model Income {
+  id        String           @id @default(uuid())
+  amount    Float
+  account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String
+}
+
+model Expense {
+  id        String           @id @default(uuid())
+  amount    Float
+  account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String
 }
