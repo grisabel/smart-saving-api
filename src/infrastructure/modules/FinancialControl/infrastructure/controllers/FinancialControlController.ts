@@ -1,19 +1,33 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
+import { FinancialAccountUseCaseFactory } from '@FinancialControl/domain/useCases/FinancialAccountUseCase';
+import { FinancialAccountSummaryRequestDto } from '../dtos/request/FinancialAccountSummaryRequestDto';
+import { FinancialAccountSummaryResponseDto } from '../dtos/response/FinancialAccountSummaryResponseDto';
+import { Email } from '@domain/models/Email';
+
+const financialAccountUseCaseFactory = FinancialAccountUseCaseFactory.getIntance();
 
 const obtainAccountSummary = async (
-    req: Request<any>,
-    res: Response<any | ErrorResponseDto>,
-    next: NextFunction
-  ) => {
-    try {
-      res.status(200).json({ok: 'ok'});
-    } catch (error) {
-      next(error);
+  req: Request<FinancialAccountSummaryRequestDto>,
+  res: Response<FinancialAccountSummaryResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    const email = Email.createFromText(req.user.email)
+    const accountId = req.params.accountId;
+
+    const [errorDto, resulDto] = await financialAccountUseCaseFactory.obtainSummary(email, accountId);
+
+    if(errorDto){
+        res.status(404).json(errorDto);
     }
-  };
+    res.status(200).json(resulDto);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export default {
-    obtainAccountSummary
-}
+  obtainAccountSummary,
+};
