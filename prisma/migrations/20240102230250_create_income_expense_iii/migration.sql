@@ -57,11 +57,12 @@ CREATE TABLE `RevokeAccessToken` (
 
 -- CreateTable
 CREATE TABLE `FinancialAccount` (
-    `accountId` INTEGER NOT NULL DEFAULT 0,
+    `id` VARCHAR(191) NOT NULL,
+    `accountNumber` INTEGER NOT NULL DEFAULT 0,
     `userEmail` VARCHAR(191) NOT NULL,
 
-    INDEX `FinancialAccount_userEmail_accountId_idx`(`userEmail`, `accountId`),
-    PRIMARY KEY (`accountId`)
+    INDEX `FinancialAccount_userEmail_accountNumber_idx`(`userEmail`, `accountNumber`),
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -69,7 +70,7 @@ CREATE TABLE `Income` (
     `id` VARCHAR(191) NOT NULL,
     `userEmail` VARCHAR(191) NOT NULL,
     `amount` DOUBLE NOT NULL,
-    `accountNumber` INTEGER NOT NULL,
+    `accountId` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -79,7 +80,7 @@ CREATE TABLE `Expense` (
     `id` VARCHAR(191) NOT NULL,
     `userEmail` VARCHAR(191) NOT NULL,
     `amount` DOUBLE NOT NULL,
-    `accountNumber` INTEGER NOT NULL,
+    `accountId` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -100,10 +101,10 @@ ALTER TABLE `FinancialAccount` ADD CONSTRAINT `FinancialAccount_userEmail_fkey` 
 ALTER TABLE `Income` ADD CONSTRAINT `Income_userEmail_fkey` FOREIGN KEY (`userEmail`) REFERENCES `User`(`email`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Income` ADD CONSTRAINT `Income_accountNumber_fkey` FOREIGN KEY (`accountNumber`) REFERENCES `FinancialAccount`(`accountId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Income` ADD CONSTRAINT `Income_accountId_fkey` FOREIGN KEY (`accountId`) REFERENCES `FinancialAccount`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Expense` ADD CONSTRAINT `Expense_userEmail_fkey` FOREIGN KEY (`userEmail`) REFERENCES `User`(`email`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Expense` ADD CONSTRAINT `Expense_accountNumber_fkey` FOREIGN KEY (`accountNumber`) REFERENCES `FinancialAccount`(`accountId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Expense` ADD CONSTRAINT `Expense_accountId_fkey` FOREIGN KEY (`accountId`) REFERENCES `FinancialAccount`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
