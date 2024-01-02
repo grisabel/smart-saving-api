@@ -4,6 +4,7 @@ import axios from 'axios';
 describe('POST /user/register', () => {
   beforeEach(async () => {
     await prisma.user.deleteMany();
+    await prisma.financialAccount.deleteMany();
   });
   it('debe retornar un status 204 (No Content) al crear un usuario satisfactoriamente', async () => {
     const body = {
@@ -19,6 +20,9 @@ describe('POST /user/register', () => {
     const res = await axios.post(`/user/register`, body);
 
     expect(res.status).toBe(204);
+
+    const resul = await prisma.financialAccount.findMany({where: {userEmail: body.email, accountNumber: 0}});
+    expect(resul.length).toEqual(1);
   });
   it('debe retornar un status 409 al intentar crear un usuario con un email existente', async () => {
     const body = {
