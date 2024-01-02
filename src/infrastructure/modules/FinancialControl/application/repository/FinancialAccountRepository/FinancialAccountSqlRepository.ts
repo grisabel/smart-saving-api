@@ -14,7 +14,7 @@ export class FinancialAccountSqlRepository
         .catch((error) => reject(error));
     });
   }
-  summary(accountId: number): Promise<FinancialAccountSummary> {
-    throw new Error('Method not implemented.');
+  summary(email: Email, accountId: number): Promise<FinancialAccountSummary> {
+    return Promise.resolve({expenses: 10.59, incomes: 5.25})
   }
 }
