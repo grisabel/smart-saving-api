@@ -105,7 +105,7 @@ model Concept {
   type      ConceptType
   concept   String
   user      User        @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-  userEmail String      @unique
+  userEmail String
 }
 
 enum ConceptType {
