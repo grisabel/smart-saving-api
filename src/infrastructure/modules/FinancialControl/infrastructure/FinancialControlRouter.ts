@@ -36,7 +36,7 @@ router.post(
 );
 
 router.delete(
-  '/concept/income',
+  '/concept/income/:conceptId',
   FinancialControlValidator.deleteConcept,
   validate,
   isLoggedIn,
@@ -44,7 +44,7 @@ router.delete(
 );
 
 router.delete(
-  '/concept/expense',
+  '/concept/expense/:conceptId',
   FinancialControlValidator.deleteConcept,
   validate,
   isLoggedIn,

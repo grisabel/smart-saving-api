@@ -1,4 +1,6 @@
 import { prisma } from '@application/repository/db';
+
+import { Id } from '@domain/models/Id/Id';
 import axios from 'axios';
 
 const URL = '/financial-control/concept/income';
@@ -80,6 +82,52 @@ describe(`La ruta ${URL}`, () => {
       //assert
       expect(throwError.response.status).toBe(401);
       expect(throwError.response.data.message).toEqual(response401.message);
+    });
+  });
+
+  describe(`El endpoint DELETE`, () => {
+    it('debe retornar un status 401 si la petición no esta autenticada', async () => {
+      const conceptId = Id.createId().getValue();
+
+      let throwError;
+      const response401 = {
+        message:
+          'Access token is missing. Please provide a valid token in headers to continue.',
+      };
+
+      //act
+      try {
+        await axios.delete(`${URL}/${conceptId}`);
+      } catch (error) {
+        throwError = error;
+      }
+
+      //assert
+      expect(throwError.response.status).toBe(401);
+      expect(throwError.response.data.message).toEqual(response401.message);
+    });
+
+    it('debe retornar un status 422 si body no sigue el formato correcto', async () => {
+      const conceptId = '1';
+      let throwError;
+      const response422 = {
+        message: 'Validación incorrecta',
+        errors: [{ path: 'conceptId' }],
+      };
+
+      //act
+      try {
+        await axios.delete(`${URL}/${conceptId}`);
+      } catch (error) {
+        throwError = error;
+      }
+
+      //assert
+      expect(throwError.response.status).toBe(422);
+      expect(throwError.response.data.message).toEqual(response422.message);
+      expect(throwError.response.data.errors).toEqual(
+        expect.arrayContaining([expect.objectContaining(response422.errors[0])])
+      );
     });
   });
 });
