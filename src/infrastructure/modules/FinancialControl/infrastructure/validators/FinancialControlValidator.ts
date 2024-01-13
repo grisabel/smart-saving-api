@@ -6,7 +6,10 @@ const getAccountSummary = [
   Param('accountNumber').financialAccount().required(),
 ];
 
+const deleteConcept = [Param('conceptId').id().required()];
+
 export default {
   addConcept,
   getAccountSummary,
+  deleteConcept,
 };

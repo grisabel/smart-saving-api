@@ -10,6 +10,8 @@ import { FinancialAccountSummaryResponseDto } from '../dtos/response/FinancialAc
 
 import { FinancialAccountConceptListResponseDto } from '../dtos/response/FinancialAccountConceptListResponseDto';
 
+import { FinancialAccountDeleteConceptRequestDto } from '../dtos/request/FinancialAccountDeleteConceptRequestDto';
+
 import { Email } from '@domain/models/Email';
 
 const financialAccountUseCaseFactory =
@@ -63,6 +65,30 @@ const addConceptExpense = async (
   }
 };
 
+const deleteConceptIncome = async (
+  req: Request<FinancialAccountDeleteConceptRequestDto>,
+  res: Response<{} | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    res.status(200).json();
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteConceptExpense = async (
+  req: Request<FinancialAccountDeleteConceptRequestDto>,
+  res: Response<{} | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    res.status(200).json();
+  } catch (error) {
+    next(error);
+  }
+};
+
 const obtainAccountSummary = async (
   req: Request<FinancialAccountSummaryRequestDto>,
   res: Response<FinancialAccountSummaryResponseDto | ErrorResponseDto>,
@@ -90,5 +116,7 @@ export default {
   obtainConceptExpense,
   addConceptIncome,
   addConceptExpense,
+  deleteConceptIncome,
+  deleteConceptExpense,
   obtainAccountSummary,
 };
