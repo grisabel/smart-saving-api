@@ -23,7 +23,16 @@ const obtainConceptIncome = async (
   next: NextFunction
 ) => {
   try {
-    res.status(200).json([{ id: 0, concept: 'a' }]);
+    const email = Email.createFromText(req.user.email);
+
+    const [errorDto, resulDto] =
+      await financialAccountUseCaseFactory.obtainConcept(email, 'income');
+
+    if (errorDto) {
+      res.status(404).json(errorDto);
+      return;
+    }
+    res.status(200).json(resulDto);
   } catch (error) {
     next(error);
   }
@@ -35,7 +44,16 @@ const obtainConceptExpense = async (
   next: NextFunction
 ) => {
   try {
-    res.status(200).json([{ id: 0, concept: 'a' }]);
+    const email = Email.createFromText(req.user.email);
+
+    const [errorDto, resulDto] =
+      await financialAccountUseCaseFactory.obtainConcept(email, 'expense');
+
+    if (errorDto) {
+      res.status(404).json(errorDto);
+      return;
+    }
+    res.status(200).json(resulDto);
   } catch (error) {
     next(error);
   }
@@ -47,7 +65,17 @@ const addConceptIncome = async (
   next: NextFunction
 ) => {
   try {
-    res.status(200).json({ id: 0, concept: 'a' });
+    const email = Email.createFromText(req.user.email);
+    const concept = req.body.concept;
+
+    const [errorDto, resulDto] =
+      await financialAccountUseCaseFactory.addConcept(email, 'income', concept);
+
+    if (errorDto) {
+      res.status(404).json(errorDto);
+      return;
+    }
+    res.status(200).json(resulDto);
   } catch (error) {
     next(error);
   }
@@ -59,7 +87,21 @@ const addConceptExpense = async (
   next: NextFunction
 ) => {
   try {
-    res.status(200).json({ id: 0, concept: 'a' });
+    const email = Email.createFromText(req.user.email);
+    const concept = req.body.concept;
+
+    const [errorDto, resulDto] =
+      await financialAccountUseCaseFactory.addConcept(
+        email,
+        'expense',
+        concept
+      );
+
+    if (errorDto) {
+      res.status(404).json(errorDto);
+      return;
+    }
+    res.status(200).json(resulDto);
   } catch (error) {
     next(error);
   }
@@ -71,7 +113,21 @@ const deleteConceptIncome = async (
   next: NextFunction
 ) => {
   try {
-    res.status(200).json();
+    const email = Email.createFromText(req.user.email);
+    const conceptId = req.body.conceptId;
+
+    const [errorDto, resulDto] =
+      await financialAccountUseCaseFactory.deleteConcept(
+        email,
+        'income',
+        conceptId
+      );
+
+    if (errorDto) {
+      res.status(404).json(errorDto);
+      return;
+    }
+    res.status(200).json(resulDto);
   } catch (error) {
     next(error);
   }
@@ -83,7 +139,21 @@ const deleteConceptExpense = async (
   next: NextFunction
 ) => {
   try {
-    res.status(200).json();
+    const email = Email.createFromText(req.user.email);
+    const conceptId = req.body.conceptId;
+
+    const [errorDto, resulDto] =
+      await financialAccountUseCaseFactory.deleteConcept(
+        email,
+        'expense',
+        conceptId
+      );
+
+    if (errorDto) {
+      res.status(404).json(errorDto);
+      return;
+    }
+    res.status(200).json(resulDto);
   } catch (error) {
     next(error);
   }
