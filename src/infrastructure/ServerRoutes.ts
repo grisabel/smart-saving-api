@@ -1,5 +1,5 @@
 export const ServerRoutes = {
   session: '/session',
   user: '/user',
-  financialControl: '/financial-control/accounts',
+  financialControl: '/financial-control',
 };

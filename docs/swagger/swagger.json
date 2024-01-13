@@ -389,6 +389,68 @@
           }
         }
       },
+      "/financial-control/concept/income": {
+        "post": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Add custom concept",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlCustomConcept",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlCustomConcept"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/concept/expense": {
+        "post": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Add custom concept",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlCustomConcept",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlCustomConcept"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/financial-control/accounts/{accountNumber}/summary": {
         "get": {
           "tags": [
@@ -500,37 +562,6 @@
                 "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/FinancialControlHabitsResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/custom-concept": {
-        "post": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Add custom concept",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlCustomConcept",
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FinancialControlCustomConcept"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
                   }
                 }
               }
@@ -1112,14 +1143,6 @@
             "concept": {
               "type": "string",
               "example": "Expenses Pets"
-            },
-            "type": {
-              "type": "string",
-              "enum": [
-                "income",
-                "expense"
-              ],
-              "example": "income"
             }
           }
         },

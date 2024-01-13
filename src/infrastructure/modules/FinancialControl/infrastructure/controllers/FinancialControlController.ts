@@ -2,12 +2,39 @@ import { NextFunction, Request, Response } from 'express';
 
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 import { FinancialAccountUseCaseFactory } from '@FinancialControl/domain/useCases/FinancialAccountUseCase';
+import { FinancialAccountConceptRequestDto } from '../dtos/request/FinancialAccountConceptRequestDto';
+import { FinancialAccountConceptResponseDto } from '../dtos/response/FinancialAccountConceptResponseDto';
+
 import { FinancialAccountSummaryRequestDto } from '../dtos/request/FinancialAccountSummaryRequestDto';
 import { FinancialAccountSummaryResponseDto } from '../dtos/response/FinancialAccountSummaryResponseDto';
 import { Email } from '@domain/models/Email';
 
 const financialAccountUseCaseFactory =
   FinancialAccountUseCaseFactory.getIntance();
+
+const addConceptIncome = async (
+  req: Request<FinancialAccountConceptRequestDto>,
+  res: Response<FinancialAccountConceptResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    res.status(200).json({ id: 0, concept: 'a' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const addConceptExpense = async (
+  req: Request<FinancialAccountConceptRequestDto>,
+  res: Response<FinancialAccountConceptResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    res.status(200).json({ id: 0, concept: 'a' });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const obtainAccountSummary = async (
   req: Request<FinancialAccountSummaryRequestDto>,
@@ -32,5 +59,7 @@ const obtainAccountSummary = async (
 };
 
 export default {
+  addConceptIncome,
+  addConceptExpense,
   obtainAccountSummary,
 };
