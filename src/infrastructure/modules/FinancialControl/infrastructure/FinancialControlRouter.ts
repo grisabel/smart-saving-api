@@ -7,6 +7,18 @@ import FinancialControlController from './controllers/FinancialControlController
 
 const router = express.Router();
 
+router.get(
+  '/concept/income',
+  isLoggedIn,
+  FinancialControlController.obtainConceptExpense
+);
+
+router.get(
+  '/concept/expense',
+  isLoggedIn,
+  FinancialControlController.obtainConceptIncome
+);
+
 router.post(
   '/concept/income',
   FinancialControlValidator.addConcept,

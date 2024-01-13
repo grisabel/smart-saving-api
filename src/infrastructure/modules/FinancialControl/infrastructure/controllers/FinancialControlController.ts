@@ -7,10 +7,37 @@ import { FinancialAccountConceptResponseDto } from '../dtos/response/FinancialAc
 
 import { FinancialAccountSummaryRequestDto } from '../dtos/request/FinancialAccountSummaryRequestDto';
 import { FinancialAccountSummaryResponseDto } from '../dtos/response/FinancialAccountSummaryResponseDto';
+
+import { FinancialAccountConceptListResponseDto } from '../dtos/response/FinancialAccountConceptListResponseDto';
+
 import { Email } from '@domain/models/Email';
 
 const financialAccountUseCaseFactory =
   FinancialAccountUseCaseFactory.getIntance();
+
+const obtainConceptIncome = async (
+  req: Request,
+  res: Response<FinancialAccountConceptListResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    res.status(200).json([{ id: 0, concept: 'a' }]);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const obtainConceptExpense = async (
+  req: Request,
+  res: Response<FinancialAccountConceptListResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    res.status(200).json([{ id: 0, concept: 'a' }]);
+  } catch (error) {
+    next(error);
+  }
+};
 
 const addConceptIncome = async (
   req: Request<FinancialAccountConceptRequestDto>,
@@ -59,6 +86,8 @@ const obtainAccountSummary = async (
 };
 
 export default {
+  obtainConceptIncome,
+  obtainConceptExpense,
   addConceptIncome,
   addConceptExpense,
   obtainAccountSummary,
