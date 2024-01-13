@@ -396,7 +396,7 @@
           ],
           "summary": "Get concept",
           "description": "Get the list of concepts that can be customised.",
-          "operationId": "financialControlListCustomConcept",
+          "operationId": "financialControlListCustomConceptIncome",
           "responses": {
             "200": {
               "description": "successful operation",
@@ -416,7 +416,7 @@
           ],
           "summary": "Add custom concept",
           "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlCustomConcept",
+          "operationId": "financialControlCustomConceptIncome",
           "requestBody": {
             "content": {
               "application/json": {
@@ -440,6 +440,32 @@
           }
         }
       },
+      "/financial-control/concept/income/{conceptId}": {
+        "delete": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Delete custom concept",
+          "description": "Delete concepts that can be customised.",
+          "operationId": "financialControlDeleteCustomConceptIncome",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "conceptId",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "ID of the concept"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation"
+            }
+          }
+        }
+      },
       "/financial-control/concept/expense": {
         "get": {
           "tags": [
@@ -447,7 +473,7 @@
           ],
           "summary": "Get custom concept",
           "description": "Get the list of concepts that can be customised.",
-          "operationId": "financialControlListCustomConcept",
+          "operationId": "financialControlListCustomConceptExpense",
           "responses": {
             "200": {
               "description": "successful operation",
@@ -467,7 +493,7 @@
           ],
           "summary": "Add custom concept",
           "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlCustomConcept",
+          "operationId": "financialControlCustomConceptExpense",
           "requestBody": {
             "content": {
               "application/json": {
@@ -487,6 +513,32 @@
                   }
                 }
               }
+            }
+          }
+        }
+      },
+      "/financial-control/concept/expense/{conceptId}": {
+        "delete": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Delete custom concept",
+          "description": "Delete concepts that can be customised.",
+          "operationId": "financialControlDeleteCustomConceptExpense",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "conceptId",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "ID of the concept"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation"
             }
           }
         }
