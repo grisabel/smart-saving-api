@@ -14,7 +14,7 @@ describe(`La ruta ${URL}`, () => {
     await prisma.expense.deleteMany();
   });
 
-  it(`El endpoint POST`, () => {
+  describe(`El endpoint POST`, () => {
     it('debe retornar un status 401 si la petición no esta autenticada', async () => {
       const body = {
         concept: 'Custom Concept',
@@ -59,6 +59,27 @@ describe(`La ruta ${URL}`, () => {
       expect(throwError.response.data.errors).toEqual(
         expect.arrayContaining([expect.objectContaining(response422.errors[0])])
       );
+    });
+  });
+
+  describe(`El endpoint GET`, () => {
+    it('debe retornar un status 401 si la petición no esta autenticada', async () => {
+      let throwError;
+      const response401 = {
+        message:
+          'Access token is missing. Please provide a valid token in headers to continue.',
+      };
+
+      //act
+      try {
+        await axios.get(URL);
+      } catch (error) {
+        throwError = error;
+      }
+
+      //assert
+      expect(throwError.response.status).toBe(401);
+      expect(throwError.response.data.message).toEqual(response401.message);
     });
   });
 });
