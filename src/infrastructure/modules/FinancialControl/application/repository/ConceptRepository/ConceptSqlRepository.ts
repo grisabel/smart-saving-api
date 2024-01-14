@@ -160,8 +160,9 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
         .then(() => {
           resolve();
         })
-        .catch(() => {
+        .catch((_error) => {
           //todo
+          console.log(_error);
           const error = new ConceptRepositoryError({
             conceptIdNotExist: CONCEPT_REPOSITORY_ERROR.conceptIdNotExist,
           });

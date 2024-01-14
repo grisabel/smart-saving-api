@@ -114,7 +114,7 @@ const deleteConceptIncome = async (
 ) => {
   try {
     const email = Email.createFromText(req.user.email);
-    const conceptId = req.body.conceptId;
+    const conceptId = req.params.conceptId;
 
     const [errorDto, resulDto] =
       await financialAccountUseCaseFactory.deleteConcept(
@@ -127,7 +127,7 @@ const deleteConceptIncome = async (
       res.status(404).json(errorDto);
       return;
     }
-    res.status(200).json(resulDto);
+    res.status(200);
   } catch (error) {
     next(error);
   }
@@ -140,7 +140,7 @@ const deleteConceptExpense = async (
 ) => {
   try {
     const email = Email.createFromText(req.user.email);
-    const conceptId = req.body.conceptId;
+    const conceptId = req.params.conceptId;
 
     const [errorDto, resulDto] =
       await financialAccountUseCaseFactory.deleteConcept(
@@ -153,7 +153,7 @@ const deleteConceptExpense = async (
       res.status(404).json(errorDto);
       return;
     }
-    res.status(200).json(resulDto);
+    res.status(200);
   } catch (error) {
     next(error);
   }

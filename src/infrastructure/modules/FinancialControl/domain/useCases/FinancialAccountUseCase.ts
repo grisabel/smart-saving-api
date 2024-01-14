@@ -46,11 +46,12 @@ export class FinancialAccountUseCase {
       } catch (error) {
         if (error instanceof ConceptRepositoryError) {
           const errorDto = ErrorResponseMapper.toResponseDto({
-            message: error.message,
+            message: 'Concepto Duplicado',
             error,
           });
 
           resolve([errorDto, null]);
+          return;
         }
         reject(error);
       }
