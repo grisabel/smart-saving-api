@@ -106,6 +106,8 @@ model Concept {
   concept   String
   user      User        @relation(fields: [userEmail], references: [email], onDelete: Cascade)
   userEmail String
+
+  @@index([userEmail, type, concept])
 }
 
 enum ConceptType {

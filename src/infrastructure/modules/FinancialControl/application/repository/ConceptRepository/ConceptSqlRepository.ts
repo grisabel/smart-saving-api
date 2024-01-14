@@ -9,8 +9,8 @@ import { ConceptType } from '@prisma/client';
 import { Email } from '@domain/models/Email';
 
 export class ConceptSqlRepository implements ConceptInterfaceRepository {
-  addExpense(email: Email, concept: string): Promise<void> {
-    return new Promise((resolve, reject) => {
+  addExpense(email: Email, concept: string): Promise<Concept> {
+    return new Promise<Concept>((resolve, reject) => {
       prisma.concept
         .create({
           data: {
@@ -19,12 +19,23 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
             concept: concept,
           },
         })
-        .then(() => resolve())
-        .catch((error) => reject(error));
+        .then((value) => {
+          resolve(value);
+        })
+        .catch((error) => {
+          if (error.code === 'P2002') {
+            const error = new ConceptRepositoryError({
+              conceptDuplicate: CONCEPT_REPOSITORY_ERROR.conceptDuplicate,
+            });
+            reject(error);
+            return;
+          }
+          reject(error);
+        });
     });
   }
-  addIncome(email: Email, concept: string): Promise<void> {
-    return new Promise((resolve, reject) => {
+  addIncome(email: Email, concept: string): Promise<Concept> {
+    return new Promise<Concept>((resolve, reject) => {
       prisma.concept
         .create({
           data: {
@@ -33,8 +44,17 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
             concept: concept,
           },
         })
-        .then(() => resolve())
-        .catch((error) => reject(error));
+        .then((value) => resolve(value))
+        .catch((error) => {
+          if (error.code === 'P2002') {
+            const error = new ConceptRepositoryError({
+              conceptDuplicate: CONCEPT_REPOSITORY_ERROR.conceptDuplicate,
+            });
+            reject(error);
+            return;
+          }
+          reject(error);
+        });
     });
   }
   readAllExpense(email: Email): Promise<Concept[]> {
@@ -48,10 +68,22 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
         })
         .then((expenses) => {
           const defaultValues = [
-            { id: 'EXPENSE-1', concept: 'Nómina' },
-            { id: 'EXPENSE-2', concept: 'Rentas' },
-            { id: 'EXPENSE-3', concept: 'Becas/Subvenciones' },
-            { id: 'EXPENSE-4', concept: 'Apuestas/Juego' },
+            //TODO
+            { id: 'INCOME-1', concept: 'Hipoteca/Alquiler/Comunidad' },
+            { id: 'INCOME-2', concept: 'Alimentación' },
+            { id: 'INCOME-3', concept: 'Mascotas' },
+            { id: 'INCOME-4', concept: 'Combustible' },
+            { id: 'INCOME-5', concept: 'Luz' },
+            { id: 'INCOME-6', concept: 'Calefacción' },
+            { id: 'INCOME-7', concept: 'Telefonía/Internet' },
+            { id: 'INCOME-8', concept: 'Agua' },
+            { id: 'INCOME-9', concept: 'Estudios' },
+            { id: 'INCOME-10', concept: 'Ocio' },
+            { id: 'INCOME-11', concept: 'Tasas/Impuestos/Multas' },
+            { id: 'INCOME-12', concept: 'Educación' },
+            { id: 'INCOME-13', concept: 'Salud' },
+            { id: 'INCOME-14', concept: 'Seguros' },
+            { id: 'INCOME-15', concept: 'Coche' },
           ];
           const values = [...defaultValues, ...expenses].map((expense) => {
             return {
@@ -76,23 +108,12 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
         })
         .then((incomes) => {
           const defaultValues = [
-            //TODO
-            { id: 'INCOME-1', concept: 'Hipoteca/Alquiler/Comunidad' },
-            { id: 'INCOME-2', concept: 'Alimentación' },
-            { id: 'INCOME-3', concept: 'Mascotas' },
-            { id: 'INCOME-4', concept: 'Combustible' },
-            { id: 'INCOME-5', concept: 'Luz' },
-            { id: 'INCOME-6', concept: 'Calefacción' },
-            { id: 'INCOME-7', concept: 'Telefonía/Internet' },
-            { id: 'INCOME-8', concept: 'Agua' },
-            { id: 'INCOME-9', concept: 'Estudios' },
-            { id: 'INCOME-10', concept: 'Ocio' },
-            { id: 'INCOME-11', concept: 'Tasas/Impuestos/Multas' },
-            { id: 'INCOME-12', concept: 'Educación' },
-            { id: 'INCOME-13', concept: 'Salud' },
-            { id: 'INCOME-14', concept: 'Seguros' },
-            { id: 'INCOME-15', concept: 'Coche' },
+            { id: 'EXPENSE-1', concept: 'Nómina' },
+            { id: 'EXPENSE-2', concept: 'Rentas' },
+            { id: 'EXPENSE-3', concept: 'Becas/Subvenciones' },
+            { id: 'EXPENSE-4', concept: 'Apuestas/Juego' },
           ];
+
           const values = [...defaultValues, ...incomes].map((income) => {
             return {
               id: income.id,

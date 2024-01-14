@@ -10,13 +10,13 @@ const router = express.Router();
 router.get(
   '/concept/income',
   isLoggedIn,
-  FinancialControlController.obtainConceptExpense
+  FinancialControlController.obtainConceptIncome
 );
 
 router.get(
   '/concept/expense',
   isLoggedIn,
-  FinancialControlController.obtainConceptIncome
+  FinancialControlController.obtainConceptExpense
 );
 
 router.post(

@@ -44,12 +44,15 @@ export class FinancialAccountUseCase {
         };
         resolve([null, resultDto]);
       } catch (error) {
-        const errorDto = ErrorResponseMapper.toResponseDto({
-          message: 'Error al añadir concepto en la cuenta del usuario', //todo
-          error,
-        });
+        if (error instanceof ConceptRepositoryError) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            message: error.message,
+            error,
+          });
 
-        resolve([errorDto, null]);
+          resolve([errorDto, null]);
+        }
+        reject(error);
       }
     });
   }
@@ -105,9 +108,9 @@ export class FinancialAccountUseCase {
 
         resolve([null, null]);
       } catch (error) {
-        if (error instanceof FinancialAccountRepositoryError) {
+        if (error instanceof ConceptRepositoryError) {
           const errorDto = ErrorResponseMapper.toResponseDto({
-            message: 'Cuenta no existente', //todo
+            message: 'El concepto no existe', //todo
             error,
           });
 
@@ -136,9 +139,9 @@ export class FinancialAccountUseCase {
         };
         resolve([null, resultDto]);
       } catch (error) {
-        if (error instanceof ConceptRepositoryError) {
+        if (error instanceof FinancialAccountRepositoryError) {
           const errorDto = ErrorResponseMapper.toResponseDto({
-            message: 'El concepto no existe', //todo
+            message: 'Cuenta no existente', //todo
             error,
           });
 
