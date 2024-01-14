@@ -24,6 +24,10 @@
         "description": "Operations about user"
       },
       {
+        "name": "financial control (income / expense)",
+        "description": "Operations about financial control"
+      },
+      {
         "name": "financial control",
         "description": "Operations about financial control"
       },
@@ -389,6 +393,222 @@
           }
         }
       },
+      "/financial-control/concept/income": {
+        "get": {
+          "tags": [
+            "financial control (income / expense)"
+          ],
+          "summary": "Get concept",
+          "description": "Get the list of concepts that can be customised.",
+          "operationId": "financialControlListCustomConceptIncome",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlCustomConceptList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "financial control (income / expense)"
+          ],
+          "summary": "Add custom concept",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlCustomConceptIncome",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlCustomConcept"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/concept/income/{conceptId}": {
+        "delete": {
+          "tags": [
+            "financial control (income / expense)"
+          ],
+          "summary": "Delete custom concept",
+          "description": "Delete concepts that can be customised.",
+          "operationId": "financialControlDeleteCustomConceptIncome",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "conceptId",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "ID of the concept"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation"
+            }
+          }
+        }
+      },
+      "/financial-control/concept/expense": {
+        "get": {
+          "tags": [
+            "financial control (income / expense)"
+          ],
+          "summary": "Get custom concept",
+          "description": "Get the list of concepts that can be customised.",
+          "operationId": "financialControlListCustomConceptExpense",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlCustomConceptList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "financial control (income / expense)"
+          ],
+          "summary": "Add custom concept",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlCustomConceptExpense",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlCustomConcept"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/concept/expense/{conceptId}": {
+        "delete": {
+          "tags": [
+            "financial control (income / expense)"
+          ],
+          "summary": "Delete custom concept",
+          "description": "Delete concepts that can be customised.",
+          "operationId": "financialControlDeleteCustomConceptExpense",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "conceptId",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "ID of the concept"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation"
+            }
+          }
+        }
+      },
+      "/financial-control/income": {
+        "post": {
+          "tags": [
+            "financial control (income / expense)"
+          ],
+          "summary": "Add Income",
+          "description": "Add an income.",
+          "operationId": "financialControlIncome",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlIncomeBody"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/expense": {
+        "post": {
+          "tags": [
+            "financial control (income / expense)"
+          ],
+          "summary": "Add Expense",
+          "description": "Add an expense.",
+          "operationId": "financialControlExpense",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlExpenseBody"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/financial-control/accounts/{accountNumber}/summary": {
         "get": {
           "tags": [
@@ -423,68 +643,6 @@
           }
         }
       },
-      "/financial-control/income": {
-        "post": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Add Income",
-          "description": "Add an income.",
-          "operationId": "financialControlIncome",
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FinancialControlIncomeBody"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/expense": {
-        "post": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Add Expense",
-          "description": "Add an expense.",
-          "operationId": "financialControlExpense",
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FinancialControlExpenseBody"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "/financial-control/habits": {
         "get": {
           "tags": [
@@ -500,74 +658,6 @@
                 "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/FinancialControlHabitsResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/custom-concept": {
-        "post": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Add custom concept",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlCustomConcept",
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FinancialControlCustomConcept"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/custom-concept/{type}": {
-        "get": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Get custom concept",
-          "description": "Get the list of concepts that can be customised.",
-          "operationId": "financialControlListCustomConcept",
-          "parameters": [
-            {
-              "in": "path",
-              "name": "type",
-              "schema": {
-                "type": "string",
-                "enum": [
-                  "income",
-                  "expense"
-                ]
-              },
-              "required": true,
-              "description": "Numeric ID of the user to get"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/FinancialControlCustomConceptList"
                   }
                 }
               }
@@ -1112,14 +1202,6 @@
             "concept": {
               "type": "string",
               "example": "Expenses Pets"
-            },
-            "type": {
-              "type": "string",
-              "enum": [
-                "income",
-                "expense"
-              ],
-              "example": "income"
             }
           }
         },
@@ -1129,8 +1211,8 @@
             "type": "object",
             "properties": {
               "id": {
-                "type": "number",
-                "example": 1
+                "type": "string",
+                "example": "1"
               },
               "concept": {
                 "type": "string",

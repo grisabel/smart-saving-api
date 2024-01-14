@@ -18,6 +18,7 @@ model User {
   Operation        Operation[]
   Session          Session[]
   FinancialAccount FinancialAccount[]
+  Concept          Concept[]
 }
 
 model Password {
@@ -97,4 +98,19 @@ model Expense {
   amount    Float
   account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId String
+}
+
+model Concept {
+  id        String      @id @default(uuid())
+  type      ConceptType
+  concept   String
+  user      User        @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail String
+
+  @@index([userEmail, type, concept])
+}
+
+enum ConceptType {
+  Concept_Income
+  Concept_Expense
 }

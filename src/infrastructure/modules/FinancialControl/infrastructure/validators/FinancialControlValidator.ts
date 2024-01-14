@@ -1,10 +1,15 @@
-import { Param } from "@infrastructure/middlewares/validators/body";
+import { Body, Param } from '@infrastructure/middlewares/validators/body';
+
+const addConcept = [Body('concept').required()];
 
 const getAccountSummary = [
   Param('accountNumber').financialAccount().required(),
 ];
 
+const deleteConcept = [Param('conceptId').id().required()];
 
 export default {
-  getAccountSummary
+  addConcept,
+  getAccountSummary,
+  deleteConcept,
 };
