@@ -4,6 +4,8 @@ import {
   DateString,
   DateTimeInterfaceService,
   DateTimeModel,
+  DateTimeSortFnc,
+  DateTimeSortSet,
   TimestampMs,
 } from './DateTimeInterfaceService';
 import { DATE_FORMATS } from './constants';
@@ -46,21 +48,45 @@ const _toFormat = (luxon: LuxonDateTime, format: DateFormat): DateString => {
   }
 };
 
+const parse = (dateTime: DateTimeModel, format: DateFormat): DateString => {
+  const luxonDate = _fromFormat(dateTime);
+  const formattedDate = _toFormat(luxonDate, format);
+  return formattedDate;
+};
+
+const isValid = (dateTime: DateTimeModel): boolean => {
+  const luxonDate = _fromFormat(dateTime);
+  return luxonDate.isValid;
+};
+
+const now = (): TimestampMs => {
+  return LuxonDateTime.now().toMillis();
+};
+
+const SORT_SET: DateTimeSortSet = {
+  ASC: (dateTime: TimestampMs, compareDateTime: TimestampMs): number =>
+    parseInt(dateTime, 10) - parseInt(compareDateTime, 10),
+  DES: (dateTime: TimestampMs, compareDateTime: TimestampMs): number =>
+    parseInt(compareDateTime, 10) - parseInt(dateTime, 10),
+};
+
+const sort = (
+  dateTime: DateTimeModel,
+  compareDateTime: DateTimeModel,
+  comparator: DateTimeSortFnc
+): number => {
+  const a = parse(dateTime, DATE_FORMATS.TimestampMs);
+  const b = parse(compareDateTime, DATE_FORMATS.TimestampMs);
+
+  return comparator(a, b);
+};
+
 const DateTimeService: DateTimeInterfaceService = {
-  parse(dateTime: DateTimeModel, format: DateFormat): DateString {
-    const luxonDate = _fromFormat(dateTime);
-    const formattedDate = _toFormat(luxonDate, format);
-    return formattedDate;
-  },
-
-  isValid(dateTime: DateTimeModel): boolean {
-    const luxonDate = _fromFormat(dateTime);
-    return luxonDate.isValid;
-  },
-
-  now(): TimestampMs {
-    return LuxonDateTime.now().toMillis();
-  },
+  parse,
+  isValid,
+  now,
+  SORT_SET,
+  sort,
 };
 
 export default DateTimeService;
