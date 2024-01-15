@@ -8,14 +8,15 @@ function startServer() {
   const port = process.env.PORT ? Number(process.env.PORT) : 3001;
 
   return new Promise(async (resolve, reject) => {
-    await prisma.user.deleteMany();
     await prisma.operation.deleteMany();
     await prisma.revokeAccessToken.deleteMany();
     await prisma.session.deleteMany();
-    await prisma.financialAccount.deleteMany();
+
     await prisma.income.deleteMany();
     await prisma.expense.deleteMany();
     await prisma.concept.deleteMany();
+    await prisma.financialAccount.deleteMany();
+    await prisma.user.deleteMany();
 
     const server = app.listen(port, host, () => {
       console.log(`[ ready ] http://${host}:${port}`);
