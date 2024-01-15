@@ -7,6 +7,7 @@ export const DATE_FORMATS = {
   Date: 'dd/MM/yyyy',
   DateTime: 'dd.MM.yyyy HH:mm',
   Month: 'MM/yyyy',
+  Year: 'yyyy',
 };
 
 export const ddMMyyyyWithPoints = 'dd.MM.yyyy';

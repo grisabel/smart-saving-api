@@ -44,8 +44,8 @@ export function Body(fieldname: string): CustomValidationChain {
     required: () => {
       return required(chain, fieldname);
     },
-    date: ({ format = DATE_FORMATS.Date }) => {
-      return chain.custom(date(fieldname, format));
+    date: (config = { format: DATE_FORMATS.Date }) => {
+      return chain.custom(date(fieldname, config.format));
     },
     email: () => {
       return chain.custom(email());

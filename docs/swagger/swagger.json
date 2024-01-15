@@ -633,7 +633,7 @@
           }
         }
       },
-      "/financial-control/accounts/{accountNumber}/summary": {
+      "/financial-control/accounts/{accountNumber}/summary/{year}": {
         "get": {
           "tags": [
             "financial control"
@@ -651,6 +651,16 @@
               },
               "required": true,
               "description": "Numeric ID of the account"
+            },
+            {
+              "in": "path",
+              "name": "year",
+              "schema": {
+                "type": "string",
+                "example": "2024"
+              },
+              "required": false,
+              "description": "year"
             }
           ],
           "responses": {
