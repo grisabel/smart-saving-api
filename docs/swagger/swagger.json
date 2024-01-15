@@ -1121,7 +1121,7 @@
           "properties": {
             "conceptId": {
               "type": "string",
-              "example": "INCOME_1"
+              "example": "INCOME-1"
             },
             "amount": {
               "type": "number",
@@ -1144,7 +1144,7 @@
           "properties": {
             "conceptId": {
               "type": "string",
-              "example": "EXPENSE_1"
+              "example": "EXPENSE-1"
             },
             "amount": {
               "type": "number",
