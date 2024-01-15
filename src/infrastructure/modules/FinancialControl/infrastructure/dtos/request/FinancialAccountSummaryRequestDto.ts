@@ -1,3 +1,4 @@
 export interface FinancialAccountSummaryRequestDto {
-    accountNumber: string
+  accountNumber: string;
+  year: string; // yyyy
 }

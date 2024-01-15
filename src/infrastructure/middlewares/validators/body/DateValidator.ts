@@ -2,11 +2,14 @@ import DateTimeService from '@application/services/DateTimeService/DateTimeServi
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import { CustomValidator, ValidationChain } from 'express-validator';
 
-export const date = (fieldName: string): CustomValidator => {
+export const date = (
+  fieldName: string,
+  format: string = DATE_FORMATS.Date
+): CustomValidator => {
   return (value) => {
     const resul = DateTimeService.isValid({
       date: value,
-      format: DATE_FORMATS.Date,
+      format,
     });
 
     if (!resul) {
