@@ -55,7 +55,11 @@ const AggregateData = {
       const [key, valueArray] = aggregateDay;
       const result: TransactionAggregateData = {
         date: key,
-        amount: valueArray.reduce((acc, value) => acc + value.amount, 0), // todo suma decimales
+        amount: valueArray.reduce((acc, value) => {
+          const constant = 100;
+          const result = acc + value.amount;
+          return Math.round(result * constant) / constant;
+        }, 0), // todo suma decimales
       };
       aggregateTransactionsData.push(result);
     });
