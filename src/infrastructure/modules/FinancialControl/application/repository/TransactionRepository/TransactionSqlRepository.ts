@@ -28,7 +28,7 @@ export class TransactionSqlRepository
         });
         reject(error);
       }
-      prisma.income
+      prisma.expense
         .create({
           data: {
             accountId: resulAccount[0].id,
@@ -38,7 +38,7 @@ export class TransactionSqlRepository
                 date: expense.date,
                 format: DATE_FORMATS.Date,
               },
-              DATE_FORMATS.TimestampMs
+              DATE_FORMATS.ISO_8601
             ),
             note: expense.note,
             conceptId: expense.conceptId,
@@ -47,8 +47,8 @@ export class TransactionSqlRepository
         .then(() => {
           resolve();
         })
-        .catch(() => {
-          reject();
+        .catch((error) => {
+          reject(error);
         });
     });
   }
@@ -78,7 +78,7 @@ export class TransactionSqlRepository
                 date: income.date,
                 format: DATE_FORMATS.Date,
               },
-              DATE_FORMATS.TimestampMs
+              DATE_FORMATS.ISO_8601
             ),
             note: income.note,
             conceptId: income.conceptId,
@@ -87,8 +87,8 @@ export class TransactionSqlRepository
         .then(() => {
           resolve();
         })
-        .catch(() => {
-          reject();
+        .catch((error) => {
+          reject(error);
         });
     });
   }

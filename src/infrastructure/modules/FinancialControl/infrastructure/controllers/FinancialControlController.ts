@@ -212,8 +212,9 @@ const addIncome = async (
       res.status(404).json(errorDto);
       return;
     }
-    res.status(200);
+    res.status(200).send();
   } catch (error) {
+    console.log({ error });
     next(error);
   }
 };
@@ -243,7 +244,7 @@ const addExpense = async (
       res.status(404).json(errorDto);
       return;
     }
-    res.status(200);
+    res.status(200).send();
   } catch (error) {
     next(error);
   }
