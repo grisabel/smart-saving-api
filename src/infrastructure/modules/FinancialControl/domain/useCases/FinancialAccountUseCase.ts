@@ -173,9 +173,24 @@ export class FinancialAccountUseCase {
           year
         );
 
+        const expensesDefault = AggregateData.byMonthDefault(year);
+        const incomesDefault = AggregateData.byMonthDefault(year);
+        const expensesValue = AggregateData.byMonth(result.expenses);
+        const incomesValue = AggregateData.byMonth(result.incomes);
+
         const resultDto: FinancialAccountSummaryResponseDto = {
-          expenses: AggregateData.byMonth(result.expenses),
-          incomes: AggregateData.byMonth(result.incomes),
+          expenses: expensesDefault.map((expensesDft, i) => {
+            if (expensesValue[i]) {
+              return expensesValue[i];
+            }
+            return expensesDft;
+          }),
+          incomes: incomesDefault.map((incomesDft, i) => {
+            if (incomesValue[i]) {
+              return incomesValue[i];
+            }
+            return incomesDft;
+          }),
         };
         resolve([null, resultDto]);
       } catch (error) {

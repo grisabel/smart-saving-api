@@ -1,6 +1,7 @@
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import { Transaction } from '../models/Transaction';
+import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
 
 interface AggregateByMap {
   [key: string /* any format of DateTimeService */]: Transaction[];
@@ -71,6 +72,30 @@ const AggregateData = {
         DateTimeService.SORT_SET.ASC
       )
     );
+  },
+  byMonthDefault(year: DateTimeModel): TransactionAggregateData[] {
+    const _year = DateTimeService.parse(year, DATE_FORMATS.Year);
+    const months = [
+      `01/${_year}`,
+      `02/${_year}`,
+      `03/${_year}`,
+      `04/${_year}`,
+      `05/${_year}`,
+      `06/${_year}`,
+      `07/${_year}`,
+      `08/${_year}`,
+      `09/${_year}`,
+      `10/${_year}`,
+      `11/${_year}`,
+      `12/${_year}`,
+    ];
+
+    return months.map((month) => {
+      return {
+        date: month,
+        amount: 0,
+      };
+    });
   },
 };
 
