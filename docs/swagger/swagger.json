@@ -1085,9 +1085,9 @@
         "FinancialControlIncomeBody": {
           "type": "object",
           "properties": {
-            "concept": {
+            "conceptId": {
               "type": "string",
-              "example": "Salario"
+              "example": "INCOME_1"
             },
             "amount": {
               "type": "number",
@@ -1108,9 +1108,9 @@
         "FinancialControlExpenseBody": {
           "type": "object",
           "properties": {
-            "concept": {
+            "conceptId": {
               "type": "string",
-              "example": "Feed"
+              "example": "EXPENSE_1"
             },
             "amount": {
               "type": "number",
