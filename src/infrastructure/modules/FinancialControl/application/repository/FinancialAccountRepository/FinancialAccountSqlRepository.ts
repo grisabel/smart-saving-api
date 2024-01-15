@@ -6,6 +6,8 @@ import {
 } from './FinancialAccountInterfaceRepository';
 import { FinancialAccountSummary } from './models/FinancialAccountSummary';
 import { Email } from '@domain/models/Email';
+import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
+import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 
 export class FinancialAccountSqlRepository
   implements FinancialAccountInterfaceRepository
@@ -44,8 +46,34 @@ export class FinancialAccountSqlRepository
         });
 
         resolve({
-          expenses: resulExpense.map((expense) => expense.amount),
-          incomes: resulIncome.map((income) => income.amount),
+          expenses: resulExpense.map((expense) => {
+            return {
+              amount: expense.amount,
+              conceptId: expense.conceptId,
+              date: DateTimeService.parse(
+                {
+                  date: `${expense.date.getTime()}`,
+                  format: DATE_FORMATS.TimestampMs,
+                },
+                DATE_FORMATS.Date
+              ),
+              note: expense.note,
+            };
+          }),
+          incomes: resulIncome.map((income) => {
+            return {
+              amount: income.amount,
+              conceptId: income.conceptId,
+              date: DateTimeService.parse(
+                {
+                  date: `${income.date.getTime()}`,
+                  format: DATE_FORMATS.TimestampMs,
+                },
+                DATE_FORMATS.Date
+              ),
+              note: income.note,
+            };
+          }),
         });
       } catch (error) {
         reject(error);

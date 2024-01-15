@@ -1,4 +1,6 @@
-export interface FinancialAccountSummary   {
-    incomes: number[],
-    expenses: number[]
+import { Transaction } from '../../TransactionRepository/models/Transaction';
+
+export interface FinancialAccountSummary {
+  incomes: Transaction[];
+  expenses: Transaction[];
 }

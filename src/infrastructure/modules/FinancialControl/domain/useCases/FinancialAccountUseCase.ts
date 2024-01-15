@@ -19,6 +19,7 @@ import { FinancialAccountConceptResponseDto } from '../../infrastructure/dtos/re
 import { TransactionFactoryRepository } from '../../application/repository/TransactionRepository/TransactionFactoryRepository';
 import { TransactionInterfaceRepository } from '../../application/repository/TransactionRepository/TransactionInterfaceRepository';
 import { Transaction } from '../../application/repository/TransactionRepository/models/Transaction';
+import AggregateData from '../../application/repository/TransactionRepository/utils/AggregateData';
 
 export class FinancialAccountUseCase {
   constructor(
@@ -170,8 +171,8 @@ export class FinancialAccountUseCase {
         );
 
         const resultDto: FinancialAccountSummaryResponseDto = {
-          expenses: result.expenses,
-          incomes: result.incomes,
+          expenses: AggregateData.byMonth(result.expenses),
+          incomes: AggregateData.byMonth(result.incomes),
         };
         resolve([null, resultDto]);
       } catch (error) {
