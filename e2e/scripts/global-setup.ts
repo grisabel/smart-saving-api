@@ -15,7 +15,8 @@ function startServer() {
     await prisma.financialAccount.deleteMany();
     await prisma.income.deleteMany();
     await prisma.expense.deleteMany();
-    
+    await prisma.concept.deleteMany();
+
     const server = app.listen(port, host, () => {
       console.log(`[ ready ] http://${host}:${port}`);
       resolve(server);

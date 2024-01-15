@@ -22,6 +22,7 @@ export class ConceptRepositoryError extends Error {
 }
 
 export interface ConceptInterfaceRepository {
+  addInitialData(email: Email): Promise<void>;
   addExpense(email: Email, concept: string): Promise<Concept>;
   addIncome(email: Email, concept: string): Promise<Concept>;
   readAllExpense(email: Email): Promise<Concept[]>;
