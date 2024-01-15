@@ -3,4 +3,5 @@ export interface FinancialAccountTransactionRequestDto {
   amount: number;
   date: string; //dd/MM/yyyy
   note: string;
+  accountNumber: string;
 }
