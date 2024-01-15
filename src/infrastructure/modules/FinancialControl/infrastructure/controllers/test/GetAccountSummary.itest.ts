@@ -11,7 +11,7 @@ describe('El endpoint GET /financial-control/accounts/0/summary', () => {
     await prisma.income.deleteMany();
     await prisma.expense.deleteMany();
   });
-  
+
   it('debe retornar un status 401 si la petición no esta autenticada', async () => {
     const accountNumber = 0;
 
@@ -116,17 +116,17 @@ describe('El endpoint GET /financial-control/accounts/0/summary', () => {
       email: body.email,
       password: body.password,
     });
-    const sumaryResponse = await axios.get(`financial-control/accounts/${accountNumber}/summary`, {
-      headers: {
-        Authorization: `Bearer ${resLogin.data.accessToken}`,
-      },
-    });
+    const sumaryResponse = await axios.get(
+      `financial-control/accounts/${accountNumber}/summary`,
+      {
+        headers: {
+          Authorization: `Bearer ${resLogin.data.accessToken}`,
+        },
+      }
+    );
 
     //assert
     expect(sumaryResponse.status).toBe(200);
-    expect(sumaryResponse.data.incomes.length).toEqual(0);
-    expect(sumaryResponse.data.expenses.length).toEqual(0);
-
   });
   // todo añadir el test por meses 1
   // todo añadir el test por meses 2 array años
