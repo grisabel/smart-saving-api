@@ -14,17 +14,21 @@ import { ErrorResponseMapper } from '@infrastructure/mappers/response/ErrorRespo
 import { ErrorResponseDto } from '@infrastructure/dtos/response/ErrorResponseDto';
 import { FinancialAccountInterfaceRepository } from '@infrastructure/modules/FinancialControl/application/repository/FinancialAccountRepository/FinancialAccountInterfaceRepository';
 import { FinancialAccountFactoryRepository } from '@infrastructure/modules/FinancialControl/application/repository/FinancialAccountRepository/FinancialAccountFactoryRepository';
+import { ConceptInterfaceRepository } from '@infrastructure/modules/FinancialControl/application/repository/ConceptRepository/ConceptInterfaceRepository';
+import { ConceptFactoryRepository } from '@infrastructure/modules/FinancialControl/application/repository/ConceptRepository/ConceptFactoryRepository';
 
 export class OnboardingUseCase {
   constructor(
     private userRepository: UserInterfaceRepository,
-    private financialAccount: FinancialAccountInterfaceRepository
+    private financialAccount: FinancialAccountInterfaceRepository,
+    private concept: ConceptInterfaceRepository
   ) {}
   saveUser(user: User): Promise<[ErrorResponseDto | Error, null]> {
     return new Promise(async (resolve, reject) => {
       try {
         await this.userRepository.save(user);
         await this.financialAccount.create(user.getEmail());
+        await this.concept.addInitialData(user.getEmail());
 
         resolve([null, null]);
       } catch (error) {
@@ -51,10 +55,13 @@ export class OnboardingUseCaseFactory {
       const userRepository = UserFactoryRepository.getInstance();
       const financialAccountRepository =
         FinancialAccountFactoryRepository.getInstance();
-        
+
+      const conceptRepository = ConceptFactoryRepository.getInstance();
+
       OnboardingUseCaseFactory.instance = new OnboardingUseCase(
         userRepository,
-        financialAccountRepository
+        financialAccountRepository,
+        conceptRepository
       );
     }
     return OnboardingUseCaseFactory.instance;
