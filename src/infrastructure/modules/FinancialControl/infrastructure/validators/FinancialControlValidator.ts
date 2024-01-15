@@ -9,6 +9,7 @@ const getAccountSummary = [
 const deleteConcept = [Param('conceptId').id().required()];
 
 const addTransaction = [
+  Param('accountNumber').financialAccount().required(),
   Body('conceptId').id().required(),
   Body('amount').required().isNumeric(),
   Body('date').date().required(),

@@ -52,7 +52,7 @@ router.delete(
 );
 
 router.post(
-  '/income',
+  '/accounts/:accountNumber/income',
   FinancialControlValidator.addTransaction,
   validate,
   isLoggedIn,
@@ -60,7 +60,7 @@ router.post(
 );
 
 router.post(
-  '/expense',
+  '/accounts/:accountNumber/expense',
   FinancialControlValidator.addTransaction,
   validate,
   isLoggedIn,
