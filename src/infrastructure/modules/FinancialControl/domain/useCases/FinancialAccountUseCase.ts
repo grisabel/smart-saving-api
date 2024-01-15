@@ -20,6 +20,7 @@ import { TransactionFactoryRepository } from '../../application/repository/Trans
 import { TransactionInterfaceRepository } from '../../application/repository/TransactionRepository/TransactionInterfaceRepository';
 import { Transaction } from '../../application/repository/TransactionRepository/models/Transaction';
 import AggregateData from '../../application/repository/TransactionRepository/utils/AggregateData';
+import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
 
 export class FinancialAccountUseCase {
   constructor(
@@ -161,13 +162,15 @@ export class FinancialAccountUseCase {
 
   obtainSummary(
     email: Email,
-    accountNumber: number
+    accountNumber: number,
+    year: DateTimeModel
   ): Promise<[ErrorResponseDto | Error, FinancialAccountSummaryResponseDto]> {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await this.financialAccount.summary(
           email,
-          accountNumber
+          accountNumber,
+          year
         );
 
         const resultDto: FinancialAccountSummaryResponseDto = {
