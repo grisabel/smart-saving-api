@@ -54,7 +54,7 @@ async function main() {
         var numeroAleatorio = Math.random() * 100;
         const amount = Math.round(numeroAleatorio * 100) / 100;
 
-        await transaction.addExpense(user.getEmail(), accountNumber, {
+        await transaction.addIncome(user.getEmail(), accountNumber, {
           amount: amount,
           conceptId: concept,
           date: date,
