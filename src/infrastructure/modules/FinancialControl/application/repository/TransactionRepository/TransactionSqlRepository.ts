@@ -8,6 +8,7 @@ import {
   FINANCIAL_ACCOUNT_REPOSITORY_ERROR,
   FinancialAccountRepositoryError,
 } from '../FinancialAccountRepository/FinancialAccountInterfaceRepository';
+import { Id } from '@domain/models/Id/Id';
 
 export class TransactionSqlRepository
   implements TransactionInterfaceRepository
@@ -28,6 +29,15 @@ export class TransactionSqlRepository
         });
         reject(error);
       }
+
+      let conceptId;
+      try {
+        Id.createFrom(expense.conceptId);
+        conceptId = expense.conceptId;
+      } catch (error) {
+        conceptId = `${expense.conceptId}-${email.getValue()}`;
+      }
+
       prisma.expense
         .create({
           data: {
@@ -41,7 +51,7 @@ export class TransactionSqlRepository
               DATE_FORMATS.ISO_8601
             ),
             note: expense.note,
-            conceptId: expense.conceptId,
+            conceptId,
           },
         })
         .then(() => {
@@ -68,6 +78,15 @@ export class TransactionSqlRepository
         });
         reject(error);
       }
+
+      let conceptId;
+      try {
+        Id.createFrom(income.conceptId);
+        conceptId = income.conceptId;
+      } catch (error) {
+        conceptId = `${income.conceptId}-${email.getValue()}`;
+      }
+
       prisma.income
         .create({
           data: {
@@ -81,7 +100,7 @@ export class TransactionSqlRepository
               DATE_FORMATS.ISO_8601
             ),
             note: income.note,
-            conceptId: income.conceptId,
+            conceptId,
           },
         })
         .then(() => {

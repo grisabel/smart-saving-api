@@ -6,6 +6,7 @@ import { email } from './EmailValidator';
 import { password } from './PasswordValidator';
 import { id } from './IdValidator';
 import { financialAccount } from './FinancialAccount';
+import { concept } from './ConceptValidator';
 
 const bindAll = <T>(object: T): { [K in keyof T]: T[K] } => {
   const protoKeys = Object.getOwnPropertyNames(
@@ -28,6 +29,7 @@ type CustomValidationChain = ValidationChain & {
   password: () => CustomValidationChain;
   financialAccount: () => CustomValidationChain;
   id: () => CustomValidationChain;
+  concept: () => CustomValidationChain;
   equalFields: (
     otherFieldName: string,
     errorMsg: string
@@ -58,6 +60,9 @@ export function Body(fieldname: string): CustomValidationChain {
     },
     equalFields: (otherFieldName, errorMsg) => {
       return chain.custom(equalFields(otherFieldName, errorMsg));
+    },
+    concept: () => {
+      return chain.custom(concept());
     },
   };
 
@@ -102,6 +107,9 @@ export function Param(fieldname: string): CustomValidationChain {
     },
     financialAccount: () => {
       return chain.custom(financialAccount());
+    },
+    concept: () => {
+      return chain.custom(concept());
     },
   };
 
