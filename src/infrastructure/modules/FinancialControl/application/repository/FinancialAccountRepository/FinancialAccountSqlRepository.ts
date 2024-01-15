@@ -6,6 +6,9 @@ import {
 } from './FinancialAccountInterfaceRepository';
 import { FinancialAccountSummary } from './models/FinancialAccountSummary';
 import { Email } from '@domain/models/Email';
+import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
+import DateTimeService from '@application/services/DateTimeService/DateTimeService';
+import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
 
 export class FinancialAccountSqlRepository
   implements FinancialAccountInterfaceRepository
@@ -20,7 +23,8 @@ export class FinancialAccountSqlRepository
   }
   summary(
     email: Email,
-    accountNumber: number
+    accountNumber: number,
+    year: DateTimeModel
   ): Promise<FinancialAccountSummary> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -35,17 +39,84 @@ export class FinancialAccountSqlRepository
           reject(error);
         }
 
+        const _year = DateTimeService.parse(year, DATE_FORMATS.Year);
+
+        const { dateStart, dateEnd } = {
+          dateStart: {
+            date: `01/01/${_year}`,
+            format: DATE_FORMATS.Date,
+          },
+          dateEnd: {
+            date: `31/12/${_year}`,
+            format: DATE_FORMATS.Date,
+          },
+        };
+
         const resulIncome = await prisma.income.findMany({
-          where: { accountId: resulAccount[0].id },
+          where: {
+            AND: [
+              { accountId: resulAccount[0].id },
+              {
+                date: {
+                  gte: DateTimeService.parse(dateStart, DATE_FORMATS.ISO_8601),
+                },
+              },
+              {
+                date: {
+                  lte: DateTimeService.parse(dateEnd, DATE_FORMATS.ISO_8601),
+                },
+              },
+            ],
+          },
         });
 
         const resulExpense = await prisma.expense.findMany({
-          where: { accountId: resulAccount[0].id },
+          where: {
+            AND: [
+              { accountId: resulAccount[0].id },
+              {
+                date: {
+                  gte: DateTimeService.parse(dateStart, DATE_FORMATS.ISO_8601),
+                },
+              },
+              {
+                date: {
+                  lte: DateTimeService.parse(dateEnd, DATE_FORMATS.ISO_8601),
+                },
+              },
+            ],
+          },
         });
 
         resolve({
-          expenses: resulExpense.map((expense) => expense.amount),
-          incomes: resulIncome.map((income) => income.amount),
+          expenses: resulExpense.map((expense) => {
+            return {
+              amount: expense.amount,
+              conceptId: expense.conceptId,
+              date: DateTimeService.parse(
+                {
+                  date: `${expense.date.getTime()}`,
+                  format: DATE_FORMATS.TimestampMs,
+                },
+                DATE_FORMATS.Date
+              ),
+              note: expense.note,
+            };
+          }),
+          incomes: resulIncome.map((income) => {
+            return {
+              amount: income.amount,
+              conceptId: income.conceptId,
+              date: DateTimeService.parse(
+                {
+                  date: `${income.date.getTime()}`,
+                  format: DATE_FORMATS.TimestampMs,
+                },
+                DATE_FORMATS.Date
+              ),
+              note: income.note,
+            };
+          }),
         });
       } catch (error) {
         reject(error);

@@ -1,9 +1,11 @@
+import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import { Body, Param } from '@infrastructure/middlewares/validators/body';
 
 const addConcept = [Body('concept').required()];
 
 const getAccountSummary = [
   Param('accountNumber').financialAccount().required(),
+  Param('year').date({ format: DATE_FORMATS.Year }).optional(),
 ];
 
 const deleteConcept = [Param('conceptId').concept().required()];

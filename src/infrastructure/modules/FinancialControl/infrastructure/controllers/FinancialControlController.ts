@@ -14,6 +14,8 @@ import { FinancialAccountDeleteConceptRequestDto } from '../dtos/request/Financi
 
 import { Email } from '@domain/models/Email';
 import { FinancialAccountTransactionRequestDto } from '../dtos/request/FinancialAccountTransactionRequestDto';
+import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
+import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
 
 const financialAccountUseCase = FinancialAccountUseCaseFactory.getIntance();
 
@@ -171,10 +173,20 @@ const obtainAccountSummary = async (
   try {
     const email = Email.createFromText(req.user.email);
     const accountNumber = parseInt(req.params.accountNumber, 10);
+    const year: DateTimeModel = req.params?.year
+      ? {
+          date: req.params.year,
+          format: DATE_FORMATS.Year,
+        }
+      : {
+          date: `${new Date().getFullYear()}`,
+          format: DATE_FORMATS.Year,
+        };
 
     const [errorDto, resulDto] = await financialAccountUseCase.obtainSummary(
       email,
-      accountNumber
+      accountNumber,
+      year
     );
 
     if (errorDto) {

@@ -7,6 +7,7 @@ import { password } from './PasswordValidator';
 import { id } from './IdValidator';
 import { financialAccount } from './FinancialAccount';
 import { concept } from './ConceptValidator';
+import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 
 const bindAll = <T>(object: T): { [K in keyof T]: T[K] } => {
   const protoKeys = Object.getOwnPropertyNames(
@@ -24,7 +25,7 @@ const bindAll = <T>(object: T): { [K in keyof T]: T[K] } => {
 
 type CustomValidationChain = ValidationChain & {
   required: () => CustomValidationChain;
-  date: () => CustomValidationChain;
+  date: (config?: { format?: string }) => CustomValidationChain;
   email: () => CustomValidationChain;
   password: () => CustomValidationChain;
   financialAccount: () => CustomValidationChain;
@@ -43,8 +44,8 @@ export function Body(fieldname: string): CustomValidationChain {
     required: () => {
       return required(chain, fieldname);
     },
-    date: () => {
-      return chain.custom(date(fieldname));
+    date: (config = { format: DATE_FORMATS.Date }) => {
+      return chain.custom(date(fieldname, config.format));
     },
     email: () => {
       return chain.custom(email());
@@ -93,8 +94,8 @@ export function Param(fieldname: string): CustomValidationChain {
     required: () => {
       return required(chain, fieldname);
     },
-    date: () => {
-      return chain.custom(date(fieldname));
+    date: ({ format = DATE_FORMATS.Date }) => {
+      return chain.custom(date(fieldname, format));
     },
     email: () => {
       return chain.custom(email());

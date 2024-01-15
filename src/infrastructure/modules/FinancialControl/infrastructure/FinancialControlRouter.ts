@@ -68,7 +68,7 @@ router.post(
 );
 
 router.get(
-  '/accounts/:accountNumber/summary',
+  '/accounts/:accountNumber/summary/:year?',
   FinancialControlValidator.getAccountSummary,
   validate,
   isLoggedIn,

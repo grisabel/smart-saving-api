@@ -19,6 +19,8 @@ import { FinancialAccountConceptResponseDto } from '../../infrastructure/dtos/re
 import { TransactionFactoryRepository } from '../../application/repository/TransactionRepository/TransactionFactoryRepository';
 import { TransactionInterfaceRepository } from '../../application/repository/TransactionRepository/TransactionInterfaceRepository';
 import { Transaction } from '../../application/repository/TransactionRepository/models/Transaction';
+import AggregateData from '../../application/repository/TransactionRepository/utils/AggregateData';
+import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
 
 export class FinancialAccountUseCase {
   constructor(
@@ -160,18 +162,35 @@ export class FinancialAccountUseCase {
 
   obtainSummary(
     email: Email,
-    accountNumber: number
+    accountNumber: number,
+    year: DateTimeModel
   ): Promise<[ErrorResponseDto | Error, FinancialAccountSummaryResponseDto]> {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await this.financialAccount.summary(
           email,
-          accountNumber
+          accountNumber,
+          year
         );
 
+        const expensesDefault = AggregateData.byMonthDefault(year);
+        const incomesDefault = AggregateData.byMonthDefault(year);
+        const expensesValue = AggregateData.byMonth(result.expenses);
+        const incomesValue = AggregateData.byMonth(result.incomes);
+
         const resultDto: FinancialAccountSummaryResponseDto = {
-          expenses: result.expenses,
-          incomes: result.incomes,
+          expenses: expensesDefault.map((expensesDft, i) => {
+            if (expensesValue[i]) {
+              return expensesValue[i];
+            }
+            return expensesDft;
+          }),
+          incomes: incomesDefault.map((incomesDft, i) => {
+            if (incomesValue[i]) {
+              return incomesValue[i];
+            }
+            return incomesDft;
+          }),
         };
         resolve([null, resultDto]);
       } catch (error) {

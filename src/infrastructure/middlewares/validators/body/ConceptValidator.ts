@@ -5,10 +5,18 @@ import { CustomValidator, ValidationChain } from 'express-validator';
 
 export const concept = (): CustomValidator => {
   return (value) => {
-    if (ConceptInterfaceRepository.DEFAULT_EXPENSE.includes(value)) {
+    if (
+      ConceptInterfaceRepository.DEFAULT_EXPENSE.map(
+        (expense) => expense.id
+      ).includes(value)
+    ) {
       return true;
     }
-    if (ConceptInterfaceRepository.DEFAULT_INCOME.includes(value)) {
+    if (
+      ConceptInterfaceRepository.DEFAULT_INCOME.map(
+        (income) => income.id
+      ).includes(value)
+    ) {
       return true;
     }
     try {

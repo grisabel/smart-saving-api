@@ -1,5 +1,6 @@
-import { Email } from "@domain/models/Email";
-import { FinancialAccountSummary } from "./models/FinancialAccountSummary";
+import { Email } from '@domain/models/Email';
+import { FinancialAccountSummary } from './models/FinancialAccountSummary';
+import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
 
 //TODO review texts
 export const FINANCIAL_ACCOUNT_REPOSITORY_ERROR = {
@@ -21,5 +22,9 @@ export class FinancialAccountRepositoryError extends Error {
 
 export interface FinancialAccountInterfaceRepository {
   create(email: Email): Promise<void>;
-  summary(email: Email, accountNumber: number): Promise<FinancialAccountSummary>;
+  summary(
+    email: Email,
+    accountNumber: number,
+    year: DateTimeModel
+  ): Promise<FinancialAccountSummary>;
 }
