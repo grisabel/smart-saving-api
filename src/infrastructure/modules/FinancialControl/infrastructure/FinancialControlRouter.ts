@@ -51,6 +51,22 @@ router.delete(
   FinancialControlController.deleteConceptExpense
 );
 
+router.post(
+  '/accounts/:accountNumber/income',
+  FinancialControlValidator.addTransaction,
+  validate,
+  isLoggedIn,
+  FinancialControlController.addIncome
+);
+
+router.post(
+  '/accounts/:accountNumber/expense',
+  FinancialControlValidator.addTransaction,
+  validate,
+  isLoggedIn,
+  FinancialControlController.addExpense
+);
+
 router.get(
   '/accounts/:accountNumber/summary',
   FinancialControlValidator.getAccountSummary,

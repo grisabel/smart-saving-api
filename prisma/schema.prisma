@@ -89,6 +89,10 @@ model FinancialAccount {
 model Income {
   id        String           @id @default(uuid())
   amount    Float
+  concept   Concept          @relation(fields: [conceptId], references: [id])
+  conceptId String
+  note      String
+  date      DateTime
   account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId String
 }
@@ -96,6 +100,10 @@ model Income {
 model Expense {
   id        String           @id @default(uuid())
   amount    Float
+  concept   Concept          @relation(fields: [conceptId], references: [id])
+  conceptId String
+  note      String
+  date      DateTime
   account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId String
 }
@@ -106,6 +114,8 @@ model Concept {
   concept   String
   user      User        @relation(fields: [userEmail], references: [email], onDelete: Cascade)
   userEmail String
+  Income    Income[]
+  Expense   Expense[]
 
   @@index([userEmail, type, concept])
 }

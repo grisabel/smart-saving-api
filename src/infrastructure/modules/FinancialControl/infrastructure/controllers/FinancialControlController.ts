@@ -13,9 +13,9 @@ import { FinancialAccountConceptListResponseDto } from '../dtos/response/Financi
 import { FinancialAccountDeleteConceptRequestDto } from '../dtos/request/FinancialAccountDeleteConceptRequestDto';
 
 import { Email } from '@domain/models/Email';
+import { FinancialAccountTransactionRequestDto } from '../dtos/request/FinancialAccountTransactionRequestDto';
 
-const financialAccountUseCaseFactory =
-  FinancialAccountUseCaseFactory.getIntance();
+const financialAccountUseCase = FinancialAccountUseCaseFactory.getIntance();
 
 const obtainConceptIncome = async (
   req: Request,
@@ -25,8 +25,10 @@ const obtainConceptIncome = async (
   try {
     const email = Email.createFromText(req.user.email);
 
-    const [errorDto, resulDto] =
-      await financialAccountUseCaseFactory.obtainConcept(email, 'income');
+    const [errorDto, resulDto] = await financialAccountUseCase.obtainConcept(
+      email,
+      'income'
+    );
 
     if (errorDto) {
       res.status(404).json(errorDto);
@@ -46,8 +48,10 @@ const obtainConceptExpense = async (
   try {
     const email = Email.createFromText(req.user.email);
 
-    const [errorDto, resulDto] =
-      await financialAccountUseCaseFactory.obtainConcept(email, 'expense');
+    const [errorDto, resulDto] = await financialAccountUseCase.obtainConcept(
+      email,
+      'expense'
+    );
 
     if (errorDto) {
       res.status(404).json(errorDto);
@@ -68,8 +72,11 @@ const addConceptIncome = async (
     const email = Email.createFromText(req.user.email);
     const concept = req.body.concept;
 
-    const [errorDto, resulDto] =
-      await financialAccountUseCaseFactory.addConcept(email, 'income', concept);
+    const [errorDto, resulDto] = await financialAccountUseCase.addConcept(
+      email,
+      'income',
+      concept
+    );
 
     if (errorDto) {
       res.status(404).json(errorDto);
@@ -90,12 +97,11 @@ const addConceptExpense = async (
     const email = Email.createFromText(req.user.email);
     const concept = req.body.concept;
 
-    const [errorDto, resulDto] =
-      await financialAccountUseCaseFactory.addConcept(
-        email,
-        'expense',
-        concept
-      );
+    const [errorDto, resulDto] = await financialAccountUseCase.addConcept(
+      email,
+      'expense',
+      concept
+    );
 
     if (errorDto) {
       res.status(404).json(errorDto);
@@ -116,12 +122,11 @@ const deleteConceptIncome = async (
     const email = Email.createFromText(req.user.email);
     const conceptId = req.params.conceptId;
 
-    const [errorDto, resulDto] =
-      await financialAccountUseCaseFactory.deleteConcept(
-        email,
-        'income',
-        conceptId
-      );
+    const [errorDto, resulDto] = await financialAccountUseCase.deleteConcept(
+      email,
+      'income',
+      conceptId
+    );
 
     if (errorDto) {
       res.status(404).json(errorDto);
@@ -142,12 +147,11 @@ const deleteConceptExpense = async (
     const email = Email.createFromText(req.user.email);
     const conceptId = req.params.conceptId;
 
-    const [errorDto, resulDto] =
-      await financialAccountUseCaseFactory.deleteConcept(
-        email,
-        'expense',
-        conceptId
-      );
+    const [errorDto, resulDto] = await financialAccountUseCase.deleteConcept(
+      email,
+      'expense',
+      conceptId
+    );
 
     if (errorDto) {
       res.status(404).json(errorDto);
@@ -168,14 +172,79 @@ const obtainAccountSummary = async (
     const email = Email.createFromText(req.user.email);
     const accountNumber = parseInt(req.params.accountNumber, 10);
 
-    const [errorDto, resulDto] =
-      await financialAccountUseCaseFactory.obtainSummary(email, accountNumber);
+    const [errorDto, resulDto] = await financialAccountUseCase.obtainSummary(
+      email,
+      accountNumber
+    );
 
     if (errorDto) {
       res.status(404).json(errorDto);
       return;
     }
     res.status(200).json(resulDto);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const addIncome = async (
+  req: Request<FinancialAccountTransactionRequestDto>,
+  res: Response<FinancialAccountSummaryResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    const email = Email.createFromText(req.user.email);
+    const accountNumber = parseInt(req.params.accountNumber, 10);
+
+    const [errorDto, resulDto] = await financialAccountUseCase.addTransaction(
+      email,
+      accountNumber,
+      {
+        amount: req.body.amount,
+        conceptId: req.body.conceptId,
+        date: req.body.date,
+        note: req.body.note,
+      },
+      'income'
+    );
+
+    if (errorDto) {
+      res.status(404).json(errorDto);
+      return;
+    }
+    res.status(200).send();
+  } catch (error) {
+    console.log({ error });
+    next(error);
+  }
+};
+
+const addExpense = async (
+  req: Request<FinancialAccountTransactionRequestDto>,
+  res: Response<FinancialAccountSummaryResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    const email = Email.createFromText(req.user.email);
+    const accountNumber = parseInt(req.params.accountNumber, 10);
+
+    const [errorDto, resulDto] = await financialAccountUseCase.addTransaction(
+      email,
+      accountNumber,
+      {
+        amount: req.body.amount,
+        conceptId: req.body.conceptId,
+        date: req.body.date,
+        note: req.body.note,
+      },
+      'expense'
+    );
+
+    if (errorDto) {
+      res.status(404).json(errorDto);
+      return;
+    }
+    res.status(200).send();
   } catch (error) {
     next(error);
   }
@@ -189,4 +258,6 @@ export default {
   deleteConceptIncome,
   deleteConceptExpense,
   obtainAccountSummary,
+  addIncome,
+  addExpense,
 };

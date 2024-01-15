@@ -16,11 +16,15 @@ import {
 import { ConceptFactoryRepository } from '../../application/repository/ConceptRepository/ConceptFactoryRepository';
 import { FinancialAccountConceptListResponseDto } from '../../infrastructure/dtos/response/FinancialAccountConceptListResponseDto';
 import { FinancialAccountConceptResponseDto } from '../../infrastructure/dtos/response/FinancialAccountConceptResponseDto';
+import { TransactionFactoryRepository } from '../../application/repository/TransactionRepository/TransactionFactoryRepository';
+import { TransactionInterfaceRepository } from '../../application/repository/TransactionRepository/TransactionInterfaceRepository';
+import { Transaction } from '../../application/repository/TransactionRepository/models/Transaction';
 
 export class FinancialAccountUseCase {
   constructor(
     private financialAccount: FinancialAccountInterfaceRepository,
-    private conceptRepository: ConceptInterfaceRepository
+    private conceptRepository: ConceptInterfaceRepository,
+    private transactionRepository: TransactionInterfaceRepository
   ) {}
 
   addConcept(
@@ -123,6 +127,37 @@ export class FinancialAccountUseCase {
     });
   }
 
+  addTransaction(
+    email: Email,
+    accountNumber: number,
+    transaction: Transaction,
+    type: 'income' | 'expense'
+  ): Promise<[ErrorResponseDto | Error, FinancialAccountConceptResponseDto]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result;
+
+        if (type === 'expense') {
+          result = await this.transactionRepository.addExpense(
+            email,
+            accountNumber,
+            transaction
+          );
+        } else {
+          result = await this.transactionRepository.addIncome(
+            email,
+            accountNumber,
+            transaction
+          );
+        }
+
+        resolve([null, null]);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   obtainSummary(
     email: Email,
     accountNumber: number
@@ -165,9 +200,12 @@ export class FinancialAccountUseCaseFactory {
 
       const conceptRepository = ConceptFactoryRepository.getInstance();
 
+      const transactionRepository = TransactionFactoryRepository.getInstance();
+
       FinancialAccountUseCaseFactory.instance = new FinancialAccountUseCase(
         financialAccountRepository,
-        conceptRepository
+        conceptRepository,
+        transactionRepository
       );
     }
     return FinancialAccountUseCaseFactory.instance;

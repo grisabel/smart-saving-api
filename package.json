@@ -7,6 +7,7 @@
     "swagger": "node docs/swagger/swagger.js",
     "start:swagger": "npx concurrently --kill-other -n \"SERVER,SWAGGER\" -c \"bgBlue,bgGreen\" \"npm run start\" \"npm run swagger\"",
     "start:prod": "npx nx run smart-savings-api:serve:production",
+    "db:init": "npm run build && npx prisma migrate deploy && node --require=./module-alias-bootstrap.js --require=dotenv/config dist/smart-savings-api/src/initialData.js",
     "build": "npx nx build smart-savings-api",
     "test": "npx nx test smart-savings-api",
     "test:e2e": "npx nx e2e smart-savings-api-e2e",

@@ -102,7 +102,6 @@ describe(`La ruta ${URL}`, () => {
       }
 
       //assert
-      console.log({ a: throwError.response.data.errors });
       expect(throwError.response.status).toBe(401);
       expect(throwError.response.data.message).toEqual(response401.message);
     });

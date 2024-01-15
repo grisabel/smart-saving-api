@@ -11,42 +11,27 @@ import { Email } from '@domain/models/Email';
 export class ConceptSqlRepository implements ConceptInterfaceRepository {
   addInitialData(email: Email): Promise<void> {
     return new Promise((resolve, reject) => {
-      const defaultIncomes = [
-        'Nómina',
-        'Rentas',
-        'Becas/Subvenciones',
-        'Apuestas/Juego',
-      ].map((income) => {
-        return {
-          userEmail: email.getValue(),
-          type: ConceptType.Concept_Income,
-          concept: income,
-        };
-      });
+      const defaultIncomes = ConceptInterfaceRepository.DEFAULT_INCOME.map(
+        (income) => {
+          return {
+            userEmail: email.getValue(),
+            type: ConceptType.Concept_Income,
+            concept: income.concept,
+            id: `${income.id}-${email.getValue()}`,
+          };
+        }
+      );
 
-      const defaultExpenses = [
-        'Hipoteca/Alquiler/Comunidad',
-        'Alimentación',
-        'Mascotas',
-        'Combustible',
-        'Luz',
-        'Calefacción',
-        'Telefonía/Internet',
-        'Agua',
-        'Estudios',
-        'Ocio',
-        'Tasas/Impuestos/Multas',
-        'Educación',
-        'Salud',
-        'Seguros',
-        'Coche',
-      ].map((expense) => {
-        return {
-          userEmail: email.getValue(),
-          type: ConceptType.Concept_Expense,
-          concept: expense,
-        };
-      });
+      const defaultExpenses = ConceptInterfaceRepository.DEFAULT_EXPENSE.map(
+        (expense) => {
+          return {
+            userEmail: email.getValue(),
+            type: ConceptType.Concept_Expense,
+            concept: expense.concept,
+            id: `${expense.id}-${email.getValue()}`,
+          };
+        }
+      );
 
       prisma.concept
         .createMany({
