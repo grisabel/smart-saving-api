@@ -24,7 +24,7 @@
         "description": "Operations about user"
       },
       {
-        "name": "financial control (income / expense)",
+        "name": "financial control (concept)",
         "description": "Operations about financial control"
       },
       {
@@ -396,7 +396,7 @@
       "/financial-control/concept/income": {
         "get": {
           "tags": [
-            "financial control (income / expense)"
+            "financial control (concept)"
           ],
           "summary": "Get concept",
           "description": "Get the list of concepts that can be customised.",
@@ -416,7 +416,7 @@
         },
         "post": {
           "tags": [
-            "financial control (income / expense)"
+            "financial control (concept)"
           ],
           "summary": "Add custom concept",
           "description": "This can only be done by the logged in user.",
@@ -447,7 +447,7 @@
       "/financial-control/concept/income/{conceptId}": {
         "delete": {
           "tags": [
-            "financial control (income / expense)"
+            "financial control (concept)"
           ],
           "summary": "Delete custom concept",
           "description": "Delete concepts that can be customised.",
@@ -473,7 +473,7 @@
       "/financial-control/concept/expense": {
         "get": {
           "tags": [
-            "financial control (income / expense)"
+            "financial control (concept)"
           ],
           "summary": "Get custom concept",
           "description": "Get the list of concepts that can be customised.",
@@ -493,7 +493,7 @@
         },
         "post": {
           "tags": [
-            "financial control (income / expense)"
+            "financial control (concept)"
           ],
           "summary": "Add custom concept",
           "description": "This can only be done by the logged in user.",
@@ -524,7 +524,7 @@
       "/financial-control/concept/expense/{conceptId}": {
         "delete": {
           "tags": [
-            "financial control (income / expense)"
+            "financial control (concept)"
           ],
           "summary": "Delete custom concept",
           "description": "Delete concepts that can be customised.",
@@ -547,14 +547,26 @@
           }
         }
       },
-      "/financial-control/income": {
+      "/financial-control/accounts/{accountNumber}/income": {
         "post": {
           "tags": [
-            "financial control (income / expense)"
+            "financial control"
           ],
           "summary": "Add Income",
           "description": "Add an income.",
           "operationId": "financialControlIncome",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            }
+          ],
           "requestBody": {
             "content": {
               "application/json": {
@@ -578,14 +590,26 @@
           }
         }
       },
-      "/financial-control/expense": {
+      "/financial-control/accounts/{accountNumber}/expense": {
         "post": {
           "tags": [
-            "financial control (income / expense)"
+            "financial control"
           ],
           "summary": "Add Expense",
           "description": "Add an expense.",
           "operationId": "financialControlExpense",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            }
+          ],
           "requestBody": {
             "content": {
               "application/json": {
