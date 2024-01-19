@@ -17,6 +17,19 @@ export type DateTimeSortSet = {
   DES: DateTimeSortFnc;
 };
 
+export type DateTimeCompareFnc = (
+  dateTime: TimestampMs,
+  compareDateTime: TimestampMs
+) => boolean;
+
+export type DateTimeCompareSet = {
+  UNTIL: DateTimeCompareFnc;
+  UNTIL_EXCLUSIVE: DateTimeCompareFnc;
+  SINCE: DateTimeCompareFnc;
+  SINCE_EXCLUSIVE: DateTimeCompareFnc;
+  EQUAL: DateTimeCompareFnc;
+};
+
 export interface DateTimeInterfaceService {
   parse: (dateTime: DateTimeModel, format: DateFormat) => DateString;
   isValid(dateTime: DateTimeModel): boolean;
@@ -26,6 +39,13 @@ export interface DateTimeInterfaceService {
   sort(
     dateTime: DateTimeModel,
     compareDateTime: DateTimeModel,
-    comparator: DateTimeSortFnc
+    sorter: DateTimeSortFnc
   ): number;
+
+  VALIDATE_SET: DateTimeCompareSet;
+  validate(
+    dateTime: DateTimeModel,
+    compareDateTime: DateTimeModel,
+    comparator: DateTimeCompareFnc
+  ): boolean;
 }

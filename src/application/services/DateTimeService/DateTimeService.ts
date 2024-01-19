@@ -2,6 +2,8 @@ import { DateTime as LuxonDateTime } from 'luxon';
 import {
   DateFormat,
   DateString,
+  DateTimeCompareFnc,
+  DateTimeCompareSet,
   DateTimeInterfaceService,
   DateTimeModel,
   DateTimeSortFnc,
@@ -49,6 +51,9 @@ const _toFormat = (luxon: LuxonDateTime, format: DateFormat): DateString => {
 };
 
 const parse = (dateTime: DateTimeModel, format: DateFormat): DateString => {
+  if (!isValid(dateTime)) {
+    throw new Error('Invalid dateTime');
+  }
   const luxonDate = _fromFormat(dateTime);
   const formattedDate = _toFormat(luxonDate, format);
   return formattedDate;
@@ -73,8 +78,43 @@ const SORT_SET: DateTimeSortSet = {
 const sort = (
   dateTime: DateTimeModel,
   compareDateTime: DateTimeModel,
-  comparator: DateTimeSortFnc
+  sorter: DateTimeSortFnc
 ): number => {
+  if (!isValid(dateTime) || !isValid(compareDateTime)) {
+    throw new Error('Invalid dateTime or compareDateTime');
+  }
+  const a = parse(dateTime, DATE_FORMATS.TimestampMs);
+  const b = parse(compareDateTime, DATE_FORMATS.TimestampMs);
+
+  return sorter(a, b);
+};
+
+const VALIDATE_SET: DateTimeCompareSet = {
+  UNTIL: (dateTime: TimestampMs, compareDateTime: TimestampMs): boolean =>
+    dateTime <= compareDateTime,
+  UNTIL_EXCLUSIVE: (
+    dateTime: TimestampMs,
+    compareDateTime: TimestampMs
+  ): boolean => dateTime < compareDateTime,
+  SINCE: (dateTime: TimestampMs, compareDateTime: TimestampMs): boolean =>
+    dateTime >= compareDateTime,
+  SINCE_EXCLUSIVE: (
+    dateTime: TimestampMs,
+    compareDateTime: TimestampMs
+  ): boolean => dateTime > compareDateTime,
+  EQUAL: (dateTime: TimestampMs, compareDateTime: TimestampMs): boolean =>
+    dateTime == compareDateTime,
+};
+
+const validate = (
+  dateTime: DateTimeModel,
+  compareDateTime: DateTimeModel,
+  comparator: DateTimeCompareFnc
+): boolean => {
+  if (!isValid(dateTime) || !isValid(compareDateTime)) {
+    throw new Error('Invalid dateTime or compareDateTime');
+  }
+
   const a = parse(dateTime, DATE_FORMATS.TimestampMs);
   const b = parse(compareDateTime, DATE_FORMATS.TimestampMs);
 
@@ -87,6 +127,8 @@ const DateTimeService: DateTimeInterfaceService = {
   now,
   SORT_SET,
   sort,
+  VALIDATE_SET,
+  validate,
 };
 
 export default DateTimeService;
