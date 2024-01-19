@@ -677,29 +677,7 @@
           }
         }
       },
-      "/financial-control/habits": {
-        "get": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Get a user's habits",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlHabits",
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/reports/income": {
+      "/financial-control/accounts/{accountNumber}/reports/income": {
         "get": {
           "tags": [
             "financial control"
@@ -740,6 +718,28 @@
                 "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/FinancialControlReportIncomeResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/habits": {
+        "get": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Get a user's habits",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlHabits",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
                   }
                 }
               }
