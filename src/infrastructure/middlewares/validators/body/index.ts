@@ -1,4 +1,4 @@
-import { ValidationChain, body, param } from 'express-validator';
+import { ValidationChain, body, param, query } from 'express-validator';
 import { required } from './RequiredFieldValidator';
 import { equalFields } from './EqualFieldsValidator';
 import { date } from './DateValidator';
@@ -37,9 +37,10 @@ type CustomValidationChain = ValidationChain & {
   ) => CustomValidationChain;
 };
 
-export function Body(fieldname: string): CustomValidationChain {
-  const chain = body(fieldname);
-
+function ChainFactory(
+  chain: ValidationChain,
+  fieldname: string
+): CustomValidationChain {
   const api = {
     required: () => {
       return required(chain, fieldname);
@@ -87,65 +88,20 @@ export function Body(fieldname: string): CustomValidationChain {
   ) as unknown as CustomValidationChain;
 }
 
+export function Body(fieldname: string): CustomValidationChain {
+  const chain = body(fieldname);
+
+  return ChainFactory(chain, fieldname);
+}
+
 export function Param(fieldname: string): CustomValidationChain {
   const chain = param(fieldname);
 
-  const api = {
-    required: () => {
-      return required(chain, fieldname);
-    },
-    date: ({ format = DATE_FORMATS.Date }) => {
-      return chain.custom(date(fieldname, format));
-    },
-    email: () => {
-      return chain.custom(email());
-    },
-    id: () => {
-      return chain.custom(id());
-    },
-    password: () => {
-      return chain.custom(password());
-    },
-    financialAccount: () => {
-      return chain.custom(financialAccount());
-    },
-    concept: () => {
-      return chain.custom(concept());
-    },
-  };
-
-  const apiProxy = new Proxy(api, {
-    get(target, prop) {
-      const value = target[prop];
-
-      if (value instanceof Function) {
-        return function (...args) {
-          const resul = value.apply(target, args);
-          return Object.assign(resul, bindAll(target));
-        };
-      }
-      return value;
-    },
-  });
-
-  return Object.assign(
-    chain,
-    bindAll(apiProxy)
-  ) as unknown as CustomValidationChain;
+  return ChainFactory(chain, fieldname);
 }
 
-// export function Body(fieldname: string): CustomValidationChain {
-//   const chain = body(fieldname);
-//   const api = {
-//     required: () => {
-//       const _chain = required(chain, fieldname);
-//       return Object.assign(_chain, bindAll(api));
-//     },
-//     equalFields: (otherFieldName, errorMsg) => {
-//       const _chain = chain.custom(equalFields(otherFieldName, errorMsg));
-//       return Object.assign(_chain, bindAll(api));
-//     },
-//   };
+export function Query(fieldname: string): CustomValidationChain {
+  const chain = query(fieldname);
 
-//   return Object.assign(chain, bindAll(api));
-// }
+  return ChainFactory(chain, fieldname);
+}
