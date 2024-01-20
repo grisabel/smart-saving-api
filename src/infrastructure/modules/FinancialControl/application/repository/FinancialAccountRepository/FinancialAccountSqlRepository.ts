@@ -93,6 +93,7 @@ export class FinancialAccountSqlRepository
         resolve({
           expenses: resulExpense.map((expense) => {
             return {
+              transactionId: expense.id,
               amount: expense.amount,
               conceptId: expense.conceptId,
               date: DateTimeService.parse(
@@ -107,6 +108,7 @@ export class FinancialAccountSqlRepository
           }),
           incomes: resulIncome.map((income) => {
             return {
+              transactionId: income.id,
               amount: income.amount,
               conceptId: income.conceptId,
               date: DateTimeService.parse(
@@ -175,6 +177,7 @@ export class FinancialAccountSqlRepository
           }
 
           return {
+            transactionId: income.id,
             amount: income.amount,
             conceptId: conceptId,
             date: DateTimeService.parse(
@@ -243,6 +246,7 @@ export class FinancialAccountSqlRepository
           }
 
           return {
+            transactionId: expense.id,
             amount: expense.amount,
             conceptId: conceptId,
             date: DateTimeService.parse(
