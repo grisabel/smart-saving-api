@@ -10,6 +10,7 @@ import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
 import { Transaction } from '../TransactionRepository/models/Transaction';
+import { Id } from '@domain/models/Id/Id';
 
 export class FinancialAccountSqlRepository
   implements FinancialAccountInterfaceRepository
@@ -92,6 +93,7 @@ export class FinancialAccountSqlRepository
         resolve({
           expenses: resulExpense.map((expense) => {
             return {
+              transactionId: expense.id,
               amount: expense.amount,
               conceptId: expense.conceptId,
               date: DateTimeService.parse(
@@ -106,6 +108,7 @@ export class FinancialAccountSqlRepository
           }),
           incomes: resulIncome.map((income) => {
             return {
+              transactionId: income.id,
               amount: income.amount,
               conceptId: income.conceptId,
               date: DateTimeService.parse(
@@ -165,9 +168,18 @@ export class FinancialAccountSqlRepository
         });
 
         const incomes = resulIncome.map((income) => {
+          let conceptId = '';
+          try {
+            Id.createFrom(income.conceptId);
+            conceptId = income.conceptId;
+          } catch (error) {
+            conceptId = income.conceptId.split('_')[0];
+          }
+
           return {
+            transactionId: income.id,
             amount: income.amount,
-            conceptId: income.conceptId,
+            conceptId: conceptId,
             date: DateTimeService.parse(
               {
                 date: `${income.date.getTime()}`,
@@ -224,10 +236,95 @@ export class FinancialAccountSqlRepository
           },
         });
 
-        const expenses = resulExpense.map((income) => {
+        const expenses = resulExpense.map((expense) => {
+          let conceptId = '';
+          try {
+            Id.createFrom(expense.conceptId);
+            conceptId = expense.conceptId;
+          } catch (error) {
+            conceptId = expense.conceptId.split('_')[0];
+          }
+
           return {
+            transactionId: expense.id,
+            amount: expense.amount,
+            conceptId: conceptId,
+            date: DateTimeService.parse(
+              {
+                date: `${expense.date.getTime()}`,
+                format: DATE_FORMATS.TimestampMs,
+              },
+              DATE_FORMATS.Date
+            ),
+            note: expense.note,
+          };
+        });
+        resolve(expenses);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  reportsIncomeDetails(
+    email: Email,
+    accountNumber: number,
+    conceptId: string,
+    dateTo: DateTimeModel,
+    dateFrom: DateTimeModel
+  ): Promise<Transaction[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const resulAccount = await prisma.financialAccount.findMany({
+          where: { userEmail: email.getValue(), accountNumber },
+        });
+
+        if (resulAccount.length === 0) {
+          const error = new FinancialAccountRepositoryError({
+            accountNotExist: FINANCIAL_ACCOUNT_REPOSITORY_ERROR.accountNotExist,
+          });
+          reject(error);
+        }
+
+        const dateStart = dateFrom;
+        const dateEnd = dateTo;
+        try {
+          Id.createFrom(conceptId);
+        } catch (error) {
+          conceptId = `${conceptId}_${email.getValue()}`;
+        }
+
+        const resulIncome = await prisma.income.findMany({
+          where: {
+            AND: [
+              { accountId: resulAccount[0].id },
+              {
+                date: {
+                  gte: DateTimeService.parse(dateStart, DATE_FORMATS.ISO_8601),
+                },
+              },
+              {
+                date: {
+                  lte: DateTimeService.parse(dateEnd, DATE_FORMATS.ISO_8601),
+                },
+              },
+              { conceptId: conceptId },
+            ],
+          },
+        });
+
+        const incomes = resulIncome.map((income) => {
+          let conceptId = '';
+          try {
+            Id.createFrom(income.conceptId);
+            conceptId = income.conceptId;
+          } catch (error) {
+            conceptId = income.conceptId.split('_')[0];
+          }
+
+          return {
+            transactionId: income.id,
             amount: income.amount,
-            conceptId: income.conceptId,
+            conceptId: conceptId,
             date: DateTimeService.parse(
               {
                 date: `${income.date.getTime()}`,
@@ -236,6 +333,82 @@ export class FinancialAccountSqlRepository
               DATE_FORMATS.Date
             ),
             note: income.note,
+          };
+        });
+        resolve(incomes);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  reportsExpenseDetails(
+    email: Email,
+    accountNumber: number,
+    conceptId: string,
+    dateTo: DateTimeModel,
+    dateFrom: DateTimeModel
+  ): Promise<Transaction[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const resulAccount = await prisma.financialAccount.findMany({
+          where: { userEmail: email.getValue(), accountNumber },
+        });
+
+        if (resulAccount.length === 0) {
+          const error = new FinancialAccountRepositoryError({
+            accountNotExist: FINANCIAL_ACCOUNT_REPOSITORY_ERROR.accountNotExist,
+          });
+          reject(error);
+        }
+
+        const dateStart = dateFrom;
+        const dateEnd = dateTo;
+        try {
+          Id.createFrom(conceptId);
+        } catch (error) {
+          conceptId = `${conceptId}_${email.getValue()}`;
+        }
+
+        const resulExpense = await prisma.expense.findMany({
+          where: {
+            AND: [
+              { accountId: resulAccount[0].id },
+              {
+                date: {
+                  gte: DateTimeService.parse(dateStart, DATE_FORMATS.ISO_8601),
+                },
+              },
+              {
+                date: {
+                  lte: DateTimeService.parse(dateEnd, DATE_FORMATS.ISO_8601),
+                },
+              },
+              { conceptId: conceptId },
+            ],
+          },
+        });
+
+        const expenses = resulExpense.map((expense) => {
+          let conceptId = '';
+          try {
+            Id.createFrom(expense.conceptId);
+            conceptId = expense.conceptId;
+          } catch (error) {
+            conceptId = expense.conceptId.split('_')[0];
+          }
+
+          return {
+            transactionId: expense.id,
+            amount: expense.amount,
+            conceptId: conceptId,
+            date: DateTimeService.parse(
+              {
+                date: `${expense.date.getTime()}`,
+                format: DATE_FORMATS.TimestampMs,
+              },
+              DATE_FORMATS.Date
+            ),
+            note: expense.note,
           };
         });
         resolve(expenses);

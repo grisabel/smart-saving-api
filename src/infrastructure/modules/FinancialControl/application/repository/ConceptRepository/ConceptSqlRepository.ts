@@ -7,6 +7,7 @@ import {
 import { Concept } from './models/Concept';
 import { ConceptType } from '@prisma/client';
 import { Email } from '@domain/models/Email';
+import { Id } from '@domain/models/Id/Id';
 
 export class ConceptSqlRepository implements ConceptInterfaceRepository {
   addInitialData(email: Email): Promise<void> {
@@ -17,7 +18,7 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
             userEmail: email.getValue(),
             type: ConceptType.Concept_Income,
             concept: income.concept,
-            id: `${income.id}-${email.getValue()}`,
+            id: `${income.id}_${email.getValue()}`,
           };
         }
       );
@@ -28,7 +29,7 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
             userEmail: email.getValue(),
             type: ConceptType.Concept_Expense,
             concept: expense.concept,
-            id: `${expense.id}-${email.getValue()}`,
+            id: `${expense.id}_${email.getValue()}`,
           };
         }
       );
@@ -104,8 +105,15 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
         })
         .then((expenses) => {
           const values = expenses.map((expense) => {
+            let conceptId = '';
+            try {
+              Id.createFrom(expense.id);
+              conceptId = expense.id;
+            } catch (error) {
+              conceptId = expense.id.split('_')[0];
+            }
             return {
-              id: expense.id,
+              id: conceptId,
               concept: expense.concept,
             };
           });
@@ -126,8 +134,15 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
         })
         .then((incomes) => {
           const values = incomes.map((income) => {
+            let conceptId = '';
+            try {
+              Id.createFrom(income.id);
+              conceptId = income.id;
+            } catch (error) {
+              conceptId = income.id.split('_')[0];
+            }
             return {
-              id: income.id,
+              id: conceptId,
               concept: income.concept,
             };
           });

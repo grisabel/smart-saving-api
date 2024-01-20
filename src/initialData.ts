@@ -25,8 +25,8 @@ async function main() {
     ConceptInterfaceRepository.DEFAULT_INCOME[1],
   ].map((c) => c.id);
   const expense_concepts = [
-    ConceptInterfaceRepository.DEFAULT_INCOME[0],
-    ConceptInterfaceRepository.DEFAULT_INCOME[1],
+    ConceptInterfaceRepository.DEFAULT_EXPENSE[0],
+    ConceptInterfaceRepository.DEFAULT_EXPENSE[1],
   ].map((c) => c.id);
 
   const dates = [

@@ -35,7 +35,7 @@ export class TransactionSqlRepository
         Id.createFrom(expense.conceptId);
         conceptId = expense.conceptId;
       } catch (error) {
-        conceptId = `${expense.conceptId}-${email.getValue()}`;
+        conceptId = `${expense.conceptId}_${email.getValue()}`;
       }
 
       prisma.expense
@@ -84,7 +84,7 @@ export class TransactionSqlRepository
         Id.createFrom(income.conceptId);
         conceptId = income.conceptId;
       } catch (error) {
-        conceptId = `${income.conceptId}-${email.getValue()}`;
+        conceptId = `${income.conceptId}_${email.getValue()}`;
       }
 
       prisma.income

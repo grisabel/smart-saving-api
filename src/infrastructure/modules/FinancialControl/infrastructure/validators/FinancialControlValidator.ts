@@ -28,10 +28,18 @@ const reports = [
   Query('dateFrom').date().required().isDateEarlier('dateTo'),
 ];
 
+const reportsDetails = [
+  Param('accountNumber').financialAccount().required(),
+  Param('conceptId').concept().required(),
+  Query('dateTo').date().required(),
+  Query('dateFrom').date().required().isDateEarlier('dateTo'),
+];
+
 export default {
   addConcept,
   getAccountSummary,
   deleteConcept,
   addTransaction,
   reports,
+  reportsDetails,
 };

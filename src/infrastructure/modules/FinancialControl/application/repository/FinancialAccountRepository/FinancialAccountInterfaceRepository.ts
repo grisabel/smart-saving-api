@@ -40,4 +40,18 @@ export interface FinancialAccountInterfaceRepository {
     dateTo: DateTimeModel,
     dateFrom: DateTimeModel
   ): Promise<Transaction[]>;
+  reportsIncomeDetails(
+    email: Email,
+    accountNumber: number,
+    conceptId: string,
+    dateTo: DateTimeModel,
+    dateFrom: DateTimeModel
+  ): Promise<Transaction[]>;
+  reportsExpenseDetails(
+    email: Email,
+    accountNumber: number,
+    conceptId: string,
+    dateTo: DateTimeModel,
+    dateFrom: DateTimeModel
+  ): Promise<Transaction[]>;
 }
