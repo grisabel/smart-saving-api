@@ -87,8 +87,6 @@ export class TransactionSqlRepository
         conceptId = `${income.conceptId}_${email.getValue()}`;
       }
 
-      console.log({ conceptId });
-
       prisma.income
         .create({
           data: {

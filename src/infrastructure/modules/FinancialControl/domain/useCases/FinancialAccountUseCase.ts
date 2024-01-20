@@ -22,6 +22,7 @@ import { Transaction } from '../../application/repository/TransactionRepository/
 import AggregateData from '../../application/repository/TransactionRepository/utils/AggregateData';
 import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
 import { FinancialAccountReportsResponseDto } from '../../infrastructure/dtos/response/FinancialAccountReportsResponseDto';
+import { FinancialAccountReportsDetailsResponseDto } from '../../infrastructure/dtos/response/FinancialAccountReportsDetailsResponseDto';
 
 export class FinancialAccountUseCase {
   constructor(
@@ -237,6 +238,54 @@ export class FinancialAccountUseCase {
         }
 
         const resultDto = AggregateData.byCategory(result);
+        resolve([null, resultDto]);
+      } catch (error) {
+        if (error instanceof FinancialAccountRepositoryError) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            message: 'Cuenta no existente', //todo
+            error,
+          });
+
+          resolve([errorDto, null]);
+        }
+
+        reject(error);
+      }
+    });
+  }
+
+  obtainReportsDetails(
+    email: Email,
+    accountNumber: number,
+    conceptId: string,
+    dateTo: DateTimeModel,
+    dateFrom: DateTimeModel,
+    type: 'income' | 'expense'
+  ): Promise<
+    [ErrorResponseDto | Error, FinancialAccountReportsDetailsResponseDto]
+  > {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let resultDto;
+
+        if (type === 'expense') {
+          resultDto = await this.financialAccount.reportsExpenseDetails(
+            email,
+            accountNumber,
+            conceptId,
+            dateTo,
+            dateFrom
+          );
+        } else {
+          resultDto = await this.financialAccount.reportsIncomeDetails(
+            email,
+            accountNumber,
+            conceptId,
+            dateTo,
+            dateFrom
+          );
+        }
+
         resolve([null, resultDto]);
       } catch (error) {
         if (error instanceof FinancialAccountRepositoryError) {

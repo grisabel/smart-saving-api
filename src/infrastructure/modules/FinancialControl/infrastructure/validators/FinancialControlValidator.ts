@@ -30,9 +30,9 @@ const reports = [
 
 const reportsDetails = [
   Param('accountNumber').financialAccount().required(),
+  Param('conceptId').concept().required(),
   Query('dateTo').date().required(),
   Query('dateFrom').date().required().isDateEarlier('dateTo'),
-  Body('conceptId').concept().required(),
 ];
 
 export default {

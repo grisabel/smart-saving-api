@@ -348,6 +348,7 @@ const obtainIncomeReportDetails = async (
   try {
     const email = Email.createFromText(req.user.email);
     const accountNumber = parseInt(req.params.accountNumber, 10);
+    const conceptId = req.params.conceptId;
 
     const dateTo: DateTimeModel = {
       date: req.query.dateTo as string,
@@ -359,13 +360,55 @@ const obtainIncomeReportDetails = async (
       format: DATE_FORMATS.Date,
     };
 
-    const [errorDto, resulDto] = await financialAccountUseCase.obtainReports(
-      email,
-      accountNumber,
-      dateTo,
-      dateFrom,
-      'income'
-    );
+    const [errorDto, resulDto] =
+      await financialAccountUseCase.obtainReportsDetails(
+        email,
+        accountNumber,
+        conceptId,
+        dateTo,
+        dateFrom,
+        'income'
+      );
+
+    if (errorDto) {
+      res.status(404).json(errorDto);
+      return;
+    }
+    res.status(200).json(resulDto);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const obtainExpenseReportDetails = async (
+  req: Request<FinancialAccountReportDetailsRequestDto>,
+  res: Response<FinancialAccountReportsDetailsResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    const email = Email.createFromText(req.user.email);
+    const accountNumber = parseInt(req.params.accountNumber, 10);
+    const conceptId = req.params.conceptId;
+
+    const dateTo: DateTimeModel = {
+      date: req.query.dateTo as string,
+      format: DATE_FORMATS.Date,
+    };
+
+    const dateFrom: DateTimeModel = {
+      date: req.query.dateFrom as string,
+      format: DATE_FORMATS.Date,
+    };
+
+    const [errorDto, resulDto] =
+      await financialAccountUseCase.obtainReportsDetails(
+        email,
+        accountNumber,
+        conceptId,
+        dateTo,
+        dateFrom,
+        'expense'
+      );
 
     if (errorDto) {
       res.status(404).json(errorDto);
@@ -390,4 +433,5 @@ export default {
   obtainIncomeReport,
   obtainExpenseReport,
   obtainIncomeReportDetails,
+  obtainExpenseReportDetails,
 };
