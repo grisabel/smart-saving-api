@@ -23,6 +23,7 @@ const addTransaction = [
 ];
 
 const reports = [
+  Param('accountNumber').financialAccount().required(),
   Query('dateTo').date().required(),
   Query('dateFrom').date().required().isDateEarlier('dateTo'),
 ];
