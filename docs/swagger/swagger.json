@@ -32,6 +32,10 @@
         "description": "Operations about financial control"
       },
       {
+        "name": "financial control (reports)",
+        "description": "Operations about financial control"
+      },
+      {
         "name": "financial tools",
         "description": "Tools about financial"
       },
@@ -680,7 +684,7 @@
       "/financial-control/accounts/{accountNumber}/reports/income": {
         "get": {
           "tags": [
-            "financial control"
+            "financial control (reports)"
           ],
           "summary": "Get income report",
           "description": "Get an income report",
@@ -736,7 +740,7 @@
       "/financial-control/accounts/{accountNumber}/reports/expense": {
         "get": {
           "tags": [
-            "financial control"
+            "financial control (reports)"
           ],
           "summary": "Get expense report",
           "description": "Get an expense report",
@@ -789,45 +793,33 @@
           }
         }
       },
-      "/financial-control/habits": {
+      "/financial-control/accounts/{accountNumber}/reports/income/{concept}": {
         "get": {
           "tags": [
-            "financial control"
-          ],
-          "summary": "Get a user's habits",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlHabits",
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/reports/income/{concept}": {
-        "get": {
-          "tags": [
-            "financial control"
+            "financial control (reports)"
           ],
           "summary": "Get income report",
           "description": "Get a detailed income report.",
           "operationId": "financialControlReportIncomeDetails",
           "parameters": [
             {
-              "name": "concept",
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            },
+            {
+              "name": "conceptId",
               "in": "path",
               "description": "Concept to which to obtain details",
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "Salario"
+                "example": "Income-1"
               }
             },
             {
@@ -837,9 +829,8 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "31/01/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "01/01/2024",
+                "format": "date"
               }
             },
             {
@@ -849,9 +840,8 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "28/02/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "31/12/2024",
+                "format": "date"
               }
             }
           ],
@@ -869,23 +859,33 @@
           }
         }
       },
-      "/financial-control/reports/expense/{concept}": {
+      "/financial-control/accounts/{accountNumber}/reports/expense/{concept}": {
         "get": {
           "tags": [
-            "financial control"
+            "financial control (reports)"
           ],
           "summary": "Get expense report",
           "description": "Get a detailed expense report",
           "operationId": "financialControlReportExpenseDetails",
           "parameters": [
             {
-              "name": "concept",
               "in": "path",
-              "description": "Concepto al cual obtener los detalles",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            },
+            {
+              "name": "conceptId",
+              "in": "path",
+              "description": "Concept to which to obtain details",
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "Salary"
+                "example": "Income-1"
               }
             },
             {
@@ -895,9 +895,8 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "30/01/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "01/01/2024",
+                "format": "date"
               }
             },
             {
@@ -907,9 +906,8 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "28/02/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "31/12/2024",
+                "format": "date"
               }
             }
           ],
@@ -920,6 +918,28 @@
                 "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/FinancialControlReportExpenseDetailsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/habits": {
+        "get": {
+          "tags": [
+            "financial control (reports)"
+          ],
+          "summary": "Get a user's habits",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlHabits",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
                   }
                 }
               }

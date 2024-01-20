@@ -18,6 +18,8 @@ import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
 import { FinancialAccountReportRequestDto } from '../dtos/request/FinancialAccountReportRequestDto';
 import { FinancialAccountReportsResponseDto } from '../dtos/response/FinancialAccountReportsResponseDto';
+import { FinancialAccountReportDetailsRequestDto } from '../dtos/request/FinancialAccountReportDetailsRequestDto';
+import { FinancialAccountReportsDetailsResponseDto } from '../dtos/response/FinancialAccountReportsDetailsResponseDto';
 
 const financialAccountUseCase = FinancialAccountUseCaseFactory.getIntance();
 
@@ -338,6 +340,43 @@ const obtainExpenseReport = async (
   }
 };
 
+const obtainIncomeReportDetails = async (
+  req: Request<FinancialAccountReportDetailsRequestDto>,
+  res: Response<FinancialAccountReportsDetailsResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    const email = Email.createFromText(req.user.email);
+    const accountNumber = parseInt(req.params.accountNumber, 10);
+
+    const dateTo: DateTimeModel = {
+      date: req.query.dateTo as string,
+      format: DATE_FORMATS.Date,
+    };
+
+    const dateFrom: DateTimeModel = {
+      date: req.query.dateFrom as string,
+      format: DATE_FORMATS.Date,
+    };
+
+    const [errorDto, resulDto] = await financialAccountUseCase.obtainReports(
+      email,
+      accountNumber,
+      dateTo,
+      dateFrom,
+      'income'
+    );
+
+    if (errorDto) {
+      res.status(404).json(errorDto);
+      return;
+    }
+    res.status(200).json(resulDto);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   obtainConceptIncome,
   obtainConceptExpense,
@@ -350,4 +389,5 @@ export default {
   addExpense,
   obtainIncomeReport,
   obtainExpenseReport,
+  obtainIncomeReportDetails,
 };

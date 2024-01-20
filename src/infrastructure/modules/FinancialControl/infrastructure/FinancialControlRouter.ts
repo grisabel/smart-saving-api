@@ -91,4 +91,20 @@ router.get(
   FinancialControlController.obtainExpenseReport
 );
 
+router.get(
+  '/accounts/:accountNumber/reports/income/:conceptId',
+  FinancialControlValidator.reportsDetails,
+  validate,
+  isLoggedIn,
+  FinancialControlController.obtainIncomeReportDetails
+);
+
+router.get(
+  '/accounts/:accountNumber/reports/expens/:conceptId',
+  FinancialControlValidator.reportsDetails,
+  validate,
+  isLoggedIn,
+  FinancialControlController.obtainIncomeReportDetails
+);
+
 export default router;
