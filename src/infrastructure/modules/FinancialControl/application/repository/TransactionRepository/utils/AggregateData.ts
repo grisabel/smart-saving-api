@@ -2,6 +2,7 @@ import DateTimeService from '@application/services/DateTimeService/DateTimeServi
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import { Transaction } from '../models/Transaction';
 import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
+import { ReportsResponseDto } from '@infrastructure/modules/FinancialControl/infrastructure/dtos/response/FinancialAccountReportsResponseDto';
 
 interface AggregateByMap {
   [key: string /* any format of DateTimeService */]: Transaction[];
@@ -37,6 +38,29 @@ const _aggregateBy = (
     }
     return dateMap;
   }, groupedByDateMap);
+};
+
+const _aggregateByCategory = (transactions: Transaction[]): AggregateByMap => {
+  const groupedByCategoryMap: AggregateByMap = {};
+  return transactions.reduce((dateMap, item) => {
+    const categoryId: string = item.conceptId;
+
+    let keyExists = false;
+    Object.entries(dateMap).forEach((dateMapItem) => {
+      const [keyCategory, valueArray] = dateMapItem;
+      if (categoryId === keyCategory) {
+        // key already exists
+        valueArray.push(item);
+        keyExists = true;
+      }
+    });
+
+    if (!keyExists) {
+      // eslint-disable-next-line no-param-reassign
+      dateMap[categoryId] = [item];
+    }
+    return dateMap;
+  }, groupedByCategoryMap);
 };
 
 export interface TransactionAggregateData {
@@ -100,6 +124,31 @@ const AggregateData = {
         amount: 0,
       };
     });
+  },
+  byCategory(transactions: Transaction[]): ReportsResponseDto[] {
+    const aggregateMap = _aggregateByCategory(transactions);
+
+    const aggregateTransactionsData: ReportsResponseDto[] = [];
+
+    Object.entries(aggregateMap).forEach((aggregateDay) => {
+      const [key, valueArray] = aggregateDay;
+      const result: ReportsResponseDto = {
+        conceptId: key,
+        amount: valueArray.reduce((acc, value) => {
+          const constant = 100;
+          const result = acc + value.amount;
+          return Math.round(result * constant) / constant;
+        }, 0), // todo suma decimales
+      };
+      aggregateTransactionsData.push(result);
+    });
+    // Uncomment to debug
+    // console.log({
+    //   chartData,
+    //   aggregateChartData,
+    // });
+
+    return aggregateTransactionsData.sort((a, b) => a.amount - b.amount);
   },
 };
 

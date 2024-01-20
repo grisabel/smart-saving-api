@@ -21,6 +21,7 @@ import { TransactionInterfaceRepository } from '../../application/repository/Tra
 import { Transaction } from '../../application/repository/TransactionRepository/models/Transaction';
 import AggregateData from '../../application/repository/TransactionRepository/utils/AggregateData';
 import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
+import { FinancialAccountReportsResponseDto } from '../../infrastructure/dtos/response/FinancialAccountReportsResponseDto';
 
 export class FinancialAccountUseCase {
   constructor(
@@ -192,6 +193,50 @@ export class FinancialAccountUseCase {
             return incomesDft;
           }),
         };
+        resolve([null, resultDto]);
+      } catch (error) {
+        if (error instanceof FinancialAccountRepositoryError) {
+          const errorDto = ErrorResponseMapper.toResponseDto({
+            message: 'Cuenta no existente', //todo
+            error,
+          });
+
+          resolve([errorDto, null]);
+        }
+
+        reject(error);
+      }
+    });
+  }
+
+  obtainReports(
+    email: Email,
+    accountNumber: number,
+    dateTo: DateTimeModel,
+    dateFrom: DateTimeModel,
+    type: 'income' | 'expense'
+  ): Promise<[ErrorResponseDto | Error, FinancialAccountReportsResponseDto]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result;
+
+        if (type === 'expense') {
+          result = await this.financialAccount.reportsExpense(
+            email,
+            accountNumber,
+            dateTo,
+            dateFrom
+          );
+        } else {
+          result = await this.financialAccount.reportsIncome(
+            email,
+            accountNumber,
+            dateTo,
+            dateFrom
+          );
+        }
+
+        const resultDto = AggregateData.byCategory(result);
         resolve([null, resultDto]);
       } catch (error) {
         if (error instanceof FinancialAccountRepositoryError) {
