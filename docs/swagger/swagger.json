@@ -793,7 +793,7 @@
           }
         }
       },
-      "/financial-control/accounts/{accountNumber}/reports/income/{concept}": {
+      "/financial-control/accounts/{accountNumber}/reports/income/{conceptId}": {
         "get": {
           "tags": [
             "financial control (reports)"
@@ -819,7 +819,7 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "Income-1"
+                "example": "INCOME-1"
               }
             },
             {
@@ -840,7 +840,7 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "31/12/2024",
+                "example": "31/01/2024",
                 "format": "date"
               }
             }
@@ -859,7 +859,7 @@
           }
         }
       },
-      "/financial-control/accounts/{accountNumber}/reports/expense/{concept}": {
+      "/financial-control/accounts/{accountNumber}/reports/expense/{conceptId}": {
         "get": {
           "tags": [
             "financial control (reports)"
@@ -885,7 +885,7 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "Income-1"
+                "example": "EXPENSE-1"
               }
             },
             {
@@ -906,7 +906,7 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "31/12/2024",
+                "example": "31/01/2024",
                 "format": "date"
               }
             }
