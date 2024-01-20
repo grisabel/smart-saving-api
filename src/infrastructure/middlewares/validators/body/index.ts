@@ -1,7 +1,7 @@
 import { ValidationChain, body, param, query } from 'express-validator';
 import { required } from './RequiredFieldValidator';
 import { equalFields } from './EqualFieldsValidator';
-import { date } from './DateValidator';
+import { date, isDateEarlier } from './DateValidator';
 import { email } from './EmailValidator';
 import { password } from './PasswordValidator';
 import { id } from './IdValidator';
@@ -26,6 +26,10 @@ const bindAll = <T>(object: T): { [K in keyof T]: T[K] } => {
 type CustomValidationChain = ValidationChain & {
   required: () => CustomValidationChain;
   date: (config?: { format?: string }) => CustomValidationChain;
+  isDateEarlier: (
+    otherFieldName: string,
+    config?: { format?: string }
+  ) => CustomValidationChain;
   email: () => CustomValidationChain;
   password: () => CustomValidationChain;
   financialAccount: () => CustomValidationChain;
@@ -48,6 +52,12 @@ function ChainFactory(
     date: (config = { format: DATE_FORMATS.Date }) => {
       return chain.custom(date(fieldname, config.format));
     },
+    isDateEarlier: (
+      otherFieldName: string,
+      config = { format: DATE_FORMATS.Date }
+    ) => {
+      return chain.custom(isDateEarlier(otherFieldName, config.format)); //todo
+    },
     email: () => {
       return chain.custom(email());
     },
@@ -61,7 +71,7 @@ function ChainFactory(
       return chain.custom(financialAccount());
     },
     equalFields: (otherFieldName, errorMsg) => {
-      return chain.custom(equalFields(otherFieldName, errorMsg));
+      return chain.custom(equalFields(otherFieldName, errorMsg)); //todo
     },
     concept: () => {
       return chain.custom(concept());
