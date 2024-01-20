@@ -125,9 +125,18 @@ export class UserSqlRepository implements UserInterfaceRepository {
   async delete(email: Email): Promise<void> {
     return new Promise((resolve, reject) => {
       prisma.user
-        .delete({
+        .update({
           where: {
             email: email.getValue(),
+          },
+          data: {
+            deleteIn: DateTimeService.parse(
+              {
+                date: `${new Date().getTime()}`,
+                format: DATE_FORMATS.TimestampMs,
+              },
+              DATE_FORMATS.ISO_8601
+            ),
           },
         })
         .then(() => {
