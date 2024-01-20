@@ -10,6 +10,7 @@ import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
 import { Transaction } from '../TransactionRepository/models/Transaction';
+import { Id } from '@domain/models/Id/Id';
 
 export class FinancialAccountSqlRepository
   implements FinancialAccountInterfaceRepository
@@ -165,9 +166,17 @@ export class FinancialAccountSqlRepository
         });
 
         const incomes = resulIncome.map((income) => {
+          let conceptId = '';
+          try {
+            Id.createFrom(income.conceptId);
+            conceptId = income.conceptId;
+          } catch (error) {
+            conceptId = income.conceptId.split('_')[0];
+          }
+
           return {
             amount: income.amount,
-            conceptId: income.conceptId,
+            conceptId: conceptId,
             date: DateTimeService.parse(
               {
                 date: `${income.date.getTime()}`,
@@ -224,18 +233,26 @@ export class FinancialAccountSqlRepository
           },
         });
 
-        const expenses = resulExpense.map((income) => {
+        const expenses = resulExpense.map((expense) => {
+          let conceptId = '';
+          try {
+            Id.createFrom(expense.conceptId);
+            conceptId = expense.conceptId;
+          } catch (error) {
+            conceptId = expense.conceptId.split('_')[0];
+          }
+
           return {
-            amount: income.amount,
-            conceptId: income.conceptId,
+            amount: expense.amount,
+            conceptId: conceptId,
             date: DateTimeService.parse(
               {
-                date: `${income.date.getTime()}`,
+                date: `${expense.date.getTime()}`,
                 format: DATE_FORMATS.TimestampMs,
               },
               DATE_FORMATS.Date
             ),
-            note: income.note,
+            note: expense.note,
           };
         });
         resolve(expenses);
