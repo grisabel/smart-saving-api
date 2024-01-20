@@ -203,8 +203,8 @@ export class FinancialAccountSqlRepository
           reject(error);
         }
 
-        const dateStart = dateTo;
-        const dateEnd = dateFrom;
+        const dateStart = dateFrom;
+        const dateEnd = dateTo;
 
         const resulExpense = await prisma.expense.findMany({
           where: {
