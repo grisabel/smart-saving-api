@@ -1,5 +1,9 @@
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
-import { Body, Param } from '@infrastructure/middlewares/validators/body';
+import {
+  Body,
+  Param,
+  Query,
+} from '@infrastructure/middlewares/validators/body';
 
 const addConcept = [Body('concept').required()];
 
@@ -18,9 +22,16 @@ const addTransaction = [
   Body('note').required(),
 ];
 
+const reports = [
+  Param('accountNumber').financialAccount().required(),
+  Query('dateTo').date().required(),
+  Query('dateFrom').date().required().isDateEarlier('dateTo'),
+];
+
 export default {
   addConcept,
   getAccountSummary,
   deleteConcept,
   addTransaction,
+  reports,
 };

@@ -75,4 +75,20 @@ router.get(
   FinancialControlController.obtainAccountSummary
 );
 
+router.get(
+  '/accounts/:accountNumber/reports/income',
+  FinancialControlValidator.reports,
+  validate,
+  isLoggedIn,
+  FinancialControlController.obtainIncomeReport
+);
+
+router.get(
+  '/accounts/:accountNumber/reports/expense',
+  FinancialControlValidator.reports,
+  validate,
+  isLoggedIn,
+  FinancialControlController.obtainExpenseReport
+);
+
 export default router;

@@ -1,6 +1,7 @@
 import { Email } from '@domain/models/Email';
 import { FinancialAccountSummary } from './models/FinancialAccountSummary';
 import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
+import { Transaction } from '../TransactionRepository/models/Transaction';
 
 //TODO review texts
 export const FINANCIAL_ACCOUNT_REPOSITORY_ERROR = {
@@ -27,4 +28,16 @@ export interface FinancialAccountInterfaceRepository {
     accountNumber: number,
     year: DateTimeModel
   ): Promise<FinancialAccountSummary>;
+  reportsIncome(
+    email: Email,
+    accountNumber: number,
+    dateTo: DateTimeModel,
+    dateFrom: DateTimeModel
+  ): Promise<Transaction[]>;
+  reportsExpense(
+    email: Email,
+    accountNumber: number,
+    dateTo: DateTimeModel,
+    dateFrom: DateTimeModel
+  ): Promise<Transaction[]>;
 }

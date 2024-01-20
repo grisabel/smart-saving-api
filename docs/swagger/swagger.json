@@ -677,6 +677,118 @@
           }
         }
       },
+      "/financial-control/accounts/{accountNumber}/reports/income": {
+        "get": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Get income report",
+          "description": "Get an income report",
+          "operationId": "financialControlReportIncome",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            },
+            {
+              "name": "dateFrom",
+              "in": "query",
+              "description": "Initial date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "01/01/2024",
+                "format": "date"
+              }
+            },
+            {
+              "name": "dateTo",
+              "in": "query",
+              "description": "Final date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "31/12/2024",
+                "format": "date"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlReportIncomeResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/accounts/{accountNumber}/reports/expense": {
+        "get": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Get expense report",
+          "description": "Get an expense report",
+          "operationId": "financialControlReportExpense",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            },
+            {
+              "name": "dateFrom",
+              "in": "query",
+              "description": "Initial date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "01/01/2024",
+                "format": "date"
+              }
+            },
+            {
+              "name": "dateTo",
+              "in": "query",
+              "description": "Final date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "31/12/2024",
+                "format": "date"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlReportExpenseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/financial-control/habits": {
         "get": {
           "tags": [
@@ -692,54 +804,6 @@
                 "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/FinancialControlHabitsResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/reports/income": {
-        "get": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Get income report",
-          "description": "Get an income report",
-          "operationId": "financialControlReportIncome",
-          "parameters": [
-            {
-              "name": "dateFrom",
-              "in": "query",
-              "description": "Initial date included",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "example": "31/01/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
-              }
-            },
-            {
-              "name": "dateTo",
-              "in": "query",
-              "description": "Final date included",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "example": "28/02/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/FinancialControlReportIncomeResponse"
                   }
                 }
               }
@@ -798,54 +862,6 @@
                 "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/FinancialControlReportIncomeDetailsResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/reports/expense": {
-        "get": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Get expense report",
-          "description": "Get an expense report",
-          "operationId": "financialControlReportExpense",
-          "parameters": [
-            {
-              "name": "dateFrom",
-              "in": "query",
-              "description": "Initial date included",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "example": "30/01/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
-              }
-            },
-            {
-              "name": "dateTo",
-              "in": "query",
-              "description": "Final date included",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "example": "28/02/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/FinancialControlReportExpenseResponse"
                   }
                 }
               }
