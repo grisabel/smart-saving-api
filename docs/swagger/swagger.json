@@ -687,15 +687,24 @@
           "operationId": "financialControlReportIncome",
           "parameters": [
             {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            },
+            {
               "name": "dateFrom",
               "in": "query",
               "description": "Initial date included",
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "31/01/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "01/01/2024",
+                "format": "date"
               }
             },
             {
@@ -705,9 +714,8 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "28/02/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "31/12/2024",
+                "format": "date"
               }
             }
           ],
