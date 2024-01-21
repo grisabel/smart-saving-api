@@ -11,8 +11,7 @@ describe(`La ruta ${URL}`, () => {
     await prisma.revokeAccessToken.deleteMany();
     await prisma.session.deleteMany();
     await prisma.financialAccount.deleteMany();
-    await prisma.income.deleteMany();
-    await prisma.expense.deleteMany();
+    await prisma.transaction.deleteMany();
   });
 
   describe(`El endpoint POST`, () => {
