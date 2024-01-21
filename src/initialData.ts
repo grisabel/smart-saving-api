@@ -6,6 +6,7 @@ import { TransactionFactoryRepository } from '@infrastructure/modules/FinancialC
 import { ConceptInterfaceRepository } from '@infrastructure/modules/FinancialControl/application/repository/ConceptRepository/ConceptInterfaceRepository';
 import { AlimentationBatch } from '@infrastructure/modules/FinancialControl/infrastructure/batch/AlimentationBatch/AlimentationBatch';
 import { VehicleBatch } from '@infrastructure/modules/FinancialControl/infrastructure/batch/VehicleBatch/VehicleBatch';
+import { RestaurantBatch } from '@infrastructure/modules/FinancialControl/infrastructure/batch/RestaurantBatch/RestaurantBatch';
 
 const userRepository = UserFactoryRepository.getInstance();
 const financialAccountRepository =
@@ -84,6 +85,7 @@ async function main() {
 async function batch() {
   AlimentationBatch();
   VehicleBatch();
+  RestaurantBatch();
 }
 
 main()
