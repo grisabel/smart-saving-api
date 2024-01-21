@@ -48,4 +48,12 @@ export interface DateTimeInterfaceService {
     compareDateTime: DateTimeModel,
     comparator: DateTimeCompareFnc
   ): boolean;
+
+  getMonthLimits(
+    dateTime: DateTimeModel,
+    unit: 'week' | 'month' | 'year'
+  ): {
+    dateStart: DateTimeModel;
+    dateEnd: DateTimeModel;
+  };
 }
