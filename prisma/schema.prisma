@@ -19,6 +19,7 @@ model User {
   Session          Session[]
   FinancialAccount FinancialAccount[]
   Concept          Concept[]
+  Habits           Habits[]
 }
 
 model Password {
@@ -89,12 +90,13 @@ model Transaction {
   id        String           @id @default(uuid())
   type      TransactionType
   amount    Float
-  concept   Concept          @relation(fields: [conceptId], references: [id])
+  concept   Concept          @relation(fields: [conceptId], references: [id], onDelete: Cascade)
   conceptId String
   note      String
   date      DateTime
   account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId String
+  Habits    Habits?
 }
 
 enum TransactionType {
@@ -116,4 +118,22 @@ model Concept {
 enum ConceptType {
   Concept_Income
   Concept_Expense
+}
+
+model Habits {
+  id            String      @id @default(uuid())
+  user          User        @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail     String
+  type          HabitsType
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  transactionId String      @unique
+
+  @@index([userEmail, type])
+}
+
+enum HabitsType {
+  Habits_Alimentation
+  Habits_Vehicles
+  Habits_Restaurant
+  Habits_AntExpenses
 }
