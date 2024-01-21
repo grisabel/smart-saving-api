@@ -1,10 +1,6 @@
+import { Transaction } from '@infrastructure/modules/FinancialControl/application/repository/TransactionRepository/models/Transaction';
+
 export type FinancialAccountReportsDetailsResponseDto =
   ReportsDetailsResponseDto[];
 
-export interface ReportsDetailsResponseDto {
-  transactionId: string;
-  conceptId: string;
-  amount: number;
-  date: string; // dd/MM/yyyy
-  note: string;
-}
+export type ReportsDetailsResponseDto = Required<Transaction>;

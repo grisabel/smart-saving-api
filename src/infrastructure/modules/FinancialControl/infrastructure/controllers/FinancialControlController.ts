@@ -20,8 +20,12 @@ import { FinancialAccountReportRequestDto } from '../dtos/request/FinancialAccou
 import { FinancialAccountReportsResponseDto } from '../dtos/response/FinancialAccountReportsResponseDto';
 import { FinancialAccountReportDetailsRequestDto } from '../dtos/request/FinancialAccountReportDetailsRequestDto';
 import { FinancialAccountReportsDetailsResponseDto } from '../dtos/response/FinancialAccountReportsDetailsResponseDto';
+import { HabitResponseDto } from '../dtos/response/HabitResponseDto';
+import { HabitFactoryRepository } from '../../application/repository/HabitsRepository/HabitFactoryRepository';
+import { HabitsType } from '../../application/repository/HabitsRepository/models/Habit';
 
 const financialAccountUseCase = FinancialAccountUseCaseFactory.getIntance();
+const habitsRepository = HabitFactoryRepository.getInstance();
 
 const obtainConceptIncome = async (
   req: Request,
@@ -420,6 +424,25 @@ const obtainExpenseReportDetails = async (
   }
 };
 
+const obtainAlimentationHabits = async (
+  req: Request,
+  res: Response<HabitResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    const email = Email.createFromText(req.user.email);
+
+    const resulDto = await habitsRepository.read(
+      email,
+      HabitsType.Habits_Alimentation
+    );
+
+    res.status(200).json(resulDto);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   obtainConceptIncome,
   obtainConceptExpense,
@@ -434,4 +457,6 @@ export default {
   obtainExpenseReport,
   obtainIncomeReportDetails,
   obtainExpenseReportDetails,
+
+  obtainAlimentationHabits,
 };

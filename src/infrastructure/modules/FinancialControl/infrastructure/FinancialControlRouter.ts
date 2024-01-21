@@ -107,4 +107,10 @@ router.get(
   FinancialControlController.obtainExpenseReportDetails
 );
 
+router.get(
+  '/habits/alimentation',
+  isLoggedIn,
+  FinancialControlController.obtainAlimentationHabits
+);
+
 export default router;
