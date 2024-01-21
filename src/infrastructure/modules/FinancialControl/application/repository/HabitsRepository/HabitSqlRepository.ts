@@ -7,11 +7,20 @@ export class HabitSqlRepository implements HabitInterfaceRepository {
   create(habit: Habit): Promise<void> {
     return new Promise((resolve, reject) => {
       prisma.habits
-        .create({
-          data: {
-            transactionId: habit.transactionId,
+        .upsert({
+          where: {
+            id: `${HabitsType[habit.type]}_${habit.email}`,
+          },
+          update: {
             userEmail: habit.email,
             type: HabitsType[habit.type],
+            transactionId: habit.transactionId,
+          },
+          create: {
+            id: `${HabitsType[habit.type]}_${habit.email}`,
+            userEmail: habit.email,
+            type: HabitsType[habit.type],
+            transactionId: habit.transactionId,
           },
         })
         .then(() => resolve())

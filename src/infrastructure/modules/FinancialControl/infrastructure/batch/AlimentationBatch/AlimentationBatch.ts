@@ -3,10 +3,13 @@ import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInt
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import { DEFAULT_EXPENSE_MAP } from '@infrastructure/modules/FinancialControl/application/repository/ConceptRepository/ConceptInterfaceRepository';
+import { HabitFactoryRepository } from '@infrastructure/modules/FinancialControl/application/repository/HabitsRepository/HabitFactoryRepository';
+import { HabitsType } from '@infrastructure/modules/FinancialControl/application/repository/HabitsRepository/models/Habit';
 import { TransactionFactoryRepository } from '@infrastructure/modules/FinancialControl/application/repository/TransactionRepository/TransactionFactoryRepository';
 
 const userRepository = UserFactoryRepository.getInstance();
 const transactionRepository = TransactionFactoryRepository.getInstance();
+const habitRepository = HabitFactoryRepository.getInstance();
 
 export const AlimentationBatch = async () => {
   // para todos los usuario
@@ -25,8 +28,6 @@ export const AlimentationBatch = async () => {
         'month'
       );
 
-      console.log({ dateStart, dateEnd });
-
       const expenses = await transactionRepository.getExpenses(
         user.getEmail(),
         accountNumber,
@@ -39,14 +40,13 @@ export const AlimentationBatch = async () => {
         (expense1, expense2) => expense1.amount - expense2.amount
       );
 
-      console.log({
-        expenses,
-        expensesSorted,
-      });
-
       if (expensesSorted.length > 0) {
         const expenseMax = expensesSorted[0];
-        console.log({ expenseMax });
+        await habitRepository.create({
+          email: user.getEmail().getValue(),
+          transactionId: expenseMax.transactionId ?? '',
+          type: HabitsType.Habits_Alimentation,
+        });
       }
     }
 
