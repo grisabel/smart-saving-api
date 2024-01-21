@@ -4,6 +4,7 @@ import { ConceptFactoryRepository } from '@infrastructure/modules/FinancialContr
 import { UserExample } from '@domain/models/User/test/User.example';
 import { TransactionFactoryRepository } from '@infrastructure/modules/FinancialControl/application/repository/TransactionRepository/TransactionFactoryRepository';
 import { ConceptInterfaceRepository } from '@infrastructure/modules/FinancialControl/application/repository/ConceptRepository/ConceptInterfaceRepository';
+import { AlimentationBatch } from '@infrastructure/modules/FinancialControl/infrastructure/batch/AlimentationBatch/AlimentationBatch';
 
 const userRepository = UserFactoryRepository.getInstance();
 const financialAccountRepository =
@@ -20,14 +21,12 @@ async function main() {
 
   const accountNumber = 0;
 
-  const income_concepts = [
-    ConceptInterfaceRepository.DEFAULT_INCOME[0],
-    ConceptInterfaceRepository.DEFAULT_INCOME[1],
-  ].map((c) => c.id);
-  const expense_concepts = [
-    ConceptInterfaceRepository.DEFAULT_EXPENSE[0],
-    ConceptInterfaceRepository.DEFAULT_EXPENSE[1],
-  ].map((c) => c.id);
+  const income_concepts = ConceptInterfaceRepository.DEFAULT_INCOME.map(
+    (c) => c.id
+  );
+  const expense_concepts = ConceptInterfaceRepository.DEFAULT_EXPENSE.map(
+    (c) => c.id
+  );
 
   const dates = [
     '01/01/2024',
@@ -81,6 +80,15 @@ async function main() {
   }
 }
 
+async function batch() {
+  AlimentationBatch();
+}
+
 main()
-  .then(() => console.log('Done insert initial data'))
+  .then(() => {
+    console.log('Done insert initial data');
+    batch()
+      .then(() => console.log('Done batch'))
+      .catch(() => console.log('Error batch'));
+  })
   .catch(() => console.log('Error insert initial data'));
