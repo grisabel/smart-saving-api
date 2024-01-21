@@ -49,7 +49,7 @@ export const DEFAULT_EXPENSE_MAP = {
   Educación: { id: 'EXPENSE-12', concept: 'Educación' },
   Salud: { id: 'EXPENSE-13', concept: 'Salud' },
   Seguros: { id: 'EXPENSE-14', concept: 'Seguros' },
-  Coche: { id: 'EXPENSE-15', concept: 'Coche' },
+  Vehiculo: { id: 'EXPENSE-15', concept: 'Vehículo' },
 };
 
 export abstract class ConceptInterfaceRepository {
