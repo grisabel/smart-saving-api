@@ -462,6 +462,25 @@ const obtainVehicleHabits = async (
   }
 };
 
+const obtainRestaurantHabits = async (
+  req: Request,
+  res: Response<HabitResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    const email = Email.createFromText(req.user.email);
+
+    const resulDto = await habitsRepository.read(
+      email,
+      HabitsType.Habits_Restaurant
+    );
+
+    res.status(200).json(resulDto);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   obtainConceptIncome,
   obtainConceptExpense,
@@ -479,4 +498,5 @@ export default {
 
   obtainAlimentationHabits,
   obtainVehicleHabits,
+  obtainRestaurantHabits,
 };

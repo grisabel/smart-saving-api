@@ -122,7 +122,7 @@ router.get(
 router.get(
   '/habits/restaurant',
   isLoggedIn,
-  FinancialControlController.obtainAlimentationHabits
+  FinancialControlController.obtainRestaurantHabits
 );
 
 router.get(

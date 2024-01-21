@@ -50,6 +50,7 @@ export const DEFAULT_EXPENSE_MAP = {
   Salud: { id: 'EXPENSE-13', concept: 'Salud' },
   Seguros: { id: 'EXPENSE-14', concept: 'Seguros' },
   Vehiculo: { id: 'EXPENSE-15', concept: 'Vehículo' },
+  Restaurante: { id: 'EXPENSE-16', concept: 'Restaurante' },
 };
 
 export abstract class ConceptInterfaceRepository {
