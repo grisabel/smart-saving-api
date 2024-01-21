@@ -38,7 +38,7 @@ export const VehicleBatch = async () => {
       );
 
       const expensesSorted = expenses.sort(
-        (expense1, expense2) => expense1.amount - expense2.amount
+        (expense1, expense2) => expense2.amount - expense1.amount
       );
 
       if (expensesSorted.length > 0) {

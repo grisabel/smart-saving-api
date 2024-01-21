@@ -116,7 +116,7 @@ router.get(
 router.get(
   '/habits/vehicle',
   isLoggedIn,
-  FinancialControlController.obtainAlimentationHabits
+  FinancialControlController.obtainVehicleHabits
 );
 
 router.get(
