@@ -11,7 +11,7 @@ const userRepository = UserFactoryRepository.getInstance();
 const transactionRepository = TransactionFactoryRepository.getInstance();
 const habitRepository = HabitFactoryRepository.getInstance();
 
-export const AlimentationBatch = async () => {
+export const VehicleBatch = async () => {
   // para todos los usuario
   // buscar los gastos de tipo alimentacón del mes actual
   // y quedarse con el más contoso
@@ -19,23 +19,20 @@ export const AlimentationBatch = async () => {
     const users = await userRepository.findAll();
 
     for (const user of users) {
-      await habitRepository.delete(
-        user.getEmail(),
-        HabitsType.Habits_Alimentation
-      );
+      await habitRepository.delete(user.getEmail(), HabitsType.Habits_Vehicles);
       const accountNumber = 0;
       const { dateStart, dateEnd } = DateTimeService.getMonthLimits(
         {
           date: new Date().getTime().toString(),
           format: DATE_FORMATS.TimestampMs,
         },
-        'month'
+        'year'
       );
 
       const expenses = await transactionRepository.getExpenses(
         user.getEmail(),
         accountNumber,
-        DEFAULT_EXPENSE_MAP.Alimentacion.id,
+        DEFAULT_EXPENSE_MAP.Vehiculo.id,
         dateEnd,
         dateStart
       );
@@ -49,13 +46,13 @@ export const AlimentationBatch = async () => {
         await habitRepository.create({
           email: user.getEmail().getValue(),
           transactionId: expenseMax.transactionId ?? '',
-          type: HabitsType.Habits_Alimentation,
+          type: HabitsType.Habits_Vehicles,
         });
       }
     }
 
-    console.log('Done AlimentationBatch');
+    console.log('Done VehicleBatch');
   } catch (error) {
-    console.log('Error AlimentationBatch');
+    console.log('Error VehicleBatch');
   }
 };

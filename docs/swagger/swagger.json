@@ -951,6 +951,72 @@
           }
         }
       },
+      "/financial-control/habits/vehicle": {
+        "get": {
+          "tags": [
+            "financial control (habits)"
+          ],
+          "summary": "Get a user's habits",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlHabits",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/habits/restaurant": {
+        "get": {
+          "tags": [
+            "financial control (habits)"
+          ],
+          "summary": "Get a user's habits",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlHabits",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/habits/ant-expenses": {
+        "get": {
+          "tags": [
+            "financial control (habits)"
+          ],
+          "summary": "Get a user's habits",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlHabits",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/financial-tools/compound-interest": {
         "get": {
           "tags": [
