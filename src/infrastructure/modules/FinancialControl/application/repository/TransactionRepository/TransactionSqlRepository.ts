@@ -9,6 +9,8 @@ import {
   FinancialAccountRepositoryError,
 } from '../FinancialAccountRepository/FinancialAccountInterfaceRepository';
 import { Id } from '@domain/models/Id/Id';
+import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
+import { TransactionType } from '@prisma/client';
 
 export class TransactionSqlRepository
   implements TransactionInterfaceRepository
@@ -38,9 +40,10 @@ export class TransactionSqlRepository
         conceptId = `${expense.conceptId}_${email.getValue()}`;
       }
 
-      prisma.expense
+      prisma.transaction
         .create({
           data: {
+            type: TransactionType.Transaction_Expense,
             accountId: resulAccount[0].id,
             amount: expense.amount,
             date: DateTimeService.parse(
@@ -87,9 +90,10 @@ export class TransactionSqlRepository
         conceptId = `${income.conceptId}_${email.getValue()}`;
       }
 
-      prisma.income
+      prisma.transaction
         .create({
           data: {
+            type: TransactionType.Transaction_Income,
             accountId: resulAccount[0].id,
             amount: income.amount,
             date: DateTimeService.parse(
@@ -109,6 +113,162 @@ export class TransactionSqlRepository
         .catch((error) => {
           reject(error);
         });
+    });
+  }
+  getExpenses(
+    email: Email,
+    accountNumber: number,
+    conceptId: string,
+    dateTo: DateTimeModel,
+    dateFrom: DateTimeModel
+  ): Promise<Transaction[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const resulAccount = await prisma.financialAccount.findMany({
+          where: { userEmail: email.getValue(), accountNumber },
+        });
+
+        if (resulAccount.length === 0) {
+          const error = new FinancialAccountRepositoryError({
+            accountNotExist: FINANCIAL_ACCOUNT_REPOSITORY_ERROR.accountNotExist,
+          });
+          reject(error);
+        }
+
+        const dateStart = dateFrom;
+        const dateEnd = dateTo;
+        try {
+          Id.createFrom(conceptId);
+        } catch (error) {
+          conceptId = `${conceptId}_${email.getValue()}`;
+        }
+
+        const resulExpense = await prisma.transaction.findMany({
+          where: {
+            AND: [
+              { type: TransactionType.Transaction_Expense },
+              { accountId: resulAccount[0].id },
+              {
+                date: {
+                  gte: DateTimeService.parse(dateStart, DATE_FORMATS.ISO_8601),
+                },
+              },
+              {
+                date: {
+                  lte: DateTimeService.parse(dateEnd, DATE_FORMATS.ISO_8601),
+                },
+              },
+              { conceptId: conceptId },
+            ],
+          },
+        });
+
+        const expenses = resulExpense.map((expense) => {
+          let conceptId = '';
+          try {
+            Id.createFrom(expense.conceptId);
+            conceptId = expense.conceptId;
+          } catch (error) {
+            conceptId = expense.conceptId.split('_')[0];
+          }
+
+          return {
+            transactionId: expense.id,
+            amount: expense.amount,
+            conceptId: conceptId,
+            date: DateTimeService.parse(
+              {
+                date: `${expense.date.getTime()}`,
+                format: DATE_FORMATS.TimestampMs,
+              },
+              DATE_FORMATS.Date
+            ),
+            note: expense.note,
+          };
+        });
+
+        resolve(expenses);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  getIncomes(
+    email: Email,
+    accountNumber: number,
+    conceptId: string,
+    dateTo: DateTimeModel,
+    dateFrom: DateTimeModel
+  ): Promise<Transaction[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const resulAccount = await prisma.financialAccount.findMany({
+          where: { userEmail: email.getValue(), accountNumber },
+        });
+
+        if (resulAccount.length === 0) {
+          const error = new FinancialAccountRepositoryError({
+            accountNotExist: FINANCIAL_ACCOUNT_REPOSITORY_ERROR.accountNotExist,
+          });
+          reject(error);
+        }
+
+        const dateStart = dateFrom;
+        const dateEnd = dateTo;
+        try {
+          Id.createFrom(conceptId);
+        } catch (error) {
+          conceptId = `${conceptId}_${email.getValue()}`;
+        }
+
+        const resulIncome = await prisma.transaction.findMany({
+          where: {
+            AND: [
+              { type: TransactionType.Transaction_Income },
+              { accountId: resulAccount[0].id },
+              {
+                date: {
+                  gte: DateTimeService.parse(dateStart, DATE_FORMATS.ISO_8601),
+                },
+              },
+              {
+                date: {
+                  lte: DateTimeService.parse(dateEnd, DATE_FORMATS.ISO_8601),
+                },
+              },
+              { conceptId: conceptId },
+            ],
+          },
+        });
+
+        const incomes = resulIncome.map((income) => {
+          let conceptId = '';
+          try {
+            Id.createFrom(income.conceptId);
+            conceptId = income.conceptId;
+          } catch (error) {
+            conceptId = income.conceptId.split('_')[0];
+          }
+
+          return {
+            transactionId: income.id,
+            amount: income.amount,
+            conceptId: conceptId,
+            date: DateTimeService.parse(
+              {
+                date: `${income.date.getTime()}`,
+                format: DATE_FORMATS.TimestampMs,
+              },
+              DATE_FORMATS.Date
+            ),
+            note: income.note,
+          };
+        });
+
+        resolve(incomes);
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 }

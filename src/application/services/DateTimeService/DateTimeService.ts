@@ -50,6 +50,13 @@ const _toFormat = (luxon: LuxonDateTime, format: DateFormat): DateString => {
   }
 };
 
+const _toDateTime = (luxon: LuxonDateTime): DateTimeModel => {
+  return {
+    date: luxon.toFormat(DATE_FORMATS.ISOStringDate),
+    format: DATE_FORMATS.ISOStringDate,
+  };
+};
+
 const parse = (dateTime: DateTimeModel, format: DateFormat): DateString => {
   if (!isValid(dateTime)) {
     throw new Error('Invalid dateTime');
@@ -121,6 +128,24 @@ const validate = (
   return comparator(a, b);
 };
 
+const getMonthLimits = (
+  dateTime: DateTimeModel,
+  unit: 'week' | 'month' | 'year'
+): {
+  dateStart: DateTimeModel;
+  dateEnd: DateTimeModel;
+} => {
+  // Crea una fecha de Luxon para el primer día del mes
+  const luxonDate = _fromFormat(dateTime);
+  const firstDay = luxonDate.startOf(unit);
+  const lastDay = luxonDate.endOf(unit);
+
+  return {
+    dateStart: _toDateTime(firstDay),
+    dateEnd: _toDateTime(lastDay),
+  };
+};
+
 const DateTimeService: DateTimeInterfaceService = {
   parse,
   isValid,
@@ -129,6 +154,7 @@ const DateTimeService: DateTimeInterfaceService = {
   sort,
   VALIDATE_SET,
   validate,
+  getMonthLimits,
 };
 
 export default DateTimeService;

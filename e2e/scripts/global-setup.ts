@@ -12,10 +12,10 @@ function startServer() {
     await prisma.revokeAccessToken.deleteMany();
     await prisma.session.deleteMany();
 
-    await prisma.income.deleteMany();
-    await prisma.expense.deleteMany();
+    await prisma.transaction.deleteMany();
     await prisma.concept.deleteMany();
     await prisma.financialAccount.deleteMany();
+    await prisma.habits.deleteMany();
     await prisma.user.deleteMany();
 
     const server = app.listen(port, host, () => {

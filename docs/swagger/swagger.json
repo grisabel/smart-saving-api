@@ -36,6 +36,10 @@
         "description": "Operations about financial control"
       },
       {
+        "name": "financial control (habits)",
+        "description": "Operations about financial control"
+      },
+      {
         "name": "financial tools",
         "description": "Tools about financial"
       },
@@ -925,10 +929,10 @@
           }
         }
       },
-      "/financial-control/habits": {
+      "/financial-control/habits/alimentation": {
         "get": {
           "tags": [
-            "financial control (reports)"
+            "financial control (habits)"
           ],
           "summary": "Get a user's habits",
           "description": "This can only be done by the logged in user.",

@@ -19,6 +19,7 @@ model User {
   Session          Session[]
   FinancialAccount FinancialAccount[]
   Concept          Concept[]
+  Habits           Habits[]
 }
 
 model Password {
@@ -76,46 +77,40 @@ model RevokeAccessToken {
 }
 
 model FinancialAccount {
-  id            String    @id @default(uuid())
-  accountNumber Int       @default(0)
-  user          User      @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  id            String        @id @default(uuid())
+  accountNumber Int           @default(0)
+  user          User          @relation(fields: [userEmail], references: [email], onDelete: Cascade)
   userEmail     String
-  Income        Income[]
-  Expense       Expense[]
+  transaction   Transaction[]
 
   @@index([userEmail, accountNumber])
 }
 
-model Income {
+model Transaction {
   id        String           @id @default(uuid())
+  type      TransactionType
   amount    Float
-  concept   Concept          @relation(fields: [conceptId], references: [id])
+  concept   Concept          @relation(fields: [conceptId], references: [id], onDelete: Cascade)
   conceptId String
   note      String
   date      DateTime
   account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId String
+  Habits    Habits[]
 }
 
-model Expense {
-  id        String           @id @default(uuid())
-  amount    Float
-  concept   Concept          @relation(fields: [conceptId], references: [id])
-  conceptId String
-  note      String
-  date      DateTime
-  account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  accountId String
+enum TransactionType {
+  Transaction_Income
+  Transaction_Expense
 }
 
 model Concept {
-  id        String      @id @default(uuid())
-  type      ConceptType
-  concept   String
-  user      User        @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-  userEmail String
-  Income    Income[]
-  Expense   Expense[]
+  id          String        @id @default(uuid())
+  type        ConceptType
+  concept     String
+  user        User          @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail   String
+  transaction Transaction[]
 
   @@index([userEmail, type, concept])
 }
@@ -123,4 +118,22 @@ model Concept {
 enum ConceptType {
   Concept_Income
   Concept_Expense
+}
+
+model Habits {
+  id            String      @id @default(uuid())
+  user          User        @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail     String
+  type          HabitsType
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  transactionId String
+
+  @@index([userEmail, type])
+}
+
+enum HabitsType {
+  Habits_Alimentation
+  Habits_Vehicles
+  Habits_Restaurant
+  Habits_AntExpenses
 }

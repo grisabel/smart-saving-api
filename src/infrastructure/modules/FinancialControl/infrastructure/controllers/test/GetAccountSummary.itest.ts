@@ -8,8 +8,7 @@ describe('El endpoint GET /financial-control/accounts/0/summary', () => {
     await prisma.revokeAccessToken.deleteMany();
     await prisma.session.deleteMany();
     await prisma.financialAccount.deleteMany();
-    await prisma.income.deleteMany();
-    await prisma.expense.deleteMany();
+    await prisma.transaction.deleteMany();
   });
 
   it('debe retornar un status 401 si la petición no esta autenticada', async () => {
