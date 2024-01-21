@@ -7,6 +7,7 @@ import DateTimeService from '@application/services/DateTimeService/DateTimeServi
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import { Id } from '@domain/models/Id/Id';
 import { HabitsType as HabitsTypePrisma } from '@prisma/client';
+import { Transaction } from '../TransactionRepository/models/Transaction';
 export class HabitSqlRepository implements HabitInterfaceRepository {
   create(habit: Habit): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -49,22 +50,21 @@ export class HabitSqlRepository implements HabitInterfaceRepository {
           if (habits.length <= 0) {
             resolve({
               type: type,
-              transaction: null,
+              transactions: [],
             });
           }
 
-          const habit = habits[0];
-          let conceptId = '';
-          try {
-            Id.createFrom(habit.transaction.conceptId);
-            conceptId = habit.transaction.conceptId;
-          } catch (error) {
-            conceptId = habit.transaction.conceptId.split('_')[0];
-          }
+          const transactions: Transaction[] = [];
+          habits.forEach((habit) => {
+            let conceptId = '';
+            try {
+              Id.createFrom(habit.transaction.conceptId);
+              conceptId = habit.transaction.conceptId;
+            } catch (error) {
+              conceptId = habit.transaction.conceptId.split('_')[0];
+            }
 
-          resolve({
-            type: HabitsType[habit.type],
-            transaction: {
+            transactions.push({
               transactionId: habit.transaction.id,
               amount: habit.transaction.amount,
               conceptId: conceptId,
@@ -77,13 +77,18 @@ export class HabitSqlRepository implements HabitInterfaceRepository {
                 DATE_FORMATS.Date
               ),
               note: habit.transaction.note,
-            },
+            });
+          });
+
+          resolve({
+            type: HabitsType[type],
+            transactions,
           });
         })
         .catch(() =>
           resolve({
             type: type,
-            transaction: null,
+            transactions: [],
           })
         );
     });

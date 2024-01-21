@@ -3,5 +3,5 @@ import { Transaction } from '@infrastructure/modules/FinancialControl/applicatio
 
 export interface HabitResponseDto {
   type: HabitsType;
-  transaction: Transaction | null;
+  transactions: Transaction[];
 }
