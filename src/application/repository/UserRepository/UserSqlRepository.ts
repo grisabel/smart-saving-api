@@ -154,7 +154,7 @@ export class UserSqlRepository implements UserInterfaceRepository {
   async update(user: User): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
-        const userResult = await prisma.user.update({
+        await prisma.user.update({
           where: {
             email: user.getEmail().getValue(),
           },
@@ -170,17 +170,25 @@ export class UserSqlRepository implements UserInterfaceRepository {
             ),
             objective: user.getObjective(),
             email: user.getEmail().getValue(),
+            deleteIn: user.getDeleteIn(),
           },
         });
 
-        await prisma.password.update({
-          where: {
-            userEmail: user.getEmail().getValue(),
-          },
-          data: {
-            hash: Password.createHash(user.getPassword().getValue()).getValue(),
-          },
-        });
+        try {
+          Password.createFromText(user.getPassword().getValue()); // todo
+          const passwordHash = Password.createHash(
+            user.getPassword().getValue()
+          );
+          await prisma.password.update({
+            where: {
+              userEmail: user.getEmail().getValue(),
+            },
+            data: {
+              hash: passwordHash.getValue(),
+            },
+          });
+        } catch (error) {}
+
         resolve();
       } catch (error) {
         const errorUser = new UserRepositoryError({

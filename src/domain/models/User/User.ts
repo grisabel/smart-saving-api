@@ -9,7 +9,8 @@ export class User {
     private lastname: string,
     private dateBirth: string, //'dd-mm-aaaa'
     private objective: string,
-    private password: Password
+    private password: Password,
+    private deleteIn: string | null = null //dd-mm-aaaa
   ) {}
 
   changePassword(newPassword: Password): void {
@@ -17,6 +18,10 @@ export class User {
       throw new UserError();
     }
     this.password = newPassword;
+  }
+
+  restartAccount() {
+    this.deleteIn = null;
   }
 
   isEqual(user: User): boolean {
@@ -56,5 +61,9 @@ export class User {
 
   public getPassword(): Password {
     return this.password;
+  }
+
+  public getDeleteIn(): string | null {
+    return this.deleteIn;
   }
 }
