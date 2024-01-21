@@ -128,7 +128,7 @@ router.get(
 router.get(
   '/habits/ant-expenses',
   isLoggedIn,
-  FinancialControlController.obtainAlimentationHabits
+  FinancialControlController.obtainAntExpenseHabits
 );
 
 export default router;
