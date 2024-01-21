@@ -113,4 +113,22 @@ router.get(
   FinancialControlController.obtainAlimentationHabits
 );
 
+router.get(
+  '/habits/vehicle',
+  isLoggedIn,
+  FinancialControlController.obtainAlimentationHabits
+);
+
+router.get(
+  '/habits/restaurant',
+  isLoggedIn,
+  FinancialControlController.obtainAlimentationHabits
+);
+
+router.get(
+  '/habits/ant-expenses',
+  isLoggedIn,
+  FinancialControlController.obtainAlimentationHabits
+);
+
 export default router;

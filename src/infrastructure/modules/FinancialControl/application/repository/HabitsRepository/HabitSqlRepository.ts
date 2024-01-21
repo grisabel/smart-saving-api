@@ -6,21 +6,13 @@ import { HabitResponseDto } from '@infrastructure/modules/FinancialControl/infra
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import { Id } from '@domain/models/Id/Id';
+import { HabitsType as HabitsTypePrisma } from '@prisma/client';
 export class HabitSqlRepository implements HabitInterfaceRepository {
   create(habit: Habit): Promise<void> {
     return new Promise((resolve, reject) => {
       prisma.habits
-        .upsert({
-          where: {
-            id: `${HabitsType[habit.type]}_${habit.email}`,
-          },
-          update: {
-            userEmail: habit.email,
-            type: HabitsType[habit.type],
-            transactionId: habit.transactionId,
-          },
-          create: {
-            id: `${HabitsType[habit.type]}_${habit.email}`,
+        .create({
+          data: {
             userEmail: habit.email,
             type: HabitsType[habit.type],
             transactionId: habit.transactionId,
@@ -34,9 +26,10 @@ export class HabitSqlRepository implements HabitInterfaceRepository {
   read(email: Email, type: HabitsType): Promise<HabitResponseDto> {
     return new Promise((resolve, reject) => {
       prisma.habits
-        .findUnique({
+        .findMany({
           where: {
-            id: `${HabitsType[type]}_${email.getValue()}`,
+            userEmail: email.getValue(),
+            type: HabitsTypePrisma[type],
           },
           select: {
             type: true,
@@ -52,7 +45,15 @@ export class HabitSqlRepository implements HabitInterfaceRepository {
             },
           },
         })
-        .then((habit) => {
+        .then((habits) => {
+          if (habits.length <= 0) {
+            resolve({
+              type: type,
+              transaction: null,
+            });
+          }
+
+          const habit = habits[0];
           let conceptId = '';
           try {
             Id.createFrom(habit.transaction.conceptId);
@@ -85,6 +86,20 @@ export class HabitSqlRepository implements HabitInterfaceRepository {
             transaction: null,
           })
         );
+    });
+  }
+
+  delete(email: Email, type: HabitsType): Promise<void> {
+    return new Promise((resolve, reject) => {
+      prisma.habits
+        .deleteMany({
+          where: {
+            userEmail: email.getValue(),
+            type: HabitsTypePrisma[type],
+          },
+        })
+        .then(() => resolve())
+        .catch(() => reject());
     });
   }
 }

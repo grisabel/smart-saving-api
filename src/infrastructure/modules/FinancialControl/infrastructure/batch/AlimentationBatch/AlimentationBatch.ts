@@ -19,6 +19,10 @@ export const AlimentationBatch = async () => {
     const users = await userRepository.findAll();
 
     for (const user of users) {
+      await habitRepository.delete(
+        user.getEmail(),
+        HabitsType.Habits_Alimentation
+      );
       const accountNumber = 0;
       const { dateStart, dateEnd } = DateTimeService.getMonthLimits(
         {
