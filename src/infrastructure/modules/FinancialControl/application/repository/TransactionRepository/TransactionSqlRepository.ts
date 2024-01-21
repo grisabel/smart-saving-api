@@ -10,6 +10,7 @@ import {
 } from '../FinancialAccountRepository/FinancialAccountInterfaceRepository';
 import { Id } from '@domain/models/Id/Id';
 import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
+import { TransactionType } from '@prisma/client';
 
 export class TransactionSqlRepository
   implements TransactionInterfaceRepository
@@ -39,9 +40,10 @@ export class TransactionSqlRepository
         conceptId = `${expense.conceptId}_${email.getValue()}`;
       }
 
-      prisma.expense
+      prisma.transaction
         .create({
           data: {
+            type: TransactionType.Transaction_Expense,
             accountId: resulAccount[0].id,
             amount: expense.amount,
             date: DateTimeService.parse(
@@ -88,9 +90,10 @@ export class TransactionSqlRepository
         conceptId = `${income.conceptId}_${email.getValue()}`;
       }
 
-      prisma.income
+      prisma.transaction
         .create({
           data: {
+            type: TransactionType.Transaction_Income,
             accountId: resulAccount[0].id,
             amount: income.amount,
             date: DateTimeService.parse(
@@ -140,9 +143,10 @@ export class TransactionSqlRepository
           conceptId = `${conceptId}_${email.getValue()}`;
         }
 
-        const resulExpense = await prisma.expense.findMany({
+        const resulExpense = await prisma.transaction.findMany({
           where: {
             AND: [
+              { type: TransactionType.Transaction_Expense },
               { accountId: resulAccount[0].id },
               {
                 date: {
@@ -217,9 +221,10 @@ export class TransactionSqlRepository
           conceptId = `${conceptId}_${email.getValue()}`;
         }
 
-        const resulIncome = await prisma.income.findMany({
+        const resulIncome = await prisma.transaction.findMany({
           where: {
             AND: [
+              { type: TransactionType.Transaction_Income },
               { accountId: resulAccount[0].id },
               {
                 date: {

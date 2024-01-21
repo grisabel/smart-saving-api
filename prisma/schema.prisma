@@ -76,18 +76,18 @@ model RevokeAccessToken {
 }
 
 model FinancialAccount {
-  id            String    @id @default(uuid())
-  accountNumber Int       @default(0)
-  user          User      @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  id            String        @id @default(uuid())
+  accountNumber Int           @default(0)
+  user          User          @relation(fields: [userEmail], references: [email], onDelete: Cascade)
   userEmail     String
-  Income        Income[]
-  Expense       Expense[]
+  transaction   Transaction[]
 
   @@index([userEmail, accountNumber])
 }
 
-model Income {
+model Transaction {
   id        String           @id @default(uuid())
+  type      TransactionType
   amount    Float
   concept   Concept          @relation(fields: [conceptId], references: [id])
   conceptId String
@@ -97,25 +97,18 @@ model Income {
   accountId String
 }
 
-model Expense {
-  id        String           @id @default(uuid())
-  amount    Float
-  concept   Concept          @relation(fields: [conceptId], references: [id])
-  conceptId String
-  note      String
-  date      DateTime
-  account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  accountId String
+enum TransactionType {
+  Transaction_Income
+  Transaction_Expense
 }
 
 model Concept {
-  id        String      @id @default(uuid())
-  type      ConceptType
-  concept   String
-  user      User        @relation(fields: [userEmail], references: [email], onDelete: Cascade)
-  userEmail String
-  Income    Income[]
-  Expense   Expense[]
+  id          String        @id @default(uuid())
+  type        ConceptType
+  concept     String
+  user        User          @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail   String
+  transaction Transaction[]
 
   @@index([userEmail, type, concept])
 }

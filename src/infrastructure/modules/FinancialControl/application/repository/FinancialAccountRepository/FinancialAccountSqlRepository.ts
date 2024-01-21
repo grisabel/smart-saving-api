@@ -11,6 +11,7 @@ import DateTimeService from '@application/services/DateTimeService/DateTimeServi
 import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInterfaceService';
 import { Transaction } from '../TransactionRepository/models/Transaction';
 import { Id } from '@domain/models/Id/Id';
+import { TransactionType } from '@prisma/client';
 
 export class FinancialAccountSqlRepository
   implements FinancialAccountInterfaceRepository
@@ -54,9 +55,10 @@ export class FinancialAccountSqlRepository
           },
         };
 
-        const resulIncome = await prisma.income.findMany({
+        const resulIncome = await prisma.transaction.findMany({
           where: {
             AND: [
+              { type: TransactionType.Transaction_Income },
               { accountId: resulAccount[0].id },
               {
                 date: {
@@ -72,9 +74,10 @@ export class FinancialAccountSqlRepository
           },
         });
 
-        const resulExpense = await prisma.expense.findMany({
+        const resulExpense = await prisma.transaction.findMany({
           where: {
             AND: [
+              { type: TransactionType.Transaction_Expense },
               { accountId: resulAccount[0].id },
               {
                 date: {
@@ -149,9 +152,10 @@ export class FinancialAccountSqlRepository
         const dateStart = dateFrom;
         const dateEnd = dateTo;
 
-        const resulIncome = await prisma.income.findMany({
+        const resulIncome = await prisma.transaction.findMany({
           where: {
             AND: [
+              { type: TransactionType.Transaction_Income },
               { accountId: resulAccount[0].id },
               {
                 date: {
@@ -218,9 +222,10 @@ export class FinancialAccountSqlRepository
         const dateStart = dateFrom;
         const dateEnd = dateTo;
 
-        const resulExpense = await prisma.expense.findMany({
+        const resulExpense = await prisma.transaction.findMany({
           where: {
             AND: [
+              { type: TransactionType.Transaction_Expense },
               { accountId: resulAccount[0].id },
               {
                 date: {
@@ -293,9 +298,10 @@ export class FinancialAccountSqlRepository
           conceptId = `${conceptId}_${email.getValue()}`;
         }
 
-        const resulIncome = await prisma.income.findMany({
+        const resulIncome = await prisma.transaction.findMany({
           where: {
             AND: [
+              { type: TransactionType.Transaction_Income },
               { accountId: resulAccount[0].id },
               {
                 date: {
@@ -369,9 +375,10 @@ export class FinancialAccountSqlRepository
           conceptId = `${conceptId}_${email.getValue()}`;
         }
 
-        const resulExpense = await prisma.expense.findMany({
+        const resulExpense = await prisma.transaction.findMany({
           where: {
             AND: [
+              { type: TransactionType.Transaction_Expense },
               { accountId: resulAccount[0].id },
               {
                 date: {
