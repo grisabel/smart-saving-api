@@ -24,6 +24,9 @@ import { DateTimeModel } from '@application/services/DateTimeService/DateTimeInt
 import { FinancialAccountReportsResponseDto } from '../../infrastructure/dtos/response/FinancialAccountReportsResponseDto';
 import { FinancialAccountReportsDetailsResponseDto } from '../../infrastructure/dtos/response/FinancialAccountReportsDetailsResponseDto';
 
+import { BigDecimal } from 'bigdecimal';
+import { FinancialAccountCompoundInterestResponseDto } from '../../infrastructure/dtos/response/FinancialAccountCompoundInterestResponseDto';
+
 export class FinancialAccountUseCase {
   constructor(
     private financialAccount: FinancialAccountInterfaceRepository,
@@ -300,6 +303,61 @@ export class FinancialAccountUseCase {
         reject(error);
       }
     });
+  }
+
+  compoundInterest(
+    initialCapital: string,
+    annualContribution: string,
+    rateInterest: string,
+    period: number
+  ): FinancialAccountCompoundInterestResponseDto {
+    const capitalInicialDecimal = new BigDecimal(initialCapital);
+    const aportacionAnualDecimal = new BigDecimal(annualContribution);
+
+    let tasaInteresDecimal = new BigDecimal(rateInterest).divide(
+      new BigDecimal('100')
+    );
+
+    let capitalActualTotalDecimal = capitalInicialDecimal;
+    let aportacionesTotalDecimal = new BigDecimal('0');
+
+    let responseDto: {
+      totalCapital: BigDecimal;
+      initialCapital: BigDecimal;
+      contribution: BigDecimal;
+      interest: BigDecimal;
+    }[] = [];
+
+    for (let ano = 1; ano <= period; ano++) {
+      aportacionesTotalDecimal = aportacionesTotalDecimal.add(
+        aportacionAnualDecimal
+      );
+
+      let interesAnual = capitalActualTotalDecimal.multiply(tasaInteresDecimal);
+
+      capitalActualTotalDecimal = capitalActualTotalDecimal
+        .add(interesAnual)
+        .add(aportacionAnualDecimal);
+
+      responseDto.push({
+        totalCapital: capitalActualTotalDecimal
+          .setScale(2, BigDecimal.ROUND_HALF_UP)
+          .toString(),
+        initialCapital: capitalInicialDecimal
+          .setScale(2, BigDecimal.ROUND_HALF_UP)
+          .toString(),
+        contribution: aportacionesTotalDecimal
+          .setScale(2, BigDecimal.ROUND_HALF_UP)
+          .toString(),
+        interest: capitalActualTotalDecimal
+          .subtract(capitalInicialDecimal)
+          .subtract(aportacionesTotalDecimal)
+          .setScale(2, BigDecimal.ROUND_HALF_UP)
+          .toString(),
+      });
+    }
+
+    return responseDto;
   }
 }
 

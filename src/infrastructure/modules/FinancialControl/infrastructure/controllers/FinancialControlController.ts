@@ -23,6 +23,8 @@ import { FinancialAccountReportsDetailsResponseDto } from '../dtos/response/Fina
 import { HabitResponseDto } from '../dtos/response/HabitResponseDto';
 import { HabitFactoryRepository } from '../../application/repository/HabitsRepository/HabitFactoryRepository';
 import { HabitsType } from '../../application/repository/HabitsRepository/models/Habit';
+import { FinancialAccountCompoundInterestRequestDto } from '../dtos/request/FinancialAccountCompoundInterestRequestDto';
+import { FinancialAccountCompoundInterestResponseDto } from '../dtos/response/FinancialAccountCompoundInterestResponseDto';
 
 const financialAccountUseCase = FinancialAccountUseCaseFactory.getIntance();
 const habitsRepository = HabitFactoryRepository.getInstance();
@@ -500,6 +502,27 @@ const obtainAntExpenseHabits = async (
   }
 };
 
+const compoundInterest = async (
+  req: Request<FinancialAccountCompoundInterestRequestDto>,
+  res: Response<FinancialAccountCompoundInterestResponseDto | ErrorResponseDto>,
+  next: NextFunction
+) => {
+  try {
+    const { initialCapital, annualContribution, rateInterest, period } =
+      req.query;
+
+    const resulDto = financialAccountUseCase.compoundInterest(
+      initialCapital as string,
+      annualContribution as string,
+      rateInterest as string,
+      parseInt(period as string, 10)
+    );
+
+    res.status(200).json(resulDto);
+  } catch (error) {
+    next(error);
+  }
+};
 export default {
   obtainConceptIncome,
   obtainConceptExpense,
@@ -519,4 +542,6 @@ export default {
   obtainVehicleHabits,
   obtainRestaurantHabits,
   obtainAntExpenseHabits,
+
+  compoundInterest,
 };
