@@ -131,4 +131,11 @@ router.get(
   FinancialControlController.obtainAntExpenseHabits
 );
 
+router.get(
+  '/compound-interest',
+  FinancialControlValidator.compoundInterest,
+  validate,
+  FinancialControlController.compoundInterest
+);
+
 export default router;

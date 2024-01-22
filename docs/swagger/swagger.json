@@ -40,7 +40,7 @@
         "description": "Operations about financial control"
       },
       {
-        "name": "financial tools",
+        "name": "financial control (tools)",
         "description": "Tools about financial"
       },
       {
@@ -1017,19 +1017,19 @@
           }
         }
       },
-      "/financial-tools/compound-interest": {
+      "/financial-control/compound-interest": {
         "get": {
           "tags": [
-            "financial tools"
+            "financial control (tools)"
           ],
           "summary": "Get compound interest",
           "description": "Get compound interest",
           "operationId": "financialToolsCompoundInterest",
           "parameters": [
             {
-              "name": "seed_capital",
+              "name": "initialCapital",
               "in": "query",
-              "description": "Seed Capital",
+              "description": "Initial Capital",
               "required": true,
               "schema": {
                 "type": "number",
@@ -1037,7 +1037,7 @@
               }
             },
             {
-              "name": "periodic_contribution",
+              "name": "annualContribution",
               "in": "query",
               "description": "Periodic annual contribution",
               "required": true,
@@ -1047,7 +1047,7 @@
               }
             },
             {
-              "name": "annual_interest_rate",
+              "name": "rateInterest",
               "in": "query",
               "description": "Annual interest rate",
               "required": true,
@@ -1057,7 +1057,7 @@
               }
             },
             {
-              "name": "investment_period",
+              "name": "period",
               "in": "query",
               "description": "Investment period in years",
               "required": true,

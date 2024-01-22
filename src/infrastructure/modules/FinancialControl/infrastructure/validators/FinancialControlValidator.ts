@@ -35,6 +35,13 @@ const reportsDetails = [
   Query('dateFrom').date().required().isDateEarlier('dateTo'),
 ];
 
+const compoundInterest = [
+  Query('initialCapital').required().isDecimal(),
+  Query('annualContribution').required().isDecimal(),
+  Query('rateInterest').required().isDecimal(),
+  Query('period').required().isInt(),
+];
+
 export default {
   addConcept,
   getAccountSummary,
@@ -42,4 +49,5 @@ export default {
   addTransaction,
   reports,
   reportsDetails,
+  compoundInterest,
 };
