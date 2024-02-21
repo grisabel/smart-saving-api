@@ -125,9 +125,18 @@ export class UserSqlRepository implements UserInterfaceRepository {
   async delete(email: Email): Promise<void> {
     return new Promise((resolve, reject) => {
       prisma.user
-        .delete({
+        .update({
           where: {
             email: email.getValue(),
+          },
+          data: {
+            deleteIn: DateTimeService.parse(
+              {
+                date: `${new Date().getTime()}`,
+                format: DATE_FORMATS.TimestampMs,
+              },
+              DATE_FORMATS.ISO_8601
+            ),
           },
         })
         .then(() => {
@@ -145,7 +154,7 @@ export class UserSqlRepository implements UserInterfaceRepository {
   async update(user: User): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
-        const userResult = await prisma.user.update({
+        await prisma.user.update({
           where: {
             email: user.getEmail().getValue(),
           },
@@ -161,17 +170,25 @@ export class UserSqlRepository implements UserInterfaceRepository {
             ),
             objective: user.getObjective(),
             email: user.getEmail().getValue(),
+            deleteIn: user.getDeleteIn(),
           },
         });
 
-        await prisma.password.update({
-          where: {
-            userEmail: user.getEmail().getValue(),
-          },
-          data: {
-            hash: Password.createHash(user.getPassword().getValue()).getValue(),
-          },
-        });
+        try {
+          Password.createFromText(user.getPassword().getValue()); // todo
+          const passwordHash = Password.createHash(
+            user.getPassword().getValue()
+          );
+          await prisma.password.update({
+            where: {
+              userEmail: user.getEmail().getValue(),
+            },
+            data: {
+              hash: passwordHash.getValue(),
+            },
+          });
+        } catch (error) {}
+
         resolve();
       } catch (error) {
         const errorUser = new UserRepositoryError({

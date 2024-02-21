@@ -24,11 +24,23 @@
         "description": "Operations about user"
       },
       {
+        "name": "financial control (concept)",
+        "description": "Operations about financial control"
+      },
+      {
         "name": "financial control",
         "description": "Operations about financial control"
       },
       {
-        "name": "financial tools",
+        "name": "financial control (reports)",
+        "description": "Operations about financial control"
+      },
+      {
+        "name": "financial control (habits)",
+        "description": "Operations about financial control"
+      },
+      {
+        "name": "financial control (tools)",
         "description": "Tools about financial"
       },
       {
@@ -389,120 +401,34 @@
           }
         }
       },
-      "/financial-control/income": {
-        "post": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Add Income",
-          "description": "Add an income.",
-          "operationId": "financialControlIncome",
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FinancialControlIncomeBody"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/expense": {
-        "post": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Add Expense",
-          "description": "Add an expense.",
-          "operationId": "financialControlExpense",
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FinancialControlExpenseBody"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/global-summary": {
+      "/financial-control/concept/income": {
         "get": {
           "tags": [
-            "financial control"
+            "financial control (concept)"
           ],
-          "summary": "Get user by user id",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlGlobalSummary",
+          "summary": "Get concept",
+          "description": "Get the list of concepts that can be customised.",
+          "operationId": "financialControlListCustomConceptIncome",
           "responses": {
             "200": {
               "description": "successful operation",
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/FinancialControlGlobalSummaryResponse"
+                    "$ref": "#/components/schemas/FinancialControlCustomConceptList"
                   }
                 }
               }
             }
           }
-        }
-      },
-      "/financial-control/habits": {
-        "get": {
-          "tags": [
-            "financial control"
-          ],
-          "summary": "Get a user's habits",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlHabits",
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/custom-concept": {
+        },
         "post": {
           "tags": [
-            "financial control"
+            "financial control (concept)"
           ],
           "summary": "Add custom concept",
           "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlCustomConcept",
+          "operationId": "financialControlCustomConceptIncome",
           "requestBody": {
             "content": {
               "application/json": {
@@ -526,29 +452,40 @@
           }
         }
       },
-      "/financial-control/custom-concept/{type}": {
-        "get": {
+      "/financial-control/concept/income/{conceptId}": {
+        "delete": {
           "tags": [
-            "financial control"
+            "financial control (concept)"
           ],
-          "summary": "Get custom concept",
-          "description": "Get the list of concepts that can be customised.",
-          "operationId": "financialControlListCustomConcept",
+          "summary": "Delete custom concept",
+          "description": "Delete concepts that can be customised.",
+          "operationId": "financialControlDeleteCustomConceptIncome",
           "parameters": [
             {
               "in": "path",
-              "name": "type",
+              "name": "conceptId",
               "schema": {
-                "type": "string",
-                "enum": [
-                  "income",
-                  "expense"
-                ]
+                "type": "string"
               },
               "required": true,
-              "description": "Numeric ID of the user to get"
+              "description": "ID of the concept"
             }
           ],
+          "responses": {
+            "200": {
+              "description": "successful operation"
+            }
+          }
+        }
+      },
+      "/financial-control/concept/expense": {
+        "get": {
+          "tags": [
+            "financial control (concept)"
+          ],
+          "summary": "Get custom concept",
+          "description": "Get the list of concepts that can be customised.",
+          "operationId": "financialControlListCustomConceptExpense",
           "responses": {
             "200": {
               "description": "successful operation",
@@ -561,17 +498,212 @@
               }
             }
           }
+        },
+        "post": {
+          "tags": [
+            "financial control (concept)"
+          ],
+          "summary": "Add custom concept",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlCustomConceptExpense",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlCustomConcept"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
         }
       },
-      "/financial-control/reports/income": {
+      "/financial-control/concept/expense/{conceptId}": {
+        "delete": {
+          "tags": [
+            "financial control (concept)"
+          ],
+          "summary": "Delete custom concept",
+          "description": "Delete concepts that can be customised.",
+          "operationId": "financialControlDeleteCustomConceptExpense",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "conceptId",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "ID of the concept"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation"
+            }
+          }
+        }
+      },
+      "/financial-control/accounts/{accountNumber}/income": {
+        "post": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Add Income",
+          "description": "Add an income.",
+          "operationId": "financialControlIncome",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlIncomeBody"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/accounts/{accountNumber}/expense": {
+        "post": {
+          "tags": [
+            "financial control"
+          ],
+          "summary": "Add Expense",
+          "description": "Add an expense.",
+          "operationId": "financialControlExpense",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialControlExpenseBody"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/accounts/{accountNumber}/summary/{year}": {
         "get": {
           "tags": [
             "financial control"
+          ],
+          "summary": "Get user by user id",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlGlobalSummary",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            },
+            {
+              "in": "path",
+              "name": "year",
+              "schema": {
+                "type": "string",
+                "example": "2024"
+              },
+              "required": false,
+              "description": "year"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlGlobalSummaryResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/accounts/{accountNumber}/reports/income": {
+        "get": {
+          "tags": [
+            "financial control (reports)"
           ],
           "summary": "Get income report",
           "description": "Get an income report",
           "operationId": "financialControlReportIncome",
           "parameters": [
+            {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            },
             {
               "name": "dateFrom",
               "in": "query",
@@ -579,9 +711,8 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "31/01/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "01/01/2024",
+                "format": "date"
               }
             },
             {
@@ -591,9 +722,8 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "28/02/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "31/12/2024",
+                "format": "date"
               }
             }
           ],
@@ -611,83 +741,34 @@
           }
         }
       },
-      "/financial-control/reports/income/{concept}": {
+      "/financial-control/accounts/{accountNumber}/reports/expense": {
         "get": {
           "tags": [
-            "financial control"
-          ],
-          "summary": "Get income report",
-          "description": "Get a detailed income report.",
-          "operationId": "financialControlReportIncomeDetails",
-          "parameters": [
-            {
-              "name": "concept",
-              "in": "path",
-              "description": "Concept to which to obtain details",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "example": "Salario"
-              }
-            },
-            {
-              "name": "dateFrom",
-              "in": "query",
-              "description": "Initial date included",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "example": "31/01/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
-              }
-            },
-            {
-              "name": "dateTo",
-              "in": "query",
-              "description": "Final date included",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "example": "28/02/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/FinancialControlReportIncomeDetailsResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/financial-control/reports/expense": {
-        "get": {
-          "tags": [
-            "financial control"
+            "financial control (reports)"
           ],
           "summary": "Get expense report",
           "description": "Get an expense report",
           "operationId": "financialControlReportExpense",
           "parameters": [
             {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            },
+            {
               "name": "dateFrom",
               "in": "query",
               "description": "Initial date included",
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "30/01/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "01/01/2024",
+                "format": "date"
               }
             },
             {
@@ -697,9 +778,8 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "28/02/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "31/12/2024",
+                "format": "date"
               }
             }
           ],
@@ -717,23 +797,33 @@
           }
         }
       },
-      "/financial-control/reports/expense/{concept}": {
+      "/financial-control/accounts/{accountNumber}/reports/income/{conceptId}": {
         "get": {
           "tags": [
-            "financial control"
+            "financial control (reports)"
           ],
-          "summary": "Get expense report",
-          "description": "Get a detailed expense report",
-          "operationId": "financialControlReportExpenseDetails",
+          "summary": "Get income report",
+          "description": "Get a detailed income report.",
+          "operationId": "financialControlReportIncomeDetails",
           "parameters": [
             {
-              "name": "concept",
               "in": "path",
-              "description": "Concepto al cual obtener los detalles",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            },
+            {
+              "name": "conceptId",
+              "in": "path",
+              "description": "Concept to which to obtain details",
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "Salary"
+                "example": "INCOME-1"
               }
             },
             {
@@ -743,9 +833,8 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "30/01/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "01/01/2024",
+                "format": "date"
               }
             },
             {
@@ -755,9 +844,74 @@
               "required": true,
               "schema": {
                 "type": "string",
-                "example": "28/02/2023",
-                "format": "date",
-                "pattern": "DD/MM/YYYY"
+                "example": "31/01/2024",
+                "format": "date"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlReportIncomeDetailsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/accounts/{accountNumber}/reports/expense/{conceptId}": {
+        "get": {
+          "tags": [
+            "financial control (reports)"
+          ],
+          "summary": "Get expense report",
+          "description": "Get a detailed expense report",
+          "operationId": "financialControlReportExpenseDetails",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "accountNumber",
+              "schema": {
+                "type": "string",
+                "example": "0"
+              },
+              "required": true,
+              "description": "Numeric ID of the account"
+            },
+            {
+              "name": "conceptId",
+              "in": "path",
+              "description": "Concept to which to obtain details",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "EXPENSE-1"
+              }
+            },
+            {
+              "name": "dateFrom",
+              "in": "query",
+              "description": "Initial date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "01/01/2024",
+                "format": "date"
+              }
+            },
+            {
+              "name": "dateTo",
+              "in": "query",
+              "description": "Final date included",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "31/01/2024",
+                "format": "date"
               }
             }
           ],
@@ -775,19 +929,107 @@
           }
         }
       },
-      "/financial-tools/compound-interest": {
+      "/financial-control/habits/alimentation": {
         "get": {
           "tags": [
-            "financial tools"
+            "financial control (habits)"
+          ],
+          "summary": "Get a user's habits",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlHabits",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/habits/vehicle": {
+        "get": {
+          "tags": [
+            "financial control (habits)"
+          ],
+          "summary": "Get a user's habits",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlHabits",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/habits/restaurant": {
+        "get": {
+          "tags": [
+            "financial control (habits)"
+          ],
+          "summary": "Get a user's habits",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlHabits",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/habits/ant-expenses": {
+        "get": {
+          "tags": [
+            "financial control (habits)"
+          ],
+          "summary": "Get a user's habits",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "financialControlHabits",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FinancialControlHabitsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/financial-control/compound-interest": {
+        "get": {
+          "tags": [
+            "financial control (tools)"
           ],
           "summary": "Get compound interest",
           "description": "Get compound interest",
           "operationId": "financialToolsCompoundInterest",
           "parameters": [
             {
-              "name": "seed_capital",
+              "name": "initialCapital",
               "in": "query",
-              "description": "Seed Capital",
+              "description": "Initial Capital",
               "required": true,
               "schema": {
                 "type": "number",
@@ -795,7 +1037,7 @@
               }
             },
             {
-              "name": "periodic_contribution",
+              "name": "annualContribution",
               "in": "query",
               "description": "Periodic annual contribution",
               "required": true,
@@ -805,7 +1047,7 @@
               }
             },
             {
-              "name": "annual_interest_rate",
+              "name": "rateInterest",
               "in": "query",
               "description": "Annual interest rate",
               "required": true,
@@ -815,7 +1057,7 @@
               }
             },
             {
-              "name": "investment_period",
+              "name": "period",
               "in": "query",
               "description": "Investment period in years",
               "required": true,
@@ -983,9 +1225,9 @@
         "FinancialControlIncomeBody": {
           "type": "object",
           "properties": {
-            "concept": {
+            "conceptId": {
               "type": "string",
-              "example": "Salario"
+              "example": "INCOME-1"
             },
             "amount": {
               "type": "number",
@@ -1006,9 +1248,9 @@
         "FinancialControlExpenseBody": {
           "type": "object",
           "properties": {
-            "concept": {
+            "conceptId": {
               "type": "string",
-              "example": "Feed"
+              "example": "EXPENSE-1"
             },
             "amount": {
               "type": "number",
@@ -1100,14 +1342,6 @@
             "concept": {
               "type": "string",
               "example": "Expenses Pets"
-            },
-            "type": {
-              "type": "string",
-              "enum": [
-                "income",
-                "expense"
-              ],
-              "example": "income"
             }
           }
         },
@@ -1117,8 +1351,8 @@
             "type": "object",
             "properties": {
               "id": {
-                "type": "number",
-                "example": 1
+                "type": "string",
+                "example": "1"
               },
               "concept": {
                 "type": "string",
