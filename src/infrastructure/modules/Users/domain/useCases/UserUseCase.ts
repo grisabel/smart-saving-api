@@ -207,6 +207,7 @@ export class UserUseCase {
             message: 'Contraseña incorrecta',
           });
           resolve([errorDto, null]);
+          return;
         }
 
         await this.userRepository.delete(email);

@@ -6,6 +6,7 @@ export const equalFields = (
 ): CustomValidator => {
   return (value, { req }) => {
     if (value !== req.body[propertyName]) {
+      //todo
       throw new Error(errorMessage);
     }
     return true;

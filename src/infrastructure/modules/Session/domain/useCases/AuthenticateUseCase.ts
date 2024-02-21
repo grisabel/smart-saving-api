@@ -75,6 +75,9 @@ export class AuthenticateUseCase {
             true
           );
 
+          user.restartAccount();
+          await this.userRepository.update(user);
+
           resolve([null, responseDto]);
         } else {
           const errorDto = ErrorResponseMapper.toResponseDto({
