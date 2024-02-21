@@ -1,7 +1,7 @@
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 import { TransactionInterfaceRepository } from './TransactionInterfaceRepository';
 import { Transaction } from './models/Transaction';
-import { prisma } from '@application/repository/db';
+import { DDBBConnectionError, prisma } from '@application/repository/db';
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import { Email } from '@domain/models/Email';
 import {
@@ -61,6 +61,10 @@ export class TransactionSqlRepository
           resolve();
         })
         .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           reject(error);
         });
     });
@@ -111,6 +115,10 @@ export class TransactionSqlRepository
           resolve();
         })
         .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           reject(error);
         });
     });
@@ -189,6 +197,10 @@ export class TransactionSqlRepository
 
         resolve(expenses);
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });
@@ -267,6 +279,10 @@ export class TransactionSqlRepository
 
         resolve(incomes);
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });

@@ -1,4 +1,4 @@
-import { prisma } from '@application/repository/db';
+import { DDBBConnectionError, prisma } from '@application/repository/db';
 import { HabitInterfaceRepository } from './HabitInterfaceRepository';
 import { Habit, HabitsType } from './models/Habit';
 import { Email } from '@domain/models/Email';
@@ -20,7 +20,13 @@ export class HabitSqlRepository implements HabitInterfaceRepository {
           },
         })
         .then(() => resolve())
-        .catch(() => reject());
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
+          reject();
+        });
     });
   }
 
@@ -85,12 +91,16 @@ export class HabitSqlRepository implements HabitInterfaceRepository {
             transactions,
           });
         })
-        .catch(() =>
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           resolve({
             type: type,
             transactions: [],
-          })
-        );
+          });
+        });
     });
   }
 
@@ -104,7 +114,13 @@ export class HabitSqlRepository implements HabitInterfaceRepository {
           },
         })
         .then(() => resolve())
-        .catch(() => reject());
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
+          reject();
+        });
     });
   }
 }
