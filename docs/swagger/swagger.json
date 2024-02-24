@@ -100,13 +100,52 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
+                    "properties": {
+                      "accessToken": {
+                        "type": "string",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InNtYXJ0LXNhdmluZy1hcGkiLCJpYXQiOjE3MDg3NzI0ODUsImV4cCI6MTcwODc3MzM4NSwic3ViIjoiaXNhYmVsY2hlbGUyNkBnbWFpbC5jb20ifQ.XQum10GFp8cVz4WnTy4AWRfI9vHBuTWByuSbLyYGMsI"
+                      },
+                      "refreshToken": {
+                        "type": "string",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDg3NzI0ODUsImV4cCI6MTcwODg1ODg4NSwic3ViIjoiaXNhYmVsY2hlbGUyNkBnbWFpbC5jb20ifQ.vzXhtsT20J6e4ODC8vELXqzSKap-lfNotrNBqfRXxiQ"
+                      },
+                      "token_type": {
+                        "type": "string",
+                        "example": "bearer"
+                      },
+                      "expires": {
+                        "type": "integer",
+                        "example": 1708773385
+                      }
+                    }
                   }
                 }
               }
             },
             "400": {
-              "description": "Invalid username/password supplied"
+              "description": "Invalid username/password supplied",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Usuario o contraseña incorrectos"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Generic Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GenericErrorResponse"
+                  }
+                }
+              }
             }
           }
         }
@@ -1495,6 +1534,15 @@
           },
           "xml": {
             "name": "##default"
+          }
+        },
+        "GenericErrorResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "Server Internal Error"
+            }
           }
         }
       },
