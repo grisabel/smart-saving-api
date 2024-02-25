@@ -267,11 +267,62 @@
           },
           "responses": {
             "200": {
-              "description": "successful operation",
+              "content": {}
+            },
+            "409": {
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Usuario ya registrado"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "422": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Validación incorrecta"
+                      },
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "example": "field"
+                            },
+                            "value": {
+                              "type": "string",
+                              "example": "12345"
+                            },
+                            "msg": {
+                              "type": "string",
+                              "example": "La contraseña debe tener al menos 6 caracteres.,La contraseña debe contener al menos una letra mayúscula.,La contraseña debe contener al menos una letra minúscula.,La contraseña debe contener al menos alguno de los siguientes caracteres: _ @ # !"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Generic Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GenericErrorResponse"
                   }
                 }
               }
