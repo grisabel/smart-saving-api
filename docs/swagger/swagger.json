@@ -137,6 +137,16 @@
                 }
               }
             },
+            "422": {
+              "description": "Generic Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GenericValidation"
+                  }
+                }
+              }
+            },
             "500": {
               "description": "Generic Error",
               "content": {
@@ -1699,6 +1709,35 @@
             "message": {
               "type": "string",
               "example": "Server Internal Error"
+            }
+          }
+        },
+        "GenericValidation": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "Validación incorrecta"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "field"
+                  },
+                  "value": {
+                    "type": "string",
+                    "example": "* values"
+                  },
+                  "msg": {
+                    "type": "string",
+                    "example": "el campo * es requerido"
+                  }
+                }
+              }
             }
           }
         }
