@@ -276,7 +276,7 @@
             }
           },
           "responses": {
-            "200": {
+            "204": {
               "content": {}
             },
             "409": {
@@ -388,7 +388,7 @@
                     "properties": {
                       "message": {
                         "type": "string",
-                        "example": "Si ha enviado un email para cambiar la contraseña"
+                        "example": "Se ha enviado un email para cambiar la contraseña"
                       }
                     }
                   }
