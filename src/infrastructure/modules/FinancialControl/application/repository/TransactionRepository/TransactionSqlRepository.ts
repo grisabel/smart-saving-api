@@ -45,7 +45,7 @@ export class TransactionSqlRepository
           data: {
             type: TransactionType.Transaction_Expense,
             accountId: resulAccount[0].id,
-            amount: expense.amount,
+            amount: parseFloat(expense.amount.toString()),
             date: DateTimeService.parse(
               {
                 date: expense.date,
@@ -99,7 +99,7 @@ export class TransactionSqlRepository
           data: {
             type: TransactionType.Transaction_Income,
             accountId: resulAccount[0].id,
-            amount: income.amount,
+            amount: parseFloat(income.amount.toString()),
             date: DateTimeService.parse(
               {
                 date: income.date,
@@ -182,7 +182,7 @@ export class TransactionSqlRepository
 
           return {
             transactionId: expense.id,
-            amount: expense.amount,
+            amount: parseFloat(expense.amount.toString()),
             conceptId: conceptId,
             date: DateTimeService.parse(
               {
@@ -264,7 +264,7 @@ export class TransactionSqlRepository
 
           return {
             transactionId: income.id,
-            amount: income.amount,
+            amount: parseFloat(income.amount.toString()),
             conceptId: conceptId,
             date: DateTimeService.parse(
               {
