@@ -17,7 +17,7 @@ const deleteConcept = [Param('conceptId').concept().required()];
 const addTransaction = [
   Param('accountNumber').financialAccount().required(),
   Body('conceptId').concept().required(),
-  Body('amount').required().isNumeric(),
+  Body('amount').required().isFloat(),
   Body('date').date().required(),
   Body('note').required(),
 ];

@@ -82,7 +82,10 @@ const addConceptIncome = async (
 ) => {
   try {
     const email = Email.createFromText(req.user.email);
-    const concept = req.body.concept;
+    const concept = {
+      ...req.body.concept,
+      amount: parseFloat(req.body.concept.amount)
+    }
 
     const [errorDto, resulDto] = await financialAccountUseCase.addConcept(
       email,
@@ -107,7 +110,10 @@ const addConceptExpense = async (
 ) => {
   try {
     const email = Email.createFromText(req.user.email);
-    const concept = req.body.concept;
+    const concept = {
+      ...req.body.concept,
+      amount: parseFloat(req.body.concept.amount)
+    }
 
     const [errorDto, resulDto] = await financialAccountUseCase.addConcept(
       email,
