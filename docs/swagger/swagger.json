@@ -1142,7 +1142,7 @@
           ],
           "summary": "Get a user's habits",
           "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlHabits",
+          "operationId": "financialControlHabits--alimentation",
           "responses": {
             "200": {
               "description": "successful operation",
@@ -1164,7 +1164,7 @@
           ],
           "summary": "Get a user's habits",
           "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlHabits",
+          "operationId": "financialControlHabits-vehicle",
           "responses": {
             "200": {
               "description": "successful operation",
@@ -1186,7 +1186,7 @@
           ],
           "summary": "Get a user's habits",
           "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlHabits",
+          "operationId": "financialControlHabits-restaurat",
           "responses": {
             "200": {
               "description": "successful operation",
@@ -1208,7 +1208,7 @@
           ],
           "summary": "Get a user's habits",
           "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlHabits",
+          "operationId": "financialControlHabits-ant",
           "responses": {
             "200": {
               "description": "successful operation",
