@@ -25,14 +25,14 @@ export const AlimentationBatch = async () => {
       );
       const accountNumber = 0;
 
-      const _year =new Date().getFullYear();
+      const _year = new Date().getFullYear();
 
       const dateStart: DateTimeModel = {
-        date: `01/01/${_year}`,
-        format: DATE_FORMATS.Date
-      }
+        date: `${_year}-01-01`,
+        format: 'yyyy-MM-dd',
+      };
 
-      const { dateEnd: _dateEnd } = DateTimeService.getMonthLimits(
+      const { dateStart: _dateStart } = DateTimeService.getMonthLimits(
         {
           date: new Date().getTime().toString(),
           format: DATE_FORMATS.TimestampMs,
@@ -40,7 +40,10 @@ export const AlimentationBatch = async () => {
         'month'
       );
 
-      const dateEnd = DateTimeService.calculatePastDate(_dateEnd, {unit: 'days', amount: 1})
+      const dateEnd = DateTimeService.calculatePastDate(_dateStart, {
+        unit: 'days',
+        amount: 1,
+      });
 
       const expenses = await transactionRepository.getExpenses(
         user.getEmail(),
