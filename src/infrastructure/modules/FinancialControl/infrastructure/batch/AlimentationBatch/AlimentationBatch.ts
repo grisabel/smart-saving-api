@@ -24,13 +24,23 @@ export const AlimentationBatch = async () => {
         HabitsType.Habits_Alimentation
       );
       const accountNumber = 0;
-      const { dateStart, dateEnd } = DateTimeService.getMonthLimits(
+
+      const _year =new Date().getFullYear();
+
+      const dateStart: DateTimeModel = {
+        date: `01/01/${_year}`,
+        format: DATE_FORMATS.Date
+      }
+
+      const { dateEnd: _dateEnd } = DateTimeService.getMonthLimits(
         {
           date: new Date().getTime().toString(),
           format: DATE_FORMATS.TimestampMs,
         },
         'month'
       );
+
+      const dateEnd = DateTimeService.calculatePastDate(_dateEnd, {unit: 'days', amount: 1})
 
       const expenses = await transactionRepository.getExpenses(
         user.getEmail(),
@@ -40,15 +50,10 @@ export const AlimentationBatch = async () => {
         dateStart
       );
 
-      const expensesSorted = expenses.sort(
-        (expense1, expense2) => expense2.amount - expense1.amount
-      );
-
-      if (expensesSorted.length > 0) {
-        const expenseMax = expensesSorted[0];
+      for (const expense of expenses) {
         await habitRepository.create({
           email: user.getEmail().getValue(),
-          transactionId: expenseMax.transactionId ?? '',
+          transactionId: expense.transactionId ?? '',
           type: HabitsType.Habits_Alimentation,
         });
       }

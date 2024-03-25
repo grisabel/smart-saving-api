@@ -146,6 +146,28 @@ const getMonthLimits = (
   };
 };
 
+const calculatePastDate = (
+  dateTime: DateTimeModel,
+  relative: { amount: number; unit: "days" | "weeks" | "months" | "years" }
+): DateTimeModel => {
+  const units = ["days", "weeks", "months", "years"];
+
+  if (!units.includes(relative.unit)) {
+    throw new Error(
+      `Invalid unit: ${relative.unit}. Must be one of ${units.join(", ")}.`
+    );
+  }
+
+  const pastDate = _fromFormat(dateTime).minus({
+    [relative.unit]: relative.amount,
+  });
+
+  return {
+    date: _toFormat(pastDate, dateTime.format),
+    format: dateTime.format,
+  };
+};
+
 const DateTimeService: DateTimeInterfaceService = {
   parse,
   isValid,
@@ -155,6 +177,7 @@ const DateTimeService: DateTimeInterfaceService = {
   VALIDATE_SET,
   validate,
   getMonthLimits,
+  calculatePastDate
 };
 
 export default DateTimeService;
