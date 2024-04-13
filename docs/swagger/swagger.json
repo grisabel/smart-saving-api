@@ -1663,13 +1663,9 @@
         "MarketingContactFormRequest": {
           "type": "object",
           "properties": {
-            "firstName": {
+            "name": {
               "type": "string",
               "example": "User Name"
-            },
-            "lastName": {
-              "type": "string",
-              "example": "User Surname"
             },
             "email": {
               "type": "string",
@@ -1679,7 +1675,7 @@
               "type": "string",
               "example": "Subject"
             },
-            "message": {
+            "description": {
               "type": "string",
               "example": "Message"
             }
