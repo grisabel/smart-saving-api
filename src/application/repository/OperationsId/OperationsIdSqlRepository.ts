@@ -5,7 +5,7 @@ import {
   OperationsIdRepositoryError,
 } from './OperationIdInterfaceRepository';
 import { Operation, OperationType } from './models/OperationId';
-import { prisma } from '@application/repository/db';
+import { DDBBConnectionError, prisma } from '@application/repository/db';
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import {
@@ -47,12 +47,17 @@ export class OperationsIdSqlRepository
         });
         resolve();
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         if (error?.code === 'P2002') {
           reject(
             new OperationsIdRepositoryError({
               idDuplicate: OPERATIONSID_REPOSITORY_ERROR.idDuplicate,
             })
           );
+          return;
         }
         reject(error);
       }
@@ -72,6 +77,10 @@ export class OperationsIdSqlRepository
           });
         })
         .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           reject(
             new OperationsIdRepositoryError({
               idNotExist: OPERATIONSID_REPOSITORY_ERROR.idNotExist,
@@ -92,11 +101,17 @@ export class OperationsIdSqlRepository
         .then(() => {
           resolve();
         })
-        .catch(() => {
-          const error = new OperationsIdRepositoryError({
-            idNotExist: OPERATIONSID_REPOSITORY_ERROR.idNotExist,
-          });
-          reject(error);
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
+
+          reject(
+            new OperationsIdRepositoryError({
+              idNotExist: OPERATIONSID_REPOSITORY_ERROR.idNotExist,
+            })
+          );
         });
     });
   }

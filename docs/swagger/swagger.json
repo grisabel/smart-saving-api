@@ -100,13 +100,62 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
+                    "properties": {
+                      "accessToken": {
+                        "type": "string",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InNtYXJ0LXNhdmluZy1hcGkiLCJpYXQiOjE3MDg3NzI0ODUsImV4cCI6MTcwODc3MzM4NSwic3ViIjoiaXNhYmVsY2hlbGUyNkBnbWFpbC5jb20ifQ.XQum10GFp8cVz4WnTy4AWRfI9vHBuTWByuSbLyYGMsI"
+                      },
+                      "refreshToken": {
+                        "type": "string",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDg3NzI0ODUsImV4cCI6MTcwODg1ODg4NSwic3ViIjoiaXNhYmVsY2hlbGUyNkBnbWFpbC5jb20ifQ.vzXhtsT20J6e4ODC8vELXqzSKap-lfNotrNBqfRXxiQ"
+                      },
+                      "token_type": {
+                        "type": "string",
+                        "example": "bearer"
+                      },
+                      "expires": {
+                        "type": "integer",
+                        "example": 1708773385
+                      }
+                    }
                   }
                 }
               }
             },
             "400": {
-              "description": "Invalid username/password supplied"
+              "description": "Invalid username/password supplied",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Usuario o contraseña incorrectos"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Generic Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GenericValidation"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Generic Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GenericErrorResponse"
+                  }
+                }
+              }
             }
           }
         }
@@ -227,12 +276,63 @@
             }
           },
           "responses": {
-            "200": {
-              "description": "successful operation",
+            "204": {
+              "content": {}
+            },
+            "409": {
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Usuario ya registrado"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "422": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Validación incorrecta"
+                      },
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "example": "field"
+                            },
+                            "value": {
+                              "type": "string",
+                              "example": "12345"
+                            },
+                            "msg": {
+                              "type": "string",
+                              "example": "La contraseña debe tener al menos 6 caracteres.,La contraseña debe contener al menos una letra mayúscula.,La contraseña debe contener al menos una letra minúscula.,La contraseña debe contener al menos alguno de los siguientes caracteres: _ @ # !"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Generic Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GenericErrorResponse"
                   }
                 }
               }
@@ -281,11 +381,41 @@
           },
           "responses": {
             "200": {
-              "description": "successful operation",
+              "description": "Invalid user or dateBirth",
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Se ha enviado un email para cambiar la contraseña"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Invalid user or dateBirth",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Email o fecha de nacimiento invalida"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Generic Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GenericErrorResponse"
                   }
                 }
               }
@@ -324,11 +454,87 @@
           ],
           "responses": {
             "200": {
-              "description": "successful operation",
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Contraseña actualizada satisfactoriamente"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "OperationId inválido"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "410": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "OperationId expirado"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "422": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Validación incorrecta"
+                      },
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "example": "field"
+                            },
+                            "value": {
+                              "type": "string",
+                              "example": "12345"
+                            },
+                            "msg": {
+                              "type": "string",
+                              "example": "La contraseña debe tener al menos 6 caracteres.,La contraseña debe contener al menos una letra mayúscula.,La contraseña debe contener al menos una letra minúscula.,La contraseña debe contener al menos alguno de los siguientes caracteres: _ @ # !"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Generic Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GenericErrorResponse"
                   }
                 }
               }
@@ -936,7 +1142,7 @@
           ],
           "summary": "Get a user's habits",
           "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlHabits",
+          "operationId": "financialControlHabits--alimentation",
           "responses": {
             "200": {
               "description": "successful operation",
@@ -958,7 +1164,7 @@
           ],
           "summary": "Get a user's habits",
           "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlHabits",
+          "operationId": "financialControlHabits-vehicle",
           "responses": {
             "200": {
               "description": "successful operation",
@@ -980,7 +1186,7 @@
           ],
           "summary": "Get a user's habits",
           "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlHabits",
+          "operationId": "financialControlHabits-restaurat",
           "responses": {
             "200": {
               "description": "successful operation",
@@ -1002,7 +1208,7 @@
           ],
           "summary": "Get a user's habits",
           "description": "This can only be done by the logged in user.",
-          "operationId": "financialControlHabits",
+          "operationId": "financialControlHabits-ant",
           "responses": {
             "200": {
               "description": "successful operation",
@@ -1495,6 +1701,44 @@
           },
           "xml": {
             "name": "##default"
+          }
+        },
+        "GenericErrorResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "Server Internal Error"
+            }
+          }
+        },
+        "GenericValidation": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "Validación incorrecta"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "field"
+                  },
+                  "value": {
+                    "type": "string",
+                    "example": "* values"
+                  },
+                  "msg": {
+                    "type": "string",
+                    "example": "el campo * es requerido"
+                  }
+                }
+              }
+            }
           }
         }
       },

@@ -4,7 +4,7 @@ import {
   SessionReasonType,
   SessionType,
 } from './SessionInterfaceRepository';
-import { prisma } from '@application/repository/db';
+import { DDBBConnectionError, prisma } from '@application/repository/db';
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 import { TimestampMs } from '@application/services/DateTimeService/DateTimeInterfaceService';
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
@@ -56,6 +56,10 @@ export class SessionSqlRepository implements SessionInterfaceRepository {
         });
         resolve();
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });
@@ -83,6 +87,10 @@ export class SessionSqlRepository implements SessionInterfaceRepository {
         });
         resolve();
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });
@@ -105,6 +113,10 @@ export class SessionSqlRepository implements SessionInterfaceRepository {
         });
         resolve();
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });
@@ -122,6 +134,10 @@ export class SessionSqlRepository implements SessionInterfaceRepository {
         });
         resolve();
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });

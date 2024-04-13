@@ -1,4 +1,4 @@
-import { prisma } from '@application/repository/db';
+import { DDBBConnectionError, prisma } from '@application/repository/db';
 
 import {
   USER_REPOSITORY_ERROR,
@@ -47,6 +47,7 @@ export class UserSqlRepository implements UserInterfaceRepository {
                 userDuplicate: USER_REPOSITORY_ERROR.userDuplicate,
               })
             );
+            return;
           }
           reject(error);
         });
@@ -83,6 +84,10 @@ export class UserSqlRepository implements UserInterfaceRepository {
           );
         })
         .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           reject(
             new UserRepositoryError({
               userNotExist: USER_REPOSITORY_ERROR.userNotExist,
@@ -117,6 +122,10 @@ export class UserSqlRepository implements UserInterfaceRepository {
           );
         })
         .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           reject(error);
         });
     });
@@ -142,11 +151,17 @@ export class UserSqlRepository implements UserInterfaceRepository {
         .then(() => {
           resolve();
         })
-        .catch(() => {
-          const error = new UserRepositoryError({
-            userNotExist: USER_REPOSITORY_ERROR.userNotExist,
-          });
-          reject(error);
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
+
+          reject(
+            new UserRepositoryError({
+              userNotExist: USER_REPOSITORY_ERROR.userNotExist,
+            })
+          );
         });
     });
   }
@@ -191,6 +206,10 @@ export class UserSqlRepository implements UserInterfaceRepository {
 
         resolve();
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         const errorUser = new UserRepositoryError({
           userNotExist: USER_REPOSITORY_ERROR.userNotExist,
         });

@@ -121,7 +121,7 @@ describe('La clase UserUseCase', () => {
         html: `<p>OperationId <strong>${operation.id}</strong></p>`,
       });
       expect(responseDto.message).toEqual(
-        'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
+        'Se ha enviado un email para cambiar la contraseña'
       );
     });
     it('debe lanzar un error dado un email no registrado', async () => {
@@ -134,9 +134,7 @@ describe('La clase UserUseCase', () => {
       );
 
       // Arrange
-      expect(errorDto.message).toEqual(
-        'Usuario o fecha de nacimiento invalida'
-      ); // todo
+      expect(errorDto.message).toEqual('Email o fecha de nacimiento invalida'); // todo
     });
     it('debe lanzar un error dado una dateBirth inválido', async () => {
       // Arange
@@ -149,9 +147,7 @@ describe('La clase UserUseCase', () => {
       );
 
       // Arrange
-      expect(errorDto.message).toEqual(
-        'Usuario o fecha de nacimiento invalida'
-      ); // todo
+      expect(errorDto.message).toEqual('Email o fecha de nacimiento invalida'); // todo
     });
   });
   describe('el método resetPasswordConfirm', () => {

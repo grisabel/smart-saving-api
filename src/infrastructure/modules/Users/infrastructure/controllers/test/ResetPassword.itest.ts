@@ -28,7 +28,7 @@ describe('Reset Password', () => {
 
       expect(res.status).toEqual(200);
       expect(res.data.message).toEqual(
-        'Si el usuario existe se habrá enviado un email para cambiar la contraseña'
+        'Se ha enviado un email para cambiar la contraseña'
       );
     });
     it('debe retornar un status 200 indicando que se ha enviado un email aunque los datos sean inválidos (email o dateBirth)', async () => {
@@ -45,7 +45,7 @@ describe('Reset Password', () => {
 
       expect(throwError.response.status).toEqual(409);
       expect(throwError.response.data.message).toEqual(
-        'Usuario o fecha de nacimiento invalida'
+        'Email o fecha de nacimiento invalida'
       );
     });
     it('debe retornar un 422 si el campo dateBirth del body no sigue el formato correcto', async () => {

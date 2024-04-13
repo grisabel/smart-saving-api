@@ -1,7 +1,7 @@
 import DateTimeService from '@application/services/DateTimeService/DateTimeService';
 import { TransactionInterfaceRepository } from './TransactionInterfaceRepository';
 import { Transaction } from './models/Transaction';
-import { prisma } from '@application/repository/db';
+import { DDBBConnectionError, prisma } from '@application/repository/db';
 import { DATE_FORMATS } from '@application/services/DateTimeService/constants';
 import { Email } from '@domain/models/Email';
 import {
@@ -45,7 +45,7 @@ export class TransactionSqlRepository
           data: {
             type: TransactionType.Transaction_Expense,
             accountId: resulAccount[0].id,
-            amount: expense.amount,
+            amount: parseFloat(expense.amount.toString()),
             date: DateTimeService.parse(
               {
                 date: expense.date,
@@ -61,6 +61,10 @@ export class TransactionSqlRepository
           resolve();
         })
         .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           reject(error);
         });
     });
@@ -95,7 +99,7 @@ export class TransactionSqlRepository
           data: {
             type: TransactionType.Transaction_Income,
             accountId: resulAccount[0].id,
-            amount: income.amount,
+            amount: parseFloat(income.amount.toString()),
             date: DateTimeService.parse(
               {
                 date: income.date,
@@ -111,6 +115,10 @@ export class TransactionSqlRepository
           resolve();
         })
         .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           reject(error);
         });
     });
@@ -174,7 +182,7 @@ export class TransactionSqlRepository
 
           return {
             transactionId: expense.id,
-            amount: expense.amount,
+            amount: parseFloat(expense.amount.toString()),
             conceptId: conceptId,
             date: DateTimeService.parse(
               {
@@ -189,6 +197,10 @@ export class TransactionSqlRepository
 
         resolve(expenses);
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });
@@ -252,7 +264,7 @@ export class TransactionSqlRepository
 
           return {
             transactionId: income.id,
-            amount: income.amount,
+            amount: parseFloat(income.amount.toString()),
             conceptId: conceptId,
             date: DateTimeService.parse(
               {
@@ -267,6 +279,10 @@ export class TransactionSqlRepository
 
         resolve(incomes);
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });

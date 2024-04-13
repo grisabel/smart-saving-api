@@ -1,4 +1,4 @@
-import { prisma } from '@application/repository/db';
+import { DDBBConnectionError, prisma } from '@application/repository/db';
 import {
   TOKEN_REPOSITORY_ERROR,
   RevokeAccessTokenInterfaceRepository,
@@ -8,8 +8,6 @@ import {
 export class TokenSqlRepository
   implements RevokeAccessTokenInterfaceRepository
 {
-  private localTokens: string[] = [];
-
   async save(token: string): Promise<void> {
     return new Promise((resolve, reject) => {
       prisma.revokeAccessToken
@@ -17,7 +15,13 @@ export class TokenSqlRepository
           data: { token: token },
         })
         .then(() => resolve())
-        .catch((error) => reject(error));
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
+          reject(error);
+        });
     });
   }
 
@@ -26,11 +30,17 @@ export class TokenSqlRepository
       prisma.revokeAccessToken
         .findFirst({ where: { token: token } })
         .then((resul) => resolve(resul.token))
-        .catch(() => {
-          const error = new TokenRepositoryError({
-            tokenNotExist: TOKEN_REPOSITORY_ERROR.tokenNotExist,
-          });
-          reject(error);
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
+
+          reject(
+            new TokenRepositoryError({
+              tokenNotExist: TOKEN_REPOSITORY_ERROR.tokenNotExist,
+            })
+          );
         });
     });
   }
@@ -53,11 +63,17 @@ export class TokenSqlRepository
           }
           resolve();
         })
-        .catch(() => {
-          const error = new TokenRepositoryError({
-            tokenNotExist: TOKEN_REPOSITORY_ERROR.tokenNotExist,
-          });
-          reject(error);
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
+
+          reject(
+            new TokenRepositoryError({
+              tokenNotExist: TOKEN_REPOSITORY_ERROR.tokenNotExist,
+            })
+          );
         });
     });
   }
