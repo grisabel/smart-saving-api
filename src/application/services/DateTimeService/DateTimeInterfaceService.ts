@@ -56,4 +56,8 @@ export interface DateTimeInterfaceService {
     dateStart: DateTimeModel;
     dateEnd: DateTimeModel;
   };
+  calculatePastDate: (
+    dateTime: DateTimeModel,
+    relative: { amount: number; unit: "days" | "weeks" | "months" | "years" }
+  ) => DateTimeModel;
 }

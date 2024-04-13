@@ -1,4 +1,4 @@
-import { prisma } from '@application/repository/db';
+import { DDBBConnectionError, prisma } from '@application/repository/db';
 import {
   CONCEPT_REPOSITORY_ERROR,
   ConceptInterfaceRepository,
@@ -42,6 +42,10 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
           resolve();
         })
         .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           reject(error);
         });
     });
@@ -60,6 +64,10 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
           resolve(value);
         })
         .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           if (error.code === 'P2002') {
             const error = new ConceptRepositoryError({
               conceptDuplicate: CONCEPT_REPOSITORY_ERROR.conceptDuplicate,
@@ -83,6 +91,10 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
         })
         .then((value) => resolve(value))
         .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           if (error.code === 'P2002') {
             const error = new ConceptRepositoryError({
               conceptDuplicate: CONCEPT_REPOSITORY_ERROR.conceptDuplicate,
@@ -120,7 +132,13 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
 
           resolve(values);
         })
-        .catch(() => reject());
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
+          reject();
+        });
     });
   }
   readAllIncome(email: Email): Promise<Concept[]> {
@@ -149,7 +167,13 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
 
           resolve(values);
         })
-        .catch(() => reject());
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
+          reject();
+        });
     });
   }
   deleteExpense(email: Email, conceptId: string): Promise<void> {
@@ -165,11 +189,17 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
         .then(() => {
           resolve();
         })
-        .catch(() => {
-          const error = new ConceptRepositoryError({
-            conceptIdNotExist: CONCEPT_REPOSITORY_ERROR.conceptIdNotExist,
-          });
-          reject(error);
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
+
+          reject(
+            new ConceptRepositoryError({
+              conceptIdNotExist: CONCEPT_REPOSITORY_ERROR.conceptIdNotExist,
+            })
+          );
         });
     });
   }
@@ -187,6 +217,10 @@ export class ConceptSqlRepository implements ConceptInterfaceRepository {
           resolve();
         })
         .catch((_error) => {
+          if (_error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
           //todo
           console.log(_error);
           const error = new ConceptRepositoryError({

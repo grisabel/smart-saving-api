@@ -1,4 +1,4 @@
-import { prisma } from '@application/repository/db';
+import { DDBBConnectionError, prisma } from '@application/repository/db';
 import {
   FINANCIAL_ACCOUNT_REPOSITORY_ERROR,
   FinancialAccountInterfaceRepository,
@@ -21,7 +21,13 @@ export class FinancialAccountSqlRepository
       prisma.financialAccount
         .create({ data: { userEmail: email.getValue() } })
         .then(() => resolve())
-        .catch((error) => reject(error));
+        .catch((error) => {
+          if (error.name == 'PrismaClientInitializationError') {
+            reject(new DDBBConnectionError());
+            return;
+          }
+          reject(error);
+        });
     });
   }
   summary(
@@ -126,6 +132,10 @@ export class FinancialAccountSqlRepository
           }),
         });
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });
@@ -196,6 +206,10 @@ export class FinancialAccountSqlRepository
         });
         resolve(incomes);
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });
@@ -266,6 +280,10 @@ export class FinancialAccountSqlRepository
         });
         resolve(expenses);
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });
@@ -343,6 +361,10 @@ export class FinancialAccountSqlRepository
         });
         resolve(incomes);
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });
@@ -420,6 +442,10 @@ export class FinancialAccountSqlRepository
         });
         resolve(expenses);
       } catch (error) {
+        if (error.name == 'PrismaClientInitializationError') {
+          reject(new DDBBConnectionError());
+          return;
+        }
         reject(error);
       }
     });

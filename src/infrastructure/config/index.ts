@@ -12,6 +12,7 @@ const config = {
   },
   EMAIL: {
     API_KEY: process.env.EMAIL_API_KEY,
+    URL_BASE: process.env.EMAIL_URL_BASE,
   },
 };
 

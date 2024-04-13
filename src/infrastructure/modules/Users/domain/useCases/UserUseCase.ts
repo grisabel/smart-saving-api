@@ -72,7 +72,7 @@ export class UserUseCase {
 
         if (user.getDateBirth() !== dateBirth) {
           const errorDto = ErrorResponseMapper.toResponseDto({
-            message: 'Usuario o fecha de nacimiento invalida',
+            message: 'Email o fecha de nacimiento invalida',
           });
           resolve([errorDto, null]);
           return;
@@ -92,14 +92,13 @@ export class UserUseCase {
         }
 
         const responseDto: ResetPasswordResponseDto = {
-          message:
-            'Si el usuario existe se habrá enviado un email para cambiar la contraseña', //todo
+          message: 'Se ha enviado un email para cambiar la contraseña', //todo
         };
         resolve([null, responseDto]);
       } catch (error) {
         if (error instanceof UserRepositoryError) {
           const errorDto = ErrorResponseMapper.toResponseDto({
-            message: 'Usuario o fecha de nacimiento invalida',
+            message: 'Email o fecha de nacimiento invalida',
           });
           resolve([errorDto, null]);
           return;
