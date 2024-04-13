@@ -37,15 +37,10 @@ export const VehicleBatch = async () => {
         dateStart
       );
 
-      const expensesSorted = expenses.sort(
-        (expense1, expense2) => expense2.amount - expense1.amount
-      );
-
-      if (expensesSorted.length > 0) {
-        const expenseMax = expensesSorted[0];
+      for (const expense of expenses) {
         await habitRepository.create({
           email: user.getEmail().getValue(),
-          transactionId: expenseMax.transactionId ?? '',
+          transactionId: expense.transactionId ?? '',
           type: HabitsType.Habits_Vehicles,
         });
       }

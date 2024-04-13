@@ -31,7 +31,7 @@ export class EmailService {
           from: 'notify@smartsavings.dev',
           to: email.getValue(),
           subject: 'Hello World',
-          html: `<p>OperationId <strong>${operation.id}</strong></p>`,
+          html: `<p>Url para cambiar contraseña ${config.EMAIL.URL_BASE}/reset-password?operationId=${operation.id}</p>`,
         });
 
         if (error) {
