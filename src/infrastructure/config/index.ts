@@ -14,6 +14,13 @@ const config = {
     API_KEY: process.env.EMAIL_API_KEY,
     URL_BASE: process.env.EMAIL_URL_BASE,
   },
+  GOOGLE_FORM: {
+    FORM_ID: process.env.GOOGLE_FORM_ID,
+    FORM_FIELD_NAME: process.env.GOOGLE_FORM_FIELD_NAME,
+    FORM_FIELD_EMAIL: process.env.GOOGLE_FORM_FIELD_EMAIL,
+    FORM_FIELD_SUBJECT: process.env.GOOGLE_FORM_FIELD_SUBJECT,
+    FORM_FIELD_DESCRIPTION: process.env.GOOGLE_FORM_FIELD_DESCRIPTION,
+  },
 };
 
 // console.log({ config });
