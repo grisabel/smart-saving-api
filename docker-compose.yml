@@ -8,7 +8,9 @@ services:
       - '3000:3000'
     depends_on:
       - mysql
-
+    networks:
+      - net-test
+      
   mysql:
     image: mysql/mysql-server
     environment:
@@ -20,8 +22,7 @@ services:
     ports:
       - '3306:3306'
     networks:
-      net-test:
-        ipv4_address: 172.16.0.2
+      - net-test
 
 # Network
 networks:
@@ -29,9 +30,6 @@ networks:
     driver: bridge
     ipam:
       driver: default
-      config:
-        - subnet: 172.16.0.1/24
-          gateway: 172.16.0.1
 
 volumes:
   my-db:
