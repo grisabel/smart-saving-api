@@ -1,6 +1,14 @@
 version: '2.1'
 
 services:
+  nodejs-server:
+    build:
+      context: './'
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mysql
+
   mysql:
     image: mysql/mysql-server
     environment:
