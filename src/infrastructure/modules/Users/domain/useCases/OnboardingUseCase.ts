@@ -16,12 +16,18 @@ import { FinancialAccountInterfaceRepository } from '@infrastructure/modules/Fin
 import { FinancialAccountFactoryRepository } from '@infrastructure/modules/FinancialControl/application/repository/FinancialAccountRepository/FinancialAccountFactoryRepository';
 import { ConceptInterfaceRepository } from '@infrastructure/modules/FinancialControl/application/repository/ConceptRepository/ConceptInterfaceRepository';
 import { ConceptFactoryRepository } from '@infrastructure/modules/FinancialControl/application/repository/ConceptRepository/ConceptFactoryRepository';
+import {
+  EmailService,
+  EmailServiceFactory,
+} from '@application/services/EmailService/EmailService';
+import config from '@infrastructure/config';
 
 export class OnboardingUseCase {
   constructor(
     private userRepository: UserInterfaceRepository,
     private financialAccount: FinancialAccountInterfaceRepository,
-    private concept: ConceptInterfaceRepository
+    private concept: ConceptInterfaceRepository,
+    private emailService: EmailService,
   ) {}
   saveUser(user: User): Promise<[ErrorResponseDto | Error, null]> {
     return new Promise(async (resolve, reject) => {
@@ -30,6 +36,9 @@ export class OnboardingUseCase {
         await this.financialAccount.create(user.getEmail());
         await this.concept.addInitialData(user.getEmail());
 
+        if (config.ENV !== 'E2E') {
+          await this.emailService.sendWelcome(user.getEmail());
+        }
         resolve([null, null]);
       } catch (error) {
         if (error instanceof UserRepositoryError) {
@@ -57,11 +66,13 @@ export class OnboardingUseCaseFactory {
         FinancialAccountFactoryRepository.getInstance();
 
       const conceptRepository = ConceptFactoryRepository.getInstance();
+      const emailService = EmailServiceFactory.getInstance();
 
       OnboardingUseCaseFactory.instance = new OnboardingUseCase(
         userRepository,
         financialAccountRepository,
-        conceptRepository
+        conceptRepository,
+        emailService
       );
     }
     return OnboardingUseCaseFactory.instance;
