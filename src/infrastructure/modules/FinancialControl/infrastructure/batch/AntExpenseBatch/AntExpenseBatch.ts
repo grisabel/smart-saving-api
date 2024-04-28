@@ -43,11 +43,15 @@ export const AntExpenseBatch = async () => {
       const expensesFilter = expenses.filter((expense) => expense.amount < 3);
 
       for (const expense of expensesFilter) {
-        await habitRepository.create({
-          email: user.getEmail().getValue(),
-          transactionId: expense.transactionId ?? '',
-          type: HabitsType.Habits_AntExpenses,
-        });
+        try {
+          await habitRepository.create({
+            email: user.getEmail().getValue(),
+            transactionId: expense.transactionId ?? '',
+            type: HabitsType.Habits_AntExpenses,
+          });
+        } catch (error) {
+          console.log('error in save');
+        }
       }
     }
 

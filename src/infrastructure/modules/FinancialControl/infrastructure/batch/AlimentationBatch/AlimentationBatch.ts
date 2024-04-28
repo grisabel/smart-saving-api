@@ -54,11 +54,15 @@ export const AlimentationBatch = async () => {
       );
 
       for (const expense of expenses) {
-        await habitRepository.create({
-          email: user.getEmail().getValue(),
-          transactionId: expense.transactionId ?? '',
-          type: HabitsType.Habits_Alimentation,
-        });
+        try {
+          await habitRepository.create({
+            email: user.getEmail().getValue(),
+            transactionId: expense.transactionId ?? '',
+            type: HabitsType.Habits_Alimentation,
+          });
+        } catch (error) {
+          console.log('error in save');
+        }
       }
     }
 

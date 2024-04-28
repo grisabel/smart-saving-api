@@ -38,11 +38,15 @@ export const VehicleBatch = async () => {
       );
 
       for (const expense of expenses) {
-        await habitRepository.create({
-          email: user.getEmail().getValue(),
-          transactionId: expense.transactionId ?? '',
-          type: HabitsType.Habits_Vehicles,
-        });
+        try {
+          await habitRepository.create({
+            email: user.getEmail().getValue(),
+            transactionId: expense.transactionId ?? '',
+            type: HabitsType.Habits_Vehicles,
+          });
+        } catch (error) {
+          console.log('Error in save');
+        }
       }
     }
 
