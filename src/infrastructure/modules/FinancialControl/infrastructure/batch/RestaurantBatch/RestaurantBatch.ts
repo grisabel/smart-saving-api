@@ -18,35 +18,43 @@ export const RestaurantBatch = async () => {
   try {
     const users = await userRepository.findAll();
 
-    for (const user of users) {
-      await habitRepository.delete(
-        user.getEmail(),
-        HabitsType.Habits_Restaurant
-      );
-      const accountNumber = 0;
-      const { dateStart, dateEnd } = DateTimeService.getMonthLimits(
-        {
-          date: new Date().getTime().toString(),
-          format: DATE_FORMATS.TimestampMs,
-        },
-        'month'
-      );
+    try {
+      for (const user of users) {
+        await habitRepository.delete(
+          user.getEmail(),
+          HabitsType.Habits_Restaurant
+        );
+        const accountNumber = 0;
+        const { dateStart, dateEnd } = DateTimeService.getMonthLimits(
+          {
+            date: new Date().getTime().toString(),
+            format: DATE_FORMATS.TimestampMs,
+          },
+          'month'
+        );
 
-      const expenses = await transactionRepository.getExpenses(
-        user.getEmail(),
-        accountNumber,
-        DEFAULT_EXPENSE_MAP.Restaurante.id,
-        dateEnd,
-        dateStart
-      );
+        const expenses = await transactionRepository.getExpenses(
+          user.getEmail(),
+          accountNumber,
+          DEFAULT_EXPENSE_MAP.Restaurante.id,
+          dateEnd,
+          dateStart
+        );
 
-      for (const expense of expenses) {
-        await habitRepository.create({
-          email: user.getEmail().getValue(),
-          transactionId: expense.transactionId ?? '',
-          type: HabitsType.Habits_Restaurant,
-        });
+        for (const expense of expenses) {
+          try {
+            await habitRepository.create({
+              email: user.getEmail().getValue(),
+              transactionId: expense.transactionId ?? '',
+              type: HabitsType.Habits_Restaurant,
+            });
+          } catch (error) {
+            console.log('error in save');
+          }
+        }
       }
+    } catch (error) {
+      console.log('error in user');
     }
 
     console.log('Done RestaurantBatch');

@@ -1,6 +1,9 @@
 import { PrismaClient } from '@prisma/client';
+import { fieldEncryptionExtension } from 'prisma-field-encryption';
 
-export const prisma = new PrismaClient();
+const client = new PrismaClient();
+
+export const prisma = client.$extends(fieldEncryptionExtension());
 
 export class DDBBConnectionError extends Error {
   static msg: string = 'DDBBConnectionError';
