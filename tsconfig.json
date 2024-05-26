@@ -26,7 +26,10 @@
       "@Users/domain/*": ["src/infrastructure/modules/Users/domain/*"],
       "@FinancialControl/infrastructure/*": ["src/infrastructure/modules/FinancialControl/infrastructure/*"],
       "@FinancialControl/application/*": ["src/infrastructure/modules/FinancialControl/application/*"],
-      "@FinancialControl/domain/*": ["src/infrastructure/modules/FinancialControl/domain/*"]
+      "@FinancialControl/domain/*": ["src/infrastructure/modules/FinancialControl/domain/*"],
+      "@Marketing/infrastructure/*": ["src/infrastructure/modules/Marketing/infrastructure/*"],
+      "@Marketing/application/*": ["src/infrastructure/modules/Marketing/application/*"],
+      "@Marketing/domain/*": ["src/infrastructure/modules/Marketing/domain/*"]
     }
   },
   "files": [],

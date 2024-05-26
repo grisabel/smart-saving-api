@@ -30,8 +30,34 @@ export class EmailService {
         const { error } = await this.resend.emails.send({
           from: 'notify@smartsavings.dev',
           to: email.getValue(),
-          subject: 'Hello World',
+          subject: 'Cambio de Contraseña',
           html: `<p>Url para cambiar contraseña ${config.EMAIL.URL_BASE}/reset-password?operationId=${operation.id}</p>`,
+        });
+
+        if (error) {
+          const domainError = new EmailServiceError({
+            emailSendError: EMAIL_SERVICE_ERROR.emailSendError,
+          });
+          reject(domainError);
+          return;
+        }
+
+        resolve();
+        return;
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  sendWelcome(email: Email): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { error } = await this.resend.emails.send({
+          from: 'notify@smartsavings.dev',
+          to: email.getValue(),
+          subject: 'Bienvenido a smart savings',
+          html: `<p>Te damos la bienvenida a la web: ${config.EMAIL.URL_BASE}</p>`,
         });
 
         if (error) {
