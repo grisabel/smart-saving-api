@@ -40,7 +40,7 @@ export const DEFAULT_EXPENSE_MAP = {
   Calefacción: { id: 'EXPENSE-6', concept: 'Calefacción' },
   'Telefonía/Internet': { id: 'EXPENSE-7', concept: 'Telefonía/Internet' },
   Agua: { id: 'EXPENSE-8', concept: 'Agua' },
-  Estudios: { id: 'EXPENSE-9', concept: 'Estudios' },
+  // Estudios: { id: 'EXPENSE-9', concept: 'Estudios' },
   Ocio: { id: 'EXPENSE-10', concept: 'Ocio' },
   'Tasas/Impuestos/Multas': {
     id: 'EXPENSE-11',

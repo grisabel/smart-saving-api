@@ -19,36 +19,44 @@ export const AntExpenseBatch = async () => {
   try {
     const users = await userRepository.findAll();
 
-    for (const user of users) {
-      await habitRepository.delete(
-        user.getEmail(),
-        HabitsType.Habits_AntExpenses
-      );
-      const accountNumber = 0;
-      const { dateStart, dateEnd } = DateTimeService.getMonthLimits(
-        {
-          date: new Date().getTime().toString(),
-          format: DATE_FORMATS.TimestampMs,
-        },
-        'month'
-      );
+    try {
+      for (const user of users) {
+        await habitRepository.delete(
+          user.getEmail(),
+          HabitsType.Habits_AntExpenses
+        );
+        const accountNumber = 0;
+        const { dateStart, dateEnd } = DateTimeService.getMonthLimits(
+          {
+            date: new Date().getTime().toString(),
+            format: DATE_FORMATS.TimestampMs,
+          },
+          'month'
+        );
 
-      const expenses = await financialAccountRepository.reportsExpense(
-        user.getEmail(),
-        accountNumber,
-        dateEnd,
-        dateStart
-      );
+        const expenses = await financialAccountRepository.reportsExpense(
+          user.getEmail(),
+          accountNumber,
+          dateEnd,
+          dateStart
+        );
 
-      const expensesFilter = expenses.filter((expense) => expense.amount < 3);
+        const expensesFilter = expenses.filter((expense) => expense.amount < 3);
 
-      for (const expense of expensesFilter) {
-        await habitRepository.create({
-          email: user.getEmail().getValue(),
-          transactionId: expense.transactionId ?? '',
-          type: HabitsType.Habits_AntExpenses,
-        });
+        for (const expense of expensesFilter) {
+          try {
+            await habitRepository.create({
+              email: user.getEmail().getValue(),
+              transactionId: expense.transactionId ?? '',
+              type: HabitsType.Habits_AntExpenses,
+            });
+          } catch (error) {
+            console.log('error in save');
+          }
+        }
       }
+    } catch (error) {
+      console.log('error in user');
     }
 
     console.log('Done AntExpenseBatch');
