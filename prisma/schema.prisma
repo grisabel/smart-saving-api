@@ -10,10 +10,10 @@ datasource db {
 
 model User {
   email            String             @id
-  firstname        String
-  lastname         String
+  firstname        String /// @encrypted
+  lastname         String /// @encrypted
   dateBirth        DateTime
-  objective        String
+  objective        String /// @encrypted
   deleteIn         DateTime?
   Password         Password?
   Operation        Operation[]
@@ -93,7 +93,7 @@ model Transaction {
   amount    Float
   concept   Concept          @relation(fields: [conceptId], references: [id], onDelete: Cascade)
   conceptId String
-  note      String
+  note      String /// @encrypted
   date      DateTime
   account   FinancialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId String
